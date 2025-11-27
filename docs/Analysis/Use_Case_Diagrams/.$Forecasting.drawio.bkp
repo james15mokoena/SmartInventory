@@ -1,0 +1,64 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/28.2.5 Chrome/138.0.7204.251 Electron/37.6.1 Safari/537.36" version="28.2.5">
+  <diagram id="Q0bstEQYl9w4Kt2Pywo8" name="Page-1">
+    <mxGraphModel dx="1426" dy="875" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="5v2Ytp3RQ0cuM9tmzQx5-1" value="" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="215" y="20" width="420" height="610" as="geometry" />
+        </mxCell>
+        <mxCell id="5v2Ytp3RQ0cuM9tmzQx5-2" value="&lt;b&gt;&lt;font style=&quot;font-size: 20px;&quot;&gt;Forecasting&lt;/font&gt;&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="380" y="30" width="130" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="5v2Ytp3RQ0cuM9tmzQx5-3" value="View forecasts" style="ellipse;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="365" y="100" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="5v2Ytp3RQ0cuM9tmzQx5-4" value="Refresh forecasts" style="ellipse;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="365" y="370" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="0OEbwiuPibtPqj9hojF8-1" value="Staff" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" vertex="1" parent="1">
+          <mxGeometry x="20" y="120" width="50" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="0OEbwiuPibtPqj9hojF8-2" value="" style="endArrow=block;endFill=1;endSize=24;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="44.5" y="310" as="sourcePoint" />
+            <mxPoint x="44.5" y="230" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="0OEbwiuPibtPqj9hojF8-3" value="Senior Staff" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" vertex="1" parent="1">
+          <mxGeometry x="20" y="320" width="50" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="0OEbwiuPibtPqj9hojF8-4" value="Admin" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" vertex="1" parent="1">
+          <mxGeometry x="20" y="520" width="50" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="0OEbwiuPibtPqj9hojF8-5" value="" style="endArrow=block;endFill=1;endSize=24;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="44.5" y="510" as="sourcePoint" />
+            <mxPoint x="44.5" y="430" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="0OEbwiuPibtPqj9hojF8-6" value="" style="endArrow=none;html=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" target="5v2Ytp3RQ0cuM9tmzQx5-3">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="80" y="140" as="sourcePoint" />
+            <mxPoint x="170" y="130" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="0OEbwiuPibtPqj9hojF8-7" value="" style="endArrow=none;html=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" target="5v2Ytp3RQ0cuM9tmzQx5-4">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="100" y="350" as="sourcePoint" />
+            <mxPoint x="150" y="310" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="0OEbwiuPibtPqj9hojF8-8" value="View forecast alerts" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="365" y="260" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="0OEbwiuPibtPqj9hojF8-9" value="" style="endArrow=none;html=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" target="0OEbwiuPibtPqj9hojF8-8">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="100" y="340" as="sourcePoint" />
+            <mxPoint x="140" y="280" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
