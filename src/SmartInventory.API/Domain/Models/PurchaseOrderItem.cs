@@ -1,11 +1,12 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace SmartInventory.API.Models;
+namespace SmartInventory.API.Domain.Models;
 
 /// <summary>
 /// Represents a purchase order item.
 /// </summary>
+[Table("PurchaseOrderItem")]
 public class PurchaseOrderItem
 {
     /// <summary>
@@ -14,7 +15,7 @@ public class PurchaseOrderItem
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public required int PurchaseOrderItemId { get; set; }
-    
+
     /// <summary>
     /// Identifies which product this purchase order item maps to.
     /// </summary>
@@ -56,9 +57,9 @@ public class PurchaseOrderItem
     /// A product may correspond to one purchase order line item.
     /// </summary>
     public required Product Product { get; set; }
-    
+
     /// <summary>
     /// A purchase order may have one or more purchase order items.
     /// </summary>
-    public required PurchaseOrder PurchaseOrder{ get; set; }
+    public required PurchaseOrder PurchaseOrder { get; set; }
 }

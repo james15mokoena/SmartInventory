@@ -1,4 +1,4 @@
-namespace SmartInventory.API.Models;
+namespace SmartInventory.API.Domain.Models;
 
 /// <summary>
 /// Defines roles that exist in the system

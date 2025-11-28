@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-namespace SmartInventory.API.Models;
+namespace SmartInventory.API.Domain.Models;
 
 /// <summary>
 /// Represents a supplier.
@@ -12,14 +12,14 @@ namespace SmartInventory.API.Models;
 [Index(nameof(ContactPersonPhone), IsUnique = true)]
 [Index(nameof(Email), IsUnique = true)]
 [Index(nameof(Phone), IsUnique = true)]
-public class Supplier
+public class Supplier : IUser
 {
     /// <summary>
     /// A unique idenfier for the supplier.
     /// </summary>
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public int Id { get; set; }
+    public required int Id { get; set; }
 
     /// <summary>
     /// The name of the supplier.
@@ -69,7 +69,7 @@ public class Supplier
     /// <summary>
     /// Indicates whether the supplier is still active or deactivated.
     /// </summary>
-    public required string IsActive { get; set; }
+    public required bool IsActive { get; set; }
 
     /// <summary>
     /// The date on which the supplier was added to the system.

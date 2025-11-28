@@ -1,15 +1,18 @@
-namespace SmartInventory.API.Models;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace SmartInventory.API.Domain.Models;
 
 /// <summary>
 /// Indicates permissions that a role has.
 /// </summary>
+[Table("RolePermission")]
 public class RolePermission
 {
     /// <summary>
     /// Links with a role.
     /// </summary>
     public required int RoleId { get; set; }
-    
+
     /// <summary>
     /// Links with a permission.
     /// </summary>

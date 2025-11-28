@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace SmartInventory.API.Models;
+namespace SmartInventory.API.Domain.Models;
 
 /// <summary>
 /// Represents a product.

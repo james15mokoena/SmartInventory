@@ -1,4 +1,4 @@
-namespace SmartInventory.API.Models;
+namespace SmartInventory.API.Domain.Models;
 
 /// <summary>
 /// Defines the types of permissions that can be assigned to a role.

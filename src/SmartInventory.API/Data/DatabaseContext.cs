@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using SmartInventory.API.Models;
+using SmartInventory.API.Domain.Models;
 
 namespace SmartInventory.API.Data;
 

@@ -1,10 +1,12 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace SmartInventory.API.Models;
+namespace SmartInventory.API.Domain.Models;
 
 /// <summary>
 /// Represents a reason for making a modification.
 /// </summary>
+[Table("ReasonType")]
 public class ReasonType
 {
     /// <summary>
