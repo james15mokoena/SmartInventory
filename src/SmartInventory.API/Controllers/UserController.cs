@@ -46,4 +46,15 @@ public class UserController(UserManagementService uService) : ControllerBase
     public IActionResult CreateSupplier(Supplier supplier) => _userService.CreateUser(supplier) ?
                                                               Ok("Supplier created successfully!") :
                                                               BadRequest("Failed to create supplier!");
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="username"></param>
+    /// <param name="password"></param>
+    /// <returns></returns>
+    [HttpGet("{username}/{password}")]
+    public IActionResult Login(string username, string password) => _userService.CheckUserExistsByUsernameAndPassword(username, password) ?
+                                                                    Ok("Logged in!") : BadRequest("Failed to loggin!");
+
 }

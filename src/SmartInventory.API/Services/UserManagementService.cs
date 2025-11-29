@@ -34,10 +34,30 @@ public class UserManagementService(UserManagementRepository userManagementReposi
         }
         else if (IsDataValid(user) is Supplier supplier)
             return _userManRepo.CreateUser(supplier);
+
+        return false;
+    }
+    
+    /// <summary>
+    /// Checks if a user with the given username and password exists.
+    /// </summary>
+    /// <param name="username"></param>
+    /// <param name="password"></param>
+    /// <returns></returns>
+    public bool CheckUserExistsByUsernameAndPassword(string username, string password)
+    {
+        if (!string.IsNullOrEmpty(username) && !string.IsNullOrEmpty(password))
+        {
+            if (_userManRepo.GetUserByUsernameAndPassword(username) is Admin admin)
+                return _passwordService.VerifyPassword(password, admin.PasswordHash);
+                
+            if(_userManRepo.GetUserByUsernameAndPassword(username) is Staff staff)
+                return _passwordService.VerifyPassword(password, staff.PasswordHash);
+            
+        }
             
         return false;
     }
-        
 
     /// <summary>
     /// Checks if the user's data does not violate any contraints.

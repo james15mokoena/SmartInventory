@@ -26,7 +26,25 @@ public class UserManagementRepository(DatabaseContext context)
             _context.Staff.Add(newStaff);
         else if (newUser is Supplier newSupplier)
             _context.Suppliers.Add(newSupplier);
-        
+
         return _context.SaveChanges() > 0;
-    }    
+    }
+    
+    /// <summary>
+    /// Verifies if there's a user with the given username.
+    /// </summary>
+    /// <param name="username"></param>
+    /// <returns></returns>
+    public IUser? GetUserByUsernameAndPassword(string username)
+    {
+        // check if its admin
+        Admin? admin = _context.Admins.FirstOrDefault(a => a.Username == username);
+        if (admin != null) return admin;
+
+        // check if its staff
+        Staff? staff = _context.Staff.FirstOrDefault(s => s.Username == username);
+        if (staff != null) return staff;
+
+        return null;
+    }
 }
