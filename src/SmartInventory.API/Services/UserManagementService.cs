@@ -87,6 +87,12 @@ public class UserManagementService(UserManagementRepository userManagementReposi
     public List<Admin>? GetActivatedAdmins() => _userManRepo.GetActivatedAdmins();
 
     /// <summary>
+    /// Gets all deactivated administrators.
+    /// </summary>
+    /// <returns></returns>
+    public List<Admin>? GetDeactivatedAdmins() => _userManRepo.GetDeactivatedAdmins();
+
+    /// <summary>
     /// Checks if the user's data does not violate any contraints.
     /// </summary>
     /// <param name="user"></param>

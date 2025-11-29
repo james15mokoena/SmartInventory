@@ -92,8 +92,17 @@ public class UserController(UserManagementService uService) : ControllerBase
     /// </summary>
     /// <returns></returns>
     [HttpGet]
-    public IActionResult ViewActivedAdmins() => _userService.GetActivatedAdmins() is List<Admin> admins ?
+    public IActionResult ViewActivatedAdmins() => _userService.GetActivatedAdmins() is List<Admin> admins ?
                                                 Ok(admins) :
-                                                 BadRequest("Failed to get active administrators!");
+                                                BadRequest("Failed to get active administrators!");
+
+    /// <summary>
+    /// Get all deactivated administrators.
+    /// </summary>
+    /// <returns></returns>
+    [HttpGet]
+    public IActionResult ViewDeactivatedAdmins() => _userService.GetDeactivatedAdmins() is List<Admin> admins ?
+                                                    Ok(admins) :
+                                                    BadRequest("Failed to get deactivated administrators!");
 
 }

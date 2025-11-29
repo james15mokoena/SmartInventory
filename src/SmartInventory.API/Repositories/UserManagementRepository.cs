@@ -98,4 +98,10 @@ public class UserManagementRepository(DatabaseContext context)
     /// </summary>
     /// <returns></returns>
     public List<Admin>? GetActivatedAdmins() => [.. _context.Admins.Where(a => a.IsActive == true)];
+
+    /// <summary>
+    /// Fetches all deactivated administrators.
+    /// </summary>
+    /// <returns></returns>
+    public List<Admin>? GetDeactivatedAdmins() => [.. _context.Admins.Where(a => a.IsActive == false)];
 }
