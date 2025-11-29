@@ -6,19 +6,38 @@ namespace SmartInventory.API.Services;
 /// <summary>
 /// Defines the functionality that enforces the business rules/constraints.
 /// </summary>
-public class UserManagementService(UserManagementRepository userManagementRepository)
+public class UserManagementService(UserManagementRepository userManagementRepository, PasswordService passwordService)
 {
     /// <summary>
     /// Will be used to interact with the database.
     /// </summary>
     private readonly UserManagementRepository _userManRepo = userManagementRepository;
 
+    private readonly PasswordService _passwordService = passwordService;
+
     /// <summary>
     /// Creates a new user.
     /// </summary>
     /// <param name="newUser"></param>
     /// <returns>true if user was created successfully, otherwise false.</returns>
-    public bool CreateUser(IUser user) => IsDataValid(user) is IUser newUser && _userManRepo.CreateUser(newUser);
+    public bool CreateUser(IUser user)
+    {
+        if (IsDataValid(user) is Admin admin)
+        {
+            admin.PasswordHash = _passwordService.HashPassword(admin.PasswordHash);
+            return _userManRepo.CreateUser(admin);
+        }
+        else if (IsDataValid(user) is Staff staff)
+        {
+            staff.PasswordHash = _passwordService.HashPassword(staff.PasswordHash);
+            return _userManRepo.CreateUser(staff);
+        }
+        else if (IsDataValid(user) is Supplier supplier)
+            return _userManRepo.CreateUser(supplier);
+            
+        return false;
+    }
+        
 
     /// <summary>
     /// Checks if the user's data does not violate any contraints.

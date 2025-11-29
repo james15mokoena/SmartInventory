@@ -4,11 +4,20 @@ using SmartInventory.API.Data;
 using SmartInventory.API.Repositories;
 using SmartInventory.API.Services;
 
+// load environment variables from .env file.
+DotNetEnv.Env.Load();
+
 var builder = WebApplication.CreateBuilder(args);
 
 // get the connection string
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")!
-                        .Replace("${DB_PASSWORD}",Environment.GetEnvironmentVariable("DB_PASSWORD"));
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+// get the database password
+var password = Environment.GetEnvironmentVariable("SMART_INVENTORY_PASSWORD");
+if (string.IsNullOrEmpty(password))
+    throw new InvalidOperationException("SMART_INVENTORY_PASSWORD environment variable is required.");
+
+connectionString = connectionString!.Replace("${SMART_INVENTORY_PASSWORD}", password);
 
 // set up the database connection
 builder.Services.AddDbContext<DatabaseContext>(options => options.UseMySql(connectionString,new MySqlServerVersion(new Version(8,0))));

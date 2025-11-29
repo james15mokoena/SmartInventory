@@ -23,7 +23,9 @@ public class UserController(UserManagementService uService) : ControllerBase
     /// <param name="admin"></param>
     /// <returns></returns>
     [HttpPost]
-    public IActionResult CreateAdmin(Admin admin) => _userService.CreateUser(admin) ? Ok("Admin created successfully!") : BadRequest("Failed to create admin!");
+    public IActionResult CreateAdmin(Admin admin) => _userService.CreateUser(admin) ?
+                                                    Ok("Admin created successfully!") :
+                                                    BadRequest("Failed to create admin!");
 
     /// <summary>
     /// Creates a new staff member.
@@ -31,7 +33,9 @@ public class UserController(UserManagementService uService) : ControllerBase
     /// <param name="staff"></param>
     /// <returns></returns>
     [HttpPost]
-    public IActionResult CreateStaffMember(Staff staff) => _userService.CreateUser(staff) ? Ok("Staff member created successfully!") : BadRequest("Failed to create staff member!");
+    public IActionResult CreateStaffMember(Staff staff) => _userService.CreateUser(staff) ?
+                                                           Ok("Staff member created successfully!") :
+                                                           BadRequest("Failed to create staff member!");
 
     /// <summary>
     /// Creates a new supplier.
@@ -39,5 +43,7 @@ public class UserController(UserManagementService uService) : ControllerBase
     /// <param name="supplier"></param>
     /// <returns></returns>
     [HttpPost]
-    public IActionResult CreateSupplier(Supplier supplier) => _userService.CreateUser(supplier) ? Ok("Supplier created successfully!") : BadRequest("Failed to create supplier!");
+    public IActionResult CreateSupplier(Supplier supplier) => _userService.CreateUser(supplier) ?
+                                                              Ok("Supplier created successfully!") :
+                                                              BadRequest("Failed to create supplier!");
 }

@@ -36,7 +36,7 @@ public class PasswordService
         return Convert.ToBase64String(combinedBytes);
     }
 
-    private byte[] HashPassword(string password, byte[] salt)
+    private static byte[] HashPassword(string password, byte[] salt)
     {
         var argon2 = new Argon2id(Encoding.UTF8.GetBytes(password))
         {
