@@ -105,4 +105,12 @@ public class UserController(UserManagementService uService) : ControllerBase
                                                     Ok(admins) :
                                                     BadRequest("Failed to get deactivated administrators!");
 
+    /// <summary>
+    /// Get all activated staff members.
+    /// </summary>
+    /// <returns></returns>
+    [HttpGet]
+    public IActionResult ViewActivatedStaff() => _userService.GetActivatedStaff() is List<Staff> staff ?
+                                                 Ok(staff) :
+                                                 BadRequest("Failed to get activated staff members!");
 }
