@@ -99,6 +99,12 @@ public class UserManagementService(UserManagementRepository userManagementReposi
     public List<Staff>? GetActivatedStaff() => _userManRepo.GetActivatedStaff();
 
     /// <summary>
+    /// Gets all deactivated staff members.
+    /// </summary>
+    /// <returns></returns>
+    public List<Staff>? GetDeactivatedStaff() => _userManRepo.GetDeactivatedStaff();
+
+    /// <summary>
     /// Checks if the user's data does not violate any contraints.
     /// </summary>
     /// <param name="user"></param>

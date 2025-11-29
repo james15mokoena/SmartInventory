@@ -113,4 +113,13 @@ public class UserController(UserManagementService uService) : ControllerBase
     public IActionResult ViewActivatedStaff() => _userService.GetActivatedStaff() is List<Staff> staff ?
                                                  Ok(staff) :
                                                  BadRequest("Failed to get activated staff members!");
+
+    /// <summary>
+    /// Get all deactivated staff members.
+    /// </summary>
+    /// <returns></returns>
+    [HttpGet]
+    public IActionResult ViewDeactivatedStaff() => _userService.GetDeactivatedStaff() is List<Staff> staff ?
+                                                 Ok(staff) :
+                                                 BadRequest("Failed to get deactivated staff members!");
 }

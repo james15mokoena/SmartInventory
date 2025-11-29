@@ -110,4 +110,10 @@ public class UserManagementRepository(DatabaseContext context)
     /// </summary>
     /// <returns></returns>
     public List<Staff>? GetActivatedStaff() => [.. _context.Staff.Where(a => a.IsActive == true)];
+
+    /// <summary>
+    /// Fetches all deactivated staff members.
+    /// </summary>
+    /// <returns></returns>
+    public List<Staff>? GetDeactivatedStaff() => [.. _context.Staff.Where(a => a.IsActive == false)];
 }
