@@ -67,4 +67,33 @@ public class UserController(UserManagementService uService) : ControllerBase
                                                                       Ok("Active status changed!") :
                                                                       BadRequest("Failed to change active status!");
 
+    /// <summary>
+    /// Gets an adminstrator with the given username.
+    /// </summary>
+    /// <param name="username"></param>
+    /// <returns></returns>
+    [HttpGet("{username}")]
+    public IActionResult ViewAdmin(string username) => _userService.GetAdmin(username) is Admin admin ?
+                                                       Ok(admin) :
+                                                       BadRequest("Failed to get the admin!");
+
+    /// <summary>
+    /// Gets a staff memmber with the given username.
+    /// </summary>
+    /// <param name="username"></param>
+    /// <returns></returns>
+    [HttpGet("{username}")]
+    public IActionResult ViewStaffMember(string username) => _userService.GetStaffMember(username) is Staff staff ?
+                                                       Ok(staff) :
+                                                       BadRequest("Failed to get the staff member!");
+
+    /// <summary>
+    /// Get all active administrators.
+    /// </summary>
+    /// <returns></returns>
+    [HttpGet]
+    public IActionResult ViewActivedAdmins() => _userService.GetActivatedAdmins() is List<Admin> admins ?
+                                                Ok(admins) :
+                                                 BadRequest("Failed to get active administrators!");
+
 }

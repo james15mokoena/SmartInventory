@@ -67,6 +67,26 @@ public class UserManagementService(UserManagementRepository userManagementReposi
     public bool ToggleUserActivation(string username) => _userManRepo.ToggleUserActivation(username);
 
     /// <summary>
+    /// Gets an administrator with the given username.
+    /// </summary>
+    /// <param name="username"></param>
+    /// <returns></returns>
+    public Admin? GetAdmin(string username) => _userManRepo.GetAdmin(username);
+
+    /// <summary>
+    /// Gets a staff member with the given username.
+    /// </summary>
+    /// <param name="username"></param>
+    /// <returns></returns>
+    public Staff? GetStaffMember(string username) => _userManRepo.GetStaffMember(username);
+
+    /// <summary>
+    /// Gets all active administrators.
+    /// </summary>
+    /// <returns></returns>
+    public List<Admin>? GetActivatedAdmins() => _userManRepo.GetActivatedAdmins();
+
+    /// <summary>
     /// Checks if the user's data does not violate any contraints.
     /// </summary>
     /// <param name="user"></param>

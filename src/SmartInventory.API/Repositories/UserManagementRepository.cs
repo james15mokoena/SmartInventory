@@ -62,7 +62,7 @@ public class UserManagementRepository(DatabaseContext context)
             if (admin != null)
             {
                 admin.IsActive = !admin.IsActive;
-                _context.Update(admin);                
+                _context.Update(admin);
                 return _context.SaveChanges() > 0;
             }
 
@@ -78,4 +78,24 @@ public class UserManagementRepository(DatabaseContext context)
 
         return false;
     }
+
+    /// <summary>
+    /// Fetches an administrator with the given username.
+    /// </summary>
+    /// <param name="username"></param>
+    /// <returns></returns>
+    public Admin? GetAdmin(string username) => _context.Admins.FirstOrDefault(a => a.Username == username) ?? null;
+
+    /// <summary>
+    /// Fetches a staff member with the given username.
+    /// </summary>
+    /// <param name="username"></param>
+    /// <returns></returns>
+    public Staff? GetStaffMember(string username) => _context.Staff.FirstOrDefault(s => s.Username == username) ?? null;
+
+    /// <summary>
+    /// Fetches all activated administrators.
+    /// </summary>
+    /// <returns></returns>
+    public List<Admin>? GetActivatedAdmins() => [.. _context.Admins.Where(a => a.IsActive == true)];
 }
