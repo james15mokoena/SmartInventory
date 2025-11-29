@@ -60,6 +60,13 @@ public class UserManagementService(UserManagementRepository userManagementReposi
     }
 
     /// <summary>
+    /// Activates or deactivates a user (admin/staff).
+    /// </summary>
+    /// <param name="username"></param>
+    /// <returns></returns>
+    public bool ToggleUserActivation(string username) => _userManRepo.ToggleUserActivation(username);
+
+    /// <summary>
     /// Checks if the user's data does not violate any contraints.
     /// </summary>
     /// <param name="user"></param>
@@ -79,7 +86,7 @@ public class UserManagementService(UserManagementRepository userManagementReposi
         else if (user is Supplier newSupplier)
             return (!string.IsNullOrEmpty(newSupplier.ContactPersonEmail) && !string.IsNullOrEmpty(newSupplier.ContactPersonName) &&
                    !string.IsNullOrEmpty(newSupplier.ContactPersonPhone) && !string.IsNullOrEmpty(newSupplier.ContactPersonRole) &&
-                   !string.IsNullOrEmpty(newSupplier.Address) &&newSupplier.IsActive &&
+                   !string.IsNullOrEmpty(newSupplier.Address) && newSupplier.IsActive &&
                    newSupplier.DateCreated != default && !string.IsNullOrEmpty(newSupplier.Phone) &&
                    !string.IsNullOrEmpty(newSupplier.SupplierName) & !string.IsNullOrEmpty(newSupplier.Email)) ? newSupplier : null;
 

@@ -29,7 +29,7 @@ public class UserManagementRepository(DatabaseContext context)
 
         return _context.SaveChanges() > 0;
     }
-    
+
     /// <summary>
     /// Verifies if there's a user with the given username.
     /// </summary>
@@ -46,5 +46,36 @@ public class UserManagementRepository(DatabaseContext context)
         if (staff != null) return staff;
 
         return null;
+    }
+
+    /// <summary>
+    /// Activates or deactivates a user (admin/staff).
+    /// </summary>
+    /// <param name="username"></param>
+    /// <returns></returns>
+    public bool ToggleUserActivation(string username)
+    {
+        if (!string.IsNullOrEmpty(username))
+        {
+            // check if its admin
+            Admin? admin = _context.Admins.FirstOrDefault(a => a.Username == username);
+            if (admin != null)
+            {
+                admin.IsActive = !admin.IsActive;
+                _context.Update(admin);                
+                return _context.SaveChanges() > 0;
+            }
+
+            // check if its staff
+            Staff? staff = _context.Staff.FirstOrDefault(s => s.Username == username);
+            if (staff != null)
+            {
+                staff.IsActive = !staff.IsActive;
+                _context.Update(staff);
+                return _context.SaveChanges() > 0;
+            }
+        }
+
+        return false;
     }
 }

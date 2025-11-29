@@ -1,3 +1,6 @@
 # Igonore all object and executable files
 **/obj/*
 **/bin/*
+
+# Ignore the environment variables file
+**/.env

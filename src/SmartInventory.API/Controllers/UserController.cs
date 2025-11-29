@@ -57,4 +57,14 @@ public class UserController(UserManagementService uService) : ControllerBase
     public IActionResult Login(string username, string password) => _userService.CheckUserExistsByUsernameAndPassword(username, password) ?
                                                                     Ok("Logged in!") : BadRequest("Failed to loggin!");
 
+    /// <summary>
+    /// Activates or deactivates user (admin/staff).
+    /// </summary>
+    /// <param name="username"></param>
+    /// <returns></returns>
+    [HttpPut("{username}")]
+    public IActionResult ActivateOrDeactivateUser(string username) => _userService.ToggleUserActivation(username) ?
+                                                                      Ok("Active status changed!") :
+                                                                      BadRequest("Failed to change active status!");
+
 }
