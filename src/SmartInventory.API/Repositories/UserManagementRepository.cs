@@ -1,4 +1,5 @@
 using SmartInventory.API.Data;
+using SmartInventory.API.Domain.DTO;
 using SmartInventory.API.Domain.Models;
 
 namespace SmartInventory.API.Repositories;
@@ -116,4 +117,56 @@ public class UserManagementRepository(DatabaseContext context)
     /// </summary>
     /// <returns></returns>
     public List<Staff>? GetDeactivatedStaff() => [.. _context.Staff.Where(a => a.IsActive == false)];
+
+    /// <summary>
+    /// Edits an admin's data.
+    /// </summary>
+    /// <param name="updatedAdmin"></param>
+    /// <returns></returns>
+    public Admin? EditAdmin(AdminDto updatedAdmin)
+    {
+        Admin? admin = GetAdmin(updatedAdmin.Username!);
+        bool isUpdated = false;
+
+        if(admin != null)
+        {
+            if (updatedAdmin.Username != admin.Username)
+            {
+                admin.Username = updatedAdmin.Username!;
+                isUpdated = true;
+            }
+
+            if (updatedAdmin.Email != admin.Email)
+            {
+                admin.Email = updatedAdmin.Email!;
+                isUpdated = true;
+            }
+
+            if (updatedAdmin.FirstName != admin.FirstName)
+            {
+                admin.FirstName = updatedAdmin.FirstName!;
+                isUpdated = true;
+            }
+
+            if (updatedAdmin.LastName != admin.LastName)
+            {
+                admin.LastName = updatedAdmin.LastName!;
+                isUpdated = true;
+            }
+
+            if (updatedAdmin.RoleId != admin.RoleId)
+            {
+                admin.RoleId = updatedAdmin.RoleId!;
+                isUpdated = true;
+            }
+
+            if (isUpdated)
+            {
+                _context.Update(admin);
+                return _context.SaveChanges() > 0 ? admin : null;
+            }
+        }
+
+        return null;
+    }
 }

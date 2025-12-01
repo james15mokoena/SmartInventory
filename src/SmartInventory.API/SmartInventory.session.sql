@@ -1,2 +1,1 @@
-SELECT * FROM Supplier;
--- delete from Supplier;
+SELECT * FROM Admin;

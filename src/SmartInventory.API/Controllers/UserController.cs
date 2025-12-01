@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using SmartInventory.API.Domain.DTO;
 using SmartInventory.API.Domain.Models;
 using SmartInventory.API.Services;
 
@@ -112,4 +113,14 @@ public class UserController(UserManagementService uService) : ControllerBase
     public IActionResult ViewDeactivatedStaff() => _userService.GetDeactivatedStaff() is List<Staff> staff ?
                                                  Ok(staff) :
                                                  BadRequest("Failed to get deactivated staff members!");
+
+    /// <summary>
+    /// Edits admin's data.
+    /// </summary>
+    /// <param name="updatedAdmin"></param>
+    /// <returns></returns>
+    [HttpPut]
+    public IActionResult EditAdmin(AdminDto updatedAdmin) => _userService.EditAdmin(updatedAdmin) is AdminDto dto ?
+                                                             Ok(dto) :
+                                                             BadRequest("Failed to update admin!");
 }

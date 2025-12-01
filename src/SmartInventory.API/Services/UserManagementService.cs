@@ -1,3 +1,4 @@
+using SmartInventory.API.Domain.DTO;
 using SmartInventory.API.Domain.Models;
 using SmartInventory.API.Repositories;
 
@@ -101,6 +102,21 @@ public class UserManagementService(UserManagementRepository userManagementReposi
     /// </summary>
     /// <returns></returns>
     public List<Staff>? GetDeactivatedStaff() => _userManRepo.GetDeactivatedStaff();
+
+    /// <summary>
+    /// Edits an admin's data.
+    /// </summary>
+    /// <param name="updatedAdmin"></param>
+    /// <returns></returns>
+    public AdminDto? EditAdmin(AdminDto updatedAdmin)
+    {
+        if (updatedAdmin.Id >= 0 && !string.IsNullOrEmpty(updatedAdmin.FirstName) &&
+           !string.IsNullOrEmpty(updatedAdmin.LastName) && !string.IsNullOrEmpty(updatedAdmin.Email) &&
+           !string.IsNullOrEmpty(updatedAdmin.Username) && updatedAdmin.RoleId >= 0)
+            return _userManRepo.EditAdmin(updatedAdmin) is Admin a ? updatedAdmin : null;
+
+        return null;
+    }
 
     /// <summary>
     /// Checks if the user's data does not violate any contraints.
