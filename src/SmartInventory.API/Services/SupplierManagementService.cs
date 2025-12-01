@@ -1,0 +1,37 @@
+using SmartInventory.API.Domain.Models;
+using SmartInventory.API.Repositories;
+
+namespace SmartInventory.API.Services;
+
+/// <summary>
+/// 
+/// </summary>
+/// <param name="suppRepo"></param>
+public class SupplierManagementService(SupplierManagementRepository suppRepo)
+{
+    /// <summary>
+    /// Enables interaction with the database.
+    /// </summary>
+    private readonly SupplierManagementRepository _suppManRepo = suppRepo;
+
+    /// <summary>
+    /// Adds a new supplier to the database.
+    /// </summary>
+    /// <param name="newSupplier"></param>
+    /// <returns></returns>
+    public bool CreateSupplier(Supplier newSupplier) => IsDataValid(newSupplier) && _suppManRepo.CreateSupplier(newSupplier);
+
+    /// <summary>
+    /// Checks if the supplier's data does not violate any constraints.
+    /// </summary>
+    /// <param name="supplier"></param>
+    /// <returns></returns>
+    private static bool IsDataValid(Supplier supplier)
+    {
+        return !string.IsNullOrEmpty(supplier.Address) && !string.IsNullOrEmpty(supplier.Email) &&
+               !string.IsNullOrEmpty(supplier.SupplierName) && !string.IsNullOrEmpty(supplier.ContactPersonEmail) &&
+               !string.IsNullOrEmpty(supplier.ContactPersonName) && !string.IsNullOrEmpty(supplier.ContactPersonPhone) &&
+               !string.IsNullOrEmpty(supplier.ContactPersonRole) && !string.IsNullOrEmpty(supplier.Phone) &&
+               supplier.DateCreated != default;
+    }
+}

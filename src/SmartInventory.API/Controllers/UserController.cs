@@ -24,7 +24,7 @@ public class UserController(UserManagementService uService) : ControllerBase
     /// <returns></returns>
     [HttpPost]
     public IActionResult CreateAdmin(Admin admin) => _userService.CreateUser(admin) ?
-                                                    Ok("Admin created successfully!") :
+                                                    CreatedAtAction(nameof(CreateAdmin),admin) :
                                                     BadRequest("Failed to create admin!");
 
     /// <summary>
@@ -34,18 +34,8 @@ public class UserController(UserManagementService uService) : ControllerBase
     /// <returns></returns>
     [HttpPost]
     public IActionResult CreateStaffMember(Staff staff) => _userService.CreateUser(staff) ?
-                                                           Ok("Staff member created successfully!") :
+                                                           CreatedAtAction(nameof(CreateStaffMember),staff) :
                                                            BadRequest("Failed to create staff member!");
-
-    /// <summary>
-    /// Creates a new supplier.
-    /// </summary>
-    /// <param name="supplier"></param>
-    /// <returns></returns>
-    [HttpPost]
-    public IActionResult CreateSupplier(Supplier supplier) => _userService.CreateUser(supplier) ?
-                                                              Ok("Supplier created successfully!") :
-                                                              BadRequest("Failed to create supplier!");
 
     /// <summary>
     /// 

@@ -32,8 +32,6 @@ public class UserManagementService(UserManagementRepository userManagementReposi
             staff.PasswordHash = _passwordService.HashPassword(staff.PasswordHash);
             return _userManRepo.CreateUser(staff);
         }
-        else if (IsDataValid(user) is Supplier supplier)
-            return _userManRepo.CreateUser(supplier);
 
         return false;
     }

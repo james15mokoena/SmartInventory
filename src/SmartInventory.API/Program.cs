@@ -24,15 +24,18 @@ builder.Services.AddDbContext<DatabaseContext>(options => options.UseMySql(conne
 
 builder.Services.AddControllers();
 
+// add repositories to the DI container.
+builder.Services.AddScoped<UserManagementRepository>();
+builder.Services.AddScoped<SupplierManagementRepository>();
+
 // add services to the DI container
 builder.Services.AddScoped<PasswordService>();
 builder.Services.AddScoped<UserManagementService>();
-
-// add repositories to the DI container.
-builder.Services.AddScoped<UserManagementRepository>();
+builder.Services.AddScoped<SupplierManagementService>();
 
 // add controllers to the DI container.
 builder.Services.AddScoped<UserController>();
+builder.Services.AddScoped<SupplierController>();
 
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
