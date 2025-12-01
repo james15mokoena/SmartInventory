@@ -120,7 +120,7 @@ public class UserController(UserManagementService uService) : ControllerBase
     /// <param name="updatedAdmin"></param>
     /// <returns></returns>
     [HttpPut]
-    public IActionResult EditAdmin(AdminDto updatedAdmin) => _userService.EditAdmin(updatedAdmin) is AdminDto dto ?
+    public IActionResult EditAdmin(UserDto updatedAdmin) => _userService.EditAdmin(updatedAdmin) is UserDto dto ?
                                                              Ok(dto) :
                                                              BadRequest("Failed to update admin!");
 }

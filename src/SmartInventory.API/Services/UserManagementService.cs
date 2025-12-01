@@ -108,7 +108,7 @@ public class UserManagementService(UserManagementRepository userManagementReposi
     /// </summary>
     /// <param name="updatedAdmin"></param>
     /// <returns></returns>
-    public AdminDto? EditAdmin(AdminDto updatedAdmin)
+    public UserDto? EditAdmin(UserDto updatedAdmin)
     {
         if (updatedAdmin.Id >= 0 && !string.IsNullOrEmpty(updatedAdmin.FirstName) &&
            !string.IsNullOrEmpty(updatedAdmin.LastName) && !string.IsNullOrEmpty(updatedAdmin.Email) &&

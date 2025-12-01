@@ -123,7 +123,7 @@ public class UserManagementRepository(DatabaseContext context)
     /// </summary>
     /// <param name="updatedAdmin"></param>
     /// <returns></returns>
-    public Admin? EditAdmin(AdminDto updatedAdmin)
+    public Admin? EditAdmin(UserDto updatedAdmin)
     {
         Admin? admin = GetAdmin(updatedAdmin.Username!);
         bool isUpdated = false;

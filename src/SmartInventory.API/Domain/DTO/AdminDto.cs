@@ -3,7 +3,7 @@ namespace SmartInventory.API.Domain.DTO;
 /// <summary>
 /// Used to expose limited admin data.
 /// </summary>
-public class AdminDto
+public class UserDto
 {
     /// <summary>
     /// A unique identifier for the admin.
