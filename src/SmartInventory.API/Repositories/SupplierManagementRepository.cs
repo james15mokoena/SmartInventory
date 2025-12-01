@@ -57,4 +57,10 @@ public class SupplierManagementRepository(DatabaseContext context)
     /// </summary>
     /// <returns></returns>
     public List<Supplier>? GetActiveSuppliers() => [.. _context.Suppliers.Where(s => s.IsActive == true)];
+
+    /// <summary>
+    /// Fetches all deactivated suppliers.
+    /// </summary>
+    /// <returns></returns>
+    public List<Supplier>? GetDeactivatedSuppliers() => [.. _context.Suppliers.Where(s => s.IsActive == false)];
 }

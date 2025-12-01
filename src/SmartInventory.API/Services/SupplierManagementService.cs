@@ -42,6 +42,12 @@ public class SupplierManagementService(SupplierManagementRepository suppRepo)
     public List<Supplier>? GetActiveSuppliers() => _suppManRepo.GetActiveSuppliers();
 
     /// <summary>
+    /// Gets all deactivated suppliers.
+    /// </summary>
+    /// <returns></returns>
+    public List<Supplier>? GetDeactivatedSuppliers() => _suppManRepo.GetDeactivatedSuppliers();
+
+    /// <summary>
     /// Checks if the supplier's data does not violate any constraints.
     /// </summary>
     /// <param name="supplier"></param>

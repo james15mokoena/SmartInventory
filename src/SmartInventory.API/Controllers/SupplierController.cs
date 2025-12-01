@@ -54,4 +54,13 @@ public class SupplierController(SupplierManagementService suppService) : Control
     public IActionResult ViewActivatedSuppliers() => _suppService.GetActiveSuppliers() is List<Supplier> suppliers ?
                                                      Ok(suppliers) :
                                                      BadRequest("Failed to fetch active suppliers!");
+
+    /// <summary>
+    /// Gets all deactivated suppliers.
+    /// </summary>
+    /// <returns></returns>
+    [HttpGet]
+    public IActionResult ViewDeactivatedSuppliers() => _suppService.GetDeactivatedSuppliers() is List<Supplier> suppliers ?
+                                                     Ok(suppliers) :
+                                                     BadRequest("Failed to fetch deactivated suppliers!");
 }
