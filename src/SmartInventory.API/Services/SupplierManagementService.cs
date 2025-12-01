@@ -22,6 +22,20 @@ public class SupplierManagementService(SupplierManagementRepository suppRepo)
     public bool CreateSupplier(Supplier newSupplier) => IsDataValid(newSupplier) && _suppManRepo.CreateSupplier(newSupplier);
 
     /// <summary>
+    /// Gets a supplier with the given supplier ID.
+    /// </summary>
+    /// <param name="supplierNo"></param>
+    /// <returns></returns>
+    public Supplier? GetSupplier(int supplierNo) => _suppManRepo.GetSupplier(supplierNo);
+
+    /// <summary>
+    /// Activates or deactivates supplier's account.
+    /// </summary>
+    /// <param name="supplierNo"></param>
+    /// <returns></returns>
+    public bool ToggleSupplierActiveStatus(int supplierNo) => _suppManRepo.ToggleSupplierActiveStatus(supplierNo);
+
+    /// <summary>
     /// Checks if the supplier's data does not violate any constraints.
     /// </summary>
     /// <param name="supplier"></param>

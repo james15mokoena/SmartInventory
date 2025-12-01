@@ -27,4 +27,28 @@ public class SupplierManagementRepository(DatabaseContext context)
         }
         return false;
     }
+
+    /// <summary>
+    /// Fetches a supplier with the given ID.
+    /// </summary>
+    /// <param name="supplierNo"></param>
+    /// <returns></returns>
+    public Supplier? GetSupplier(int supplierNo) => _context.Suppliers.FirstOrDefault(s => s.Id == supplierNo);
+
+    /// <summary>
+    /// Activates or deactivates a supplier's account.
+    /// </summary>
+    /// <param name="supplierNo"></param>
+    /// <returns></returns>
+    public bool ToggleSupplierActiveStatus(int supplierNo)
+    {
+        Supplier? supplier = _context.Suppliers.FirstOrDefault(s => s.Id == supplierNo);
+        if (supplier != null)
+        {
+            supplier.IsActive = !supplier.IsActive;
+            _context.Update(supplier);
+            return _context.SaveChanges() > 0;
+        }
+        return false;
+    }
 }

@@ -25,4 +25,24 @@ public class SupplierController(SupplierManagementService suppService) : Control
     public IActionResult CreateSupplier(Supplier supplier) => _suppService.CreateSupplier(supplier) ?
                                                               CreatedAtAction(nameof(CreateSupplier), supplier) :
                                                               BadRequest("Failed to add a new supplier!");
+
+    /// <summary>
+    /// Gets a supplier with the given ID.
+    /// </summary>
+    /// <param name="supplierNo"></param>
+    /// <returns></returns>
+    [HttpGet("{supplierNo}")]
+    public IActionResult ViewSupplier(int supplierNo) => _suppService.GetSupplier(supplierNo) is Supplier supplier ?
+                                                         Ok(supplier) :
+                                                         BadRequest("Failed to get the supplier's data.");
+
+    /// <summary>
+    /// Activates or deactivates supplier's active status.
+    /// </summary>
+    /// <param name="supplierNo"></param>
+    /// <returns></returns>
+    [HttpPut("{supplierNo}")]
+    public IActionResult ActivateOrDeactivateSupplier(int supplierNo) => _suppService.ToggleSupplierActiveStatus(supplierNo) ?
+                                                        Ok("Active status changed!") :
+                                                        BadRequest("Failed to update supplier's active status!");
 }
