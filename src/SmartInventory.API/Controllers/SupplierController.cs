@@ -45,4 +45,13 @@ public class SupplierController(SupplierManagementService suppService) : Control
     public IActionResult ActivateOrDeactivateSupplier(int supplierNo) => _suppService.ToggleSupplierActiveStatus(supplierNo) ?
                                                         Ok("Active status changed!") :
                                                         BadRequest("Failed to update supplier's active status!");
+
+    /// <summary>
+    /// Gets all active suppliers.
+    /// </summary>
+    /// <returns></returns>
+    [HttpGet]
+    public IActionResult ViewActivatedSuppliers() => _suppService.GetActiveSuppliers() is List<Supplier> suppliers ?
+                                                     Ok(suppliers) :
+                                                     BadRequest("Failed to fetch active suppliers!");
 }

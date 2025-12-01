@@ -51,4 +51,10 @@ public class SupplierManagementRepository(DatabaseContext context)
         }
         return false;
     }
+
+    /// <summary>
+    /// Fetches all active suppliers.
+    /// </summary>
+    /// <returns></returns>
+    public List<Supplier>? GetActiveSuppliers() => [.. _context.Suppliers.Where(s => s.IsActive == true)];
 }

@@ -36,6 +36,12 @@ public class SupplierManagementService(SupplierManagementRepository suppRepo)
     public bool ToggleSupplierActiveStatus(int supplierNo) => _suppManRepo.ToggleSupplierActiveStatus(supplierNo);
 
     /// <summary>
+    /// Gets all active suppliers.
+    /// </summary>
+    /// <returns></returns>
+    public List<Supplier>? GetActiveSuppliers() => _suppManRepo.GetActiveSuppliers();
+
+    /// <summary>
     /// Checks if the supplier's data does not violate any constraints.
     /// </summary>
     /// <param name="supplier"></param>
