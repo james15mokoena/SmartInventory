@@ -119,6 +119,21 @@ public class UserManagementService(UserManagementRepository userManagementReposi
     }
 
     /// <summary>
+    /// Edits a staff member's data.
+    /// </summary>
+    /// <param name="updatedStaffMember"></param>
+    /// <returns></returns>
+    public UserDto? EditStaffMember(UserDto updatedStaffMember)
+    {
+        if (updatedStaffMember.Id >= 0 && !string.IsNullOrEmpty(updatedStaffMember.FirstName) &&
+           !string.IsNullOrEmpty(updatedStaffMember.LastName) && !string.IsNullOrEmpty(updatedStaffMember.Email) &&
+           !string.IsNullOrEmpty(updatedStaffMember.Username) && updatedStaffMember.RoleId >= 0)
+            return _userManRepo.EditStaffMember(updatedStaffMember) is Staff s ? updatedStaffMember : null;
+
+        return null;
+    }
+
+    /// <summary>
     /// Checks if the user's data does not violate any contraints.
     /// </summary>
     /// <param name="user"></param>

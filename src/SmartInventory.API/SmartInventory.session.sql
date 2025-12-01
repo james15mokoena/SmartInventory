@@ -1,1 +1,1 @@
-SELECT * FROM Admin;
+SELECT * FROM Staff;

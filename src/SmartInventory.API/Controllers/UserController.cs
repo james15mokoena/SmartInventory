@@ -123,4 +123,14 @@ public class UserController(UserManagementService uService) : ControllerBase
     public IActionResult EditAdmin(UserDto updatedAdmin) => _userService.EditAdmin(updatedAdmin) is UserDto dto ?
                                                              Ok(dto) :
                                                              BadRequest("Failed to update admin!");
+
+    /// <summary>
+    /// Edits a staff member's data.
+    /// </summary>
+    /// <param name="updatedStaffMember"></param>
+    /// <returns></returns>
+    [HttpPut]
+    public IActionResult EditStaffMember(UserDto updatedStaffMember) => _userService.EditStaffMember(updatedStaffMember) is UserDto dto ?
+                                                             Ok(dto) :
+                                                             BadRequest("Failed to update staff member!");
 }

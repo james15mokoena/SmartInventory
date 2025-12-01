@@ -128,7 +128,7 @@ public class UserManagementRepository(DatabaseContext context)
         Admin? admin = GetAdmin(updatedAdmin.Username!);
         bool isUpdated = false;
 
-        if(admin != null)
+        if (admin != null)
         {
             if (updatedAdmin.Username != admin.Username)
             {
@@ -164,6 +164,58 @@ public class UserManagementRepository(DatabaseContext context)
             {
                 _context.Update(admin);
                 return _context.SaveChanges() > 0 ? admin : null;
+            }
+        }
+
+        return null;
+    }
+    
+    /// <summary>
+    /// Edits a staff member's data.
+    /// </summary>
+    /// <param name="updatedStaffMember"></param>
+    /// <returns></returns>
+    public Staff? EditStaffMember(UserDto updatedStaffMember)
+    {
+        Staff? staff = GetStaffMember(updatedStaffMember.Username!);
+        bool isUpdated = false;
+
+        if(staff != null)
+        {
+            if (updatedStaffMember.Username != staff.Username)
+            {
+                staff.Username = updatedStaffMember.Username!;
+                isUpdated = true;
+            }
+
+            if (updatedStaffMember.Email != staff.Email)
+            {
+                staff.Email = updatedStaffMember.Email!;
+                isUpdated = true;
+            }
+
+            if (updatedStaffMember.FirstName != staff.FirstName)
+            {
+                staff.FirstName = updatedStaffMember.FirstName!;
+                isUpdated = true;
+            }
+
+            if (updatedStaffMember.LastName != staff.LastName)
+            {
+                staff.LastName = updatedStaffMember.LastName!;
+                isUpdated = true;
+            }
+
+            if (updatedStaffMember.RoleId != staff.RoleId)
+            {
+                staff.RoleId = updatedStaffMember.RoleId!;
+                isUpdated = true;
+            }
+
+            if (isUpdated)
+            {
+                _context.Update(staff);
+                return _context.SaveChanges() > 0 ? staff : null;
             }
         }
 
