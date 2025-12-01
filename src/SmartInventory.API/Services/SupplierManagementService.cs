@@ -1,3 +1,4 @@
+using SmartInventory.API.Domain.DTO;
 using SmartInventory.API.Domain.Models;
 using SmartInventory.API.Repositories;
 
@@ -46,6 +47,22 @@ public class SupplierManagementService(SupplierManagementRepository suppRepo)
     /// </summary>
     /// <returns></returns>
     public List<Supplier>? GetDeactivatedSuppliers() => _suppManRepo.GetDeactivatedSuppliers();
+
+    /// <summary>
+    /// Edits a supplier's data.
+    /// </summary>
+    /// <param name="updatedSupplier"></param>
+    /// <returns></returns>
+    public SupplierDto? EditSupplier(SupplierDto updatedSupplier)
+    {
+        if (updatedSupplier.Id >= 0 && !string.IsNullOrEmpty(updatedSupplier.Address) &&
+           !string.IsNullOrEmpty(updatedSupplier.Email) && !string.IsNullOrEmpty(updatedSupplier.Phone) &&
+           !string.IsNullOrEmpty(updatedSupplier.SupplierName) && !string.IsNullOrEmpty(updatedSupplier.Website) &&
+           !string.IsNullOrEmpty(updatedSupplier.ContactPersonEmail) && !string.IsNullOrEmpty(updatedSupplier.ContactPersonName) &&
+           !string.IsNullOrEmpty(updatedSupplier.ContactPersonPhone) && !string.IsNullOrEmpty(updatedSupplier.ContactPersonRole))
+            return _suppManRepo.EditSupplier(updatedSupplier) is Supplier supplier? updatedSupplier : null;
+        return null;
+    }
 
     /// <summary>
     /// Checks if the supplier's data does not violate any constraints.

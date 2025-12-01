@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using SmartInventory.API.Domain.DTO;
 using SmartInventory.API.Domain.Models;
 using SmartInventory.API.Services;
 
@@ -63,4 +64,14 @@ public class SupplierController(SupplierManagementService suppService) : Control
     public IActionResult ViewDeactivatedSuppliers() => _suppService.GetDeactivatedSuppliers() is List<Supplier> suppliers ?
                                                      Ok(suppliers) :
                                                      BadRequest("Failed to fetch deactivated suppliers!");
+
+    /// <summary>
+    /// Edits a supplier's data.
+    /// </summary>
+    /// <param name="updatedSupplier"></param>
+    /// <returns></returns>
+    [HttpPut]
+    public IActionResult EditSupplier(SupplierDto updatedSupplier) => _suppService.EditSupplier(updatedSupplier) is SupplierDto dto ?
+                                                                      Ok(dto) :
+                                                                      BadRequest("Failed to edit supplier's data.");
 }
