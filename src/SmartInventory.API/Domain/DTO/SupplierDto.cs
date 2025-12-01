@@ -54,4 +54,14 @@ public class SupplierDto
     /// The URL of the supplier's website.
     /// </summary>
     public string? Website { get; set; }
+
+    /// <summary>
+    /// Indicates whether the supplier is still active or deactivated.
+    /// </summary>
+    public required bool IsActive { get; set; }
+
+     /// <summary>
+    /// The date on which the supplier was added to the system.
+    /// </summary>
+    public required DateTime DateCreated { get; set; }
 }

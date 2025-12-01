@@ -20,7 +20,35 @@ public class SupplierManagementService(SupplierManagementRepository suppRepo)
     /// </summary>
     /// <param name="newSupplier"></param>
     /// <returns></returns>
-    public bool CreateSupplier(Supplier newSupplier) => IsDataValid(newSupplier) && _suppManRepo.CreateSupplier(newSupplier);
+    public bool CreateSupplier(SupplierDto newSupplier) //=> IsDataValid(newSupplier) && _suppManRepo.CreateSupplier(newSupplier);
+    {
+        if (newSupplier.Id >= 0 && !string.IsNullOrEmpty(newSupplier.Address) &&
+           !string.IsNullOrEmpty(newSupplier.Email) && !string.IsNullOrEmpty(newSupplier.Phone) &&
+           !string.IsNullOrEmpty(newSupplier.SupplierName) && !string.IsNullOrEmpty(newSupplier.Website) &&
+           !string.IsNullOrEmpty(newSupplier.ContactPersonEmail) && !string.IsNullOrEmpty(newSupplier.ContactPersonName) &&
+           !string.IsNullOrEmpty(newSupplier.ContactPersonPhone) && !string.IsNullOrEmpty(newSupplier.ContactPersonRole))
+        {
+            return _suppManRepo.CreateSupplier(new()
+            {
+                SupplierName = newSupplier.SupplierName,
+                Email = newSupplier.Email,
+                Address = newSupplier.Address,
+                IsActive = newSupplier.IsActive,
+                Phone = newSupplier.Phone,
+                Website = newSupplier.Website,
+                DateCreated = newSupplier.DateCreated,
+                ContactPersonName = newSupplier.ContactPersonName,
+                ContactPersonEmail = newSupplier.ContactPersonEmail,
+                ContactPersonPhone = newSupplier.ContactPersonPhone,
+                ContactPersonRole = newSupplier.ContactPersonRole,
+                Id = newSupplier.Id,
+                Products = [],
+                PurchaseOrders = []
+            });
+        }
+
+        return false;
+    }
 
     /// <summary>
     /// Gets a supplier with the given supplier ID.

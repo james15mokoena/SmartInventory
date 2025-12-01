@@ -1,2 +1,1 @@
-
-delete from Product;
+SELECT * from Product;

@@ -23,7 +23,7 @@ public class SupplierController(SupplierManagementService suppService) : Control
     /// <param name="supplier"></param>
     /// <returns></returns>
     [HttpPost]
-    public IActionResult CreateSupplier(Supplier supplier) => _suppService.CreateSupplier(supplier) ?
+    public IActionResult CreateSupplier(SupplierDto supplier) => _suppService.CreateSupplier(supplier) ?
                                                               CreatedAtAction(nameof(CreateSupplier), supplier) :
                                                               BadRequest("Failed to add a new supplier!");
 

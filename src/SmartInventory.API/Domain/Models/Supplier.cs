@@ -74,7 +74,7 @@ public class Supplier : IUser
     /// <summary>
     /// The date on which the supplier was added to the system.
     /// </summary>
-    public required string DateCreated { get; set; }
+    public required DateTime DateCreated { get; set; }
 
     // Navigation properties
 
