@@ -8,7 +8,7 @@ public class SupplierDto
     /// <summary>
     /// A unique ID or number of a supplier.
     /// </summary>
-    public int Id { get; set; }
+    public int Id { get; set; } = -1;
 
     /// <summary>
     /// The name of the supplier.
