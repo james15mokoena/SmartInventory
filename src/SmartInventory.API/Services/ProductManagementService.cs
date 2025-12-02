@@ -60,7 +60,7 @@ public class ProductManagementService(ProductManagementRepository productRepo, S
 
         return false;
     }
-    
+
     /// <summary>
     /// Gets a product identified by the SKU(Stock-Keeping Unit) number.
     /// </summary>
@@ -108,5 +108,119 @@ public class ProductManagementService(ProductManagementRepository productRepo, S
             }
         }
         return null;
+    }
+
+    /// <summary>
+    /// Fetches all active products.
+    /// </summary>
+    /// <returns></returns>
+    public List<ProductDto>? GetActiveProducts()
+    {
+        List<Product>? products = _productRepo.GetActiveProducts();
+
+        if (products != null && products.Count > 0)
+        {
+            List<ProductDto> productDtos = [];
+
+            foreach (Product product in products)
+            {
+                if (product != null)
+                {
+                    productDtos.Add(new ProductDto
+                    {
+                        SKU = product.SKU
+                        ,
+                        Barcode = product.Barcode
+                        ,
+                        Category = product.Category
+                        ,
+                        CostPrice = product.CostPrice
+                        ,
+                        CurrentStock = product.CurrentStock
+                        ,
+                        DateCreated = product.DateCreated
+                        ,
+                        Description = product.Description
+                        ,
+                        IsActive = product.IsActive
+                        ,
+                        LastUpdated = product.LastUpdated
+                        ,
+                        MinimumStockLevel = product.MinimumStockLevel
+                        ,
+                        Name = product.Name
+                        ,
+                        ReorderQuantity = product.ReorderQuantity
+                        ,
+                        SupplierId = product.SupplierId
+                        ,
+                        UnitMeasurement = product.UnitMeasurement
+                        ,
+                        UnitPrice = product.UnitPrice
+                    });
+                }
+            }
+
+            return productDtos;
+        }
+
+        return null;
+    }
+    
+    /// <summary>
+    /// Fetches all deactivated products.
+    /// </summary>
+    /// <returns></returns>
+    public List<ProductDto>? GetDeactivatedProducts()
+    {
+        List<Product>? products = _productRepo.GetDeactivatedProducts();
+
+        if (products != null && products.Count > 0)
+        {
+            List<ProductDto> productDtos = [];
+
+            foreach (Product product in products)
+            {
+                if (product != null)
+                {
+                    productDtos.Add(new ProductDto
+                    {
+                        SKU = product.SKU
+                        ,
+                        Barcode = product.Barcode
+                        ,
+                        Category = product.Category
+                        ,
+                        CostPrice = product.CostPrice
+                        ,
+                        CurrentStock = product.CurrentStock
+                        ,
+                        DateCreated = product.DateCreated
+                        ,
+                        Description = product.Description
+                        ,
+                        IsActive = product.IsActive
+                        ,
+                        LastUpdated = product.LastUpdated
+                        ,
+                        MinimumStockLevel = product.MinimumStockLevel
+                        ,
+                        Name = product.Name
+                        ,
+                        ReorderQuantity = product.ReorderQuantity
+                        ,
+                        SupplierId = product.SupplierId
+                        ,
+                        UnitMeasurement = product.UnitMeasurement
+                        ,
+                        UnitPrice = product.UnitPrice
+                    });
+                }
+            }
+            
+            return productDtos;
+        }
+        
+        return null;       
     }
 }

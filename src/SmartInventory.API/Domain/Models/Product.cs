@@ -87,6 +87,11 @@ public class Product
     /// </summary>
     public string Barcode { get; set; } = "";
 
+    /// <summary>
+    /// The URL of the product's image.
+    /// </summary>
+    public string ImageUrl { get; set; } = "";
+
     // Navigation properties.
 
     /// <summary>

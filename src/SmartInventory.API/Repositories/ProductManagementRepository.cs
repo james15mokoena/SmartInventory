@@ -30,4 +30,16 @@ public class ProductManagementRepository(DatabaseContext context)
     /// <param name="sku"></param>
     /// <returns></returns>
     public Product? GetProductBySku(string sku) => _context.Products.FirstOrDefault(p => p.SKU == sku);
+
+    /// <summary>
+    /// Used to fetch all active products.
+    /// </summary>
+    /// <returns></returns>
+    public List<Product>? GetActiveProducts() => [.. _context.Products.Where(p => p.IsActive == true)];
+
+    /// <summary>
+    /// Used to fetch all deactivated products.
+    /// </summary>
+    /// <returns></returns>
+    public List<Product>? GetDeactivatedProducts() => [.. _context.Products.Where(p => p.IsActive == false)];
 }

@@ -36,4 +36,22 @@ public class ProductController(ProductManagementService productService) : Contro
     public IActionResult ViewProductDetails(string sku) => _productService.GetProductBySku(sku) is ProductDto dto ?
                                                            Ok(dto) :
                                                            BadRequest("Failed to fetch product details!");
+
+    /// <summary>
+    /// Fetches all active products.
+    /// </summary>
+    /// <returns></returns>
+    [HttpGet]
+    public IActionResult ViewActiveProducts() => _productService.GetActiveProducts() is List<ProductDto> dtos ?
+                                                           Ok(dtos) :
+                                                           BadRequest("Failed to fetch active products!");
+
+    /// <summary>
+    /// Fetches all deactivated products.
+    /// </summary>
+    /// <returns></returns>
+    [HttpGet]
+    public IActionResult ViewDeactivatedProducts() => _productService.GetDeactivatedProducts() is List<ProductDto> dtos ?
+                                                           Ok(dtos) :
+                                                           BadRequest("Failed to fetch deactivated products!");
 }
