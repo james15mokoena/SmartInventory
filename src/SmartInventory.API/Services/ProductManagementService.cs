@@ -226,4 +226,21 @@ public class ProductManagementService(ProductManagementRepository productRepo, S
     /// <param name="sku"></param>
     /// <returns></returns>
     public bool ToggleProductActiveStatus(string sku) => !string.IsNullOrEmpty(sku) && _productRepo.ToggleProductActiveStatus(sku);
+
+    /// <summary>
+    /// Edits a product's data.
+    /// </summary>
+    /// <param name="updatedProduct"></param>
+    /// <returns></returns>
+    public ProductDto? EditProduct(ProductDto updatedProduct)
+    {
+        if (!string.IsNullOrEmpty(updatedProduct.SKU) && !string.IsNullOrEmpty(updatedProduct.Name) &&
+           !string.IsNullOrEmpty(updatedProduct.Barcode) && !string.IsNullOrEmpty(updatedProduct.Category) &&
+           !string.IsNullOrEmpty(updatedProduct.Description) && updatedProduct.CostPrice >= 0.0 &&
+           updatedProduct.CurrentStock >= 0.0 && updatedProduct.MinimumStockLevel >= 0.0 && updatedProduct.ReorderQuantity >= 0 &&
+           updatedProduct.UnitPrice >= 0.0 && updatedProduct.UnitMeasurement >= 0.0 && updatedProduct.SupplierId >= 0 &&
+           updatedProduct.LastUpdated != default && updatedProduct.DateCreated != default)
+            return _productRepo.EditProduct(updatedProduct) is Product p ? updatedProduct : null;
+        return null;
+    }
 }

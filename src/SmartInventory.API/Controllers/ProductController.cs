@@ -64,4 +64,14 @@ public class ProductController(ProductManagementService productService) : Contro
     public IActionResult ActivateOrDeactivateProduct(string sku) => _productService.ToggleProductActiveStatus(sku) ?
                                                                     Ok("Product status changed!") :
                                                                     BadRequest("Failed to change product's status!");
+
+    /// <summary>
+    /// Edits a product's data.
+    /// </summary>
+    /// <param name="updatedProduct"></param>
+    /// <returns></returns>
+    [HttpPut]
+    public IActionResult EditProduct(ProductDto updatedProduct) => _productService.EditProduct(updatedProduct) is ProductDto d ?
+                                                                   Ok(d) :
+                                                                   BadRequest("Failed to edit the product!");
 }

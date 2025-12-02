@@ -1,1 +1,1 @@
-SELECT * from Supplier;
+SELECT * from Product;
