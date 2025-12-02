@@ -30,9 +30,8 @@ public class ProductManagementService(ProductManagementRepository productRepo, S
             newProduct.ReorderQuantity >= 0 && newProduct.UnitMeasurement >= 0.0 && newProduct.SupplierId >= 0)
         {
             // get the supplier of this product.
-            Supplier? supplier = _supplierService.GetSupplier(newProduct.SupplierId);
 
-            if (supplier != null)
+            if (_supplierService.GetSupplier(newProduct.SupplierId) is Supplier supplier)
             {
                 return _productRepo.CreateProduct(new()
                 {
@@ -70,8 +69,7 @@ public class ProductManagementService(ProductManagementRepository productRepo, S
     {
         if (!string.IsNullOrEmpty(sku))
         {
-            Product? product = _productRepo.GetProductBySku(sku);
-            if (product != null)
+            if (_productRepo.GetProductBySku(sku) is Product product)
             {
                 return new ProductDto()
                 {
@@ -116,9 +114,8 @@ public class ProductManagementService(ProductManagementRepository productRepo, S
     /// <returns></returns>
     public List<ProductDto>? GetActiveProducts()
     {
-        List<Product>? products = _productRepo.GetActiveProducts();
 
-        if (products != null && products.Count > 0)
+        if (_productRepo.GetActiveProducts() is List<Product> products && products.Count > 0)
         {
             List<ProductDto> productDtos = [];
 
@@ -166,16 +163,15 @@ public class ProductManagementService(ProductManagementRepository productRepo, S
 
         return null;
     }
-    
+
     /// <summary>
     /// Fetches all deactivated products.
     /// </summary>
     /// <returns></returns>
     public List<ProductDto>? GetDeactivatedProducts()
     {
-        List<Product>? products = _productRepo.GetDeactivatedProducts();
 
-        if (products != null && products.Count > 0)
+        if (_productRepo.GetDeactivatedProducts() is List<Product> products && products.Count > 0)
         {
             List<ProductDto> productDtos = [];
 
@@ -217,10 +213,17 @@ public class ProductManagementService(ProductManagementRepository productRepo, S
                     });
                 }
             }
-            
+
             return productDtos;
         }
-        
-        return null;       
+
+        return null;
     }
+
+    /// <summary>
+    /// Activates or deactivates a product.
+    /// </summary>
+    /// <param name="sku"></param>
+    /// <returns></returns>
+    public bool ToggleProductActiveStatus(string sku) => !string.IsNullOrEmpty(sku) && _productRepo.ToggleProductActiveStatus(sku);
 }

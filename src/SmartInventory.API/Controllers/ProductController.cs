@@ -54,4 +54,14 @@ public class ProductController(ProductManagementService productService) : Contro
     public IActionResult ViewDeactivatedProducts() => _productService.GetDeactivatedProducts() is List<ProductDto> dtos ?
                                                            Ok(dtos) :
                                                            BadRequest("Failed to fetch deactivated products!");
+
+    /// <summary>
+    /// Activates or deactivates a product.
+    /// </summary>
+    /// <param name="sku"></param>
+    /// <returns></returns>
+    [HttpPut("{sku}")]
+    public IActionResult ActivateOrDeactivateProduct(string sku) => _productService.ToggleProductActiveStatus(sku) ?
+                                                                    Ok("Product status changed!") :
+                                                                    BadRequest("Failed to change product's status!");
 }

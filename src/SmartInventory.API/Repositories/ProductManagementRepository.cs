@@ -42,4 +42,20 @@ public class ProductManagementRepository(DatabaseContext context)
     /// </summary>
     /// <returns></returns>
     public List<Product>? GetDeactivatedProducts() => [.. _context.Products.Where(p => p.IsActive == false)];
+
+    /// <summary>
+    /// Activates or deactivates a product.
+    /// </summary>
+    /// <param name="sku"></param>
+    /// <returns></returns>
+    public bool ToggleProductActiveStatus(string sku)
+    {
+        if (GetProductBySku(sku) is Product product)
+        {
+            product.IsActive = !product.IsActive;
+            _context.Update(product);
+            return _context.SaveChanges() > 0;
+        }
+        return false;
+    }
 }
