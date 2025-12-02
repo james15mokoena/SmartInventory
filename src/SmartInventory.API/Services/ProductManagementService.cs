@@ -32,7 +32,7 @@ public class ProductManagementService(ProductManagementRepository productRepo, S
             // get the supplier of this product.
             Supplier? supplier = _supplierService.GetSupplier(newProduct.SupplierId);
 
-            if(supplier != null)
+            if (supplier != null)
             {
                 return _productRepo.CreateProduct(new()
                 {
@@ -57,7 +57,56 @@ public class ProductManagementService(ProductManagementRepository productRepo, S
                 });
             }
         }
-        
+
         return false;
+    }
+    
+    /// <summary>
+    /// Gets a product identified by the SKU(Stock-Keeping Unit) number.
+    /// </summary>
+    /// <param name="sku"></param>
+    /// <returns></returns>
+    public ProductDto? GetProductBySku(string sku)
+    {
+        if (!string.IsNullOrEmpty(sku))
+        {
+            Product? product = _productRepo.GetProductBySku(sku);
+            if (product != null)
+            {
+                return new ProductDto()
+                {
+                    SKU = product.SKU
+                    ,
+                    Barcode = product.Barcode
+                    ,
+                    Category = product.Category
+                    ,
+                    CostPrice = product.CostPrice
+                    ,
+                    CurrentStock = product.CurrentStock
+                    ,
+                    DateCreated = product.DateCreated
+                    ,
+                    Description = product.Description
+                    ,
+                    IsActive = product.IsActive
+                    ,
+                    LastUpdated = product.LastUpdated
+                    ,
+                    MinimumStockLevel = product.MinimumStockLevel
+                    ,
+                    Name = product.Name
+                    ,
+                    ReorderQuantity = product.ReorderQuantity
+                    ,
+                    SupplierId = product.SupplierId
+                    ,
+                    UnitMeasurement = product.UnitMeasurement
+                    ,
+                    UnitPrice = product.UnitPrice
+                };
+            }
+        }
+        return null;
     }
 }

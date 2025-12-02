@@ -23,4 +23,11 @@ public class ProductManagementRepository(DatabaseContext context)
         _context.Products.Add(newProduct);
         return _context.SaveChanges() > 0;
     }
+
+    /// <summary>
+    /// Used to fetch a product's details from the database.
+    /// </summary>
+    /// <param name="sku"></param>
+    /// <returns></returns>
+    public Product? GetProductBySku(string sku) => _context.Products.FirstOrDefault(p => p.SKU == sku);
 }
