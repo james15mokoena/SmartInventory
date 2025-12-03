@@ -1,1 +1,1 @@
-SELECT * from ReasonType;
+SELECT * from StockTransaction;

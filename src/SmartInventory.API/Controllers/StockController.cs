@@ -44,4 +44,18 @@ public class StockController(StockManagementService stockService) : ControllerBa
     public IActionResult ViewTransactionReasons() => _stockService.GetTransactionReasons() is List<ReasonType?> reasonTypes ?
                                                      Ok(reasonTypes) :
                                                      BadRequest("Failed to fetch transaction reasons!");
+
+    /// <summary>
+    /// Records a new stock transaction.
+    /// </summary>
+    /// <param name="sku"></param>
+    /// <param name="quantity"></param>
+    /// <param name="userId"></param>
+    /// <param name="reasonTypeId"></param>
+    /// <returns></returns>
+    [HttpPost]
+    public IActionResult RecordIncomingStock(string sku, int quantity, int userId, int reasonTypeId) =>
+            _stockService.RecordIncomingStock(sku, quantity, userId, reasonTypeId) ?
+            Ok("Stock transaction recorded successfully!") :
+            BadRequest("Failed to record stock transaction!");
 }
