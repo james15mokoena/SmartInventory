@@ -34,6 +34,13 @@ public class StockManagementService(StockManagementRepository stockRepo)
     /// </summary>
     /// <param name="reasonType"></param>
     /// <returns></returns>
-    public bool AddTransactionReason(ReasonType reasonType) => _stockRepo.AddTransactionReason(reasonType);
+    public bool AddTransactionReason(ReasonType reasonType) => !string.IsNullOrEmpty(reasonType.Reason) && _stockRepo.AddTransactionReason(reasonType);
+
+    /// <summary>
+    /// Used to delete a transaction reason.
+    /// </summary>
+    /// <param name="reasonTypeId"></param>
+    /// <returns></returns>
+    public bool DeleteTransactionReason(int reasonTypeId) => reasonTypeId >= 0 && _stockRepo.DeleteTransactionReason(reasonTypeId);
                                                             
 }

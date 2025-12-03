@@ -23,6 +23,16 @@ public class StockController(StockManagementService stockService) : ControllerBa
     /// <returns></returns>
     [HttpPost]
     public IActionResult AddTransactionReason(ReasonType reasonType) => _stockService.AddTransactionReason(reasonType) ?
-                                                                        CreatedAtAction(nameof(AddTransactionReason),reasonType) :
-                                                                        BadRequest("Failed to add a new transaction!");
+                                                                        CreatedAtAction(nameof(AddTransactionReason), reasonType) :
+                                                                        BadRequest("Failed to add a new transaction reason!");
+
+    /// <summary>
+    /// Deletes a transaction reason.
+    /// </summary>
+    /// <param name="reasonType"></param>
+    /// <returns></returns>
+    [HttpDelete("{reasonTypeId}")]
+    public IActionResult DeleteTransactionReason(int reasonTypeId) => _stockService.DeleteTransactionReason(reasonTypeId) ?
+                                                                        Ok("Transaction reason deleted successfully!") :
+                                                                        BadRequest("Failed to delete a transaction reason!");
 }

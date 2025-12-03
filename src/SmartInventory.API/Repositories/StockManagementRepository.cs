@@ -63,7 +63,7 @@ public class StockManagementRepository(DatabaseContext context)
         }
         return false;
     }
-    
+
     /// <summary>
     /// Used to add a new transaction reason.
     /// </summary>
@@ -80,6 +80,21 @@ public class StockManagementRepository(DatabaseContext context)
                 Reason = reasonType.Reason
             });
 
+            return _context.SaveChanges() > 0;
+        }
+        return false;
+    }
+    
+    /// <summary>
+    /// Used to delete a transaction reason.
+    /// </summary>
+    /// <param name="reasonTypeId"></param>
+    /// <returns></returns>
+    public bool DeleteTransactionReason(int reasonTypeId)
+    {
+        if(_context.ReasonTypes.FirstOrDefault(r => r.Id == reasonTypeId) is ReasonType reason)
+        {
+            _context.ReasonTypes.Remove(reason);
             return _context.SaveChanges() > 0;
         }
         return false;
