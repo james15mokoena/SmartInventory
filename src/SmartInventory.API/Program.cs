@@ -28,16 +28,19 @@ builder.Services.AddControllers();
 builder.Services.AddScoped<UserManagementRepository>();
 builder.Services.AddScoped<SupplierManagementRepository>();
 builder.Services.AddScoped<ProductManagementRepository>();
+builder.Services.AddScoped<StockManagementRepository>();
 
 // add services to the DI container
 builder.Services.AddScoped<PasswordService>();
 builder.Services.AddScoped<UserManagementService>();
 builder.Services.AddScoped<SupplierManagementService>();
 builder.Services.AddScoped<ProductManagementService>();
+builder.Services.AddScoped<StockManagementService>();
 
 // add controllers to the DI container.
 builder.Services.AddScoped<UserController>();
 builder.Services.AddScoped<SupplierController>();
+builder.Services.AddScoped<ProductController>();
 builder.Services.AddScoped<ProductController>();
 
 // Add services to the container.
