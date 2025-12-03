@@ -35,4 +35,13 @@ public class StockController(StockManagementService stockService) : ControllerBa
     public IActionResult DeleteTransactionReason(int reasonTypeId) => _stockService.DeleteTransactionReason(reasonTypeId) ?
                                                                         Ok("Transaction reason deleted successfully!") :
                                                                         BadRequest("Failed to delete a transaction reason!");
+
+    /// <summary>
+    /// Fetches transaction reasons.
+    /// </summary>
+    /// <returns></returns>
+    [HttpGet]
+    public IActionResult ViewTransactionReasons() => _stockService.GetTransactionReasons() is List<ReasonType?> reasonTypes ?
+                                                     Ok(reasonTypes) :
+                                                     BadRequest("Failed to fetch transaction reasons!");
 }

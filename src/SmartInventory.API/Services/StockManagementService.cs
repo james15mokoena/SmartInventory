@@ -42,5 +42,11 @@ public class StockManagementService(StockManagementRepository stockRepo)
     /// <param name="reasonTypeId"></param>
     /// <returns></returns>
     public bool DeleteTransactionReason(int reasonTypeId) => reasonTypeId >= 0 && _stockRepo.DeleteTransactionReason(reasonTypeId);
+
+    /// <summary>
+    /// Used to get all transaction reasons.
+    /// </summary>
+    /// <returns></returns>
+    public List<ReasonType?>? GetTransactionReasons() => _stockRepo.GetTransactionReasons();
                                                             
 }

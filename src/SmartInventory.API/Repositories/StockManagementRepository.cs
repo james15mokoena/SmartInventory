@@ -84,7 +84,7 @@ public class StockManagementRepository(DatabaseContext context)
         }
         return false;
     }
-    
+
     /// <summary>
     /// Used to delete a transaction reason.
     /// </summary>
@@ -92,11 +92,17 @@ public class StockManagementRepository(DatabaseContext context)
     /// <returns></returns>
     public bool DeleteTransactionReason(int reasonTypeId)
     {
-        if(_context.ReasonTypes.FirstOrDefault(r => r.Id == reasonTypeId) is ReasonType reason)
+        if (_context.ReasonTypes.FirstOrDefault(r => r.Id == reasonTypeId) is ReasonType reason)
         {
             _context.ReasonTypes.Remove(reason);
             return _context.SaveChanges() > 0;
         }
         return false;
     }
+
+    /// <summary>
+    /// Used to fetch all transaction reasons.
+    /// </summary>
+    /// <returns></returns>
+    public List<ReasonType?>? GetTransactionReasons() => [.. _context.ReasonTypes.DefaultIfEmpty()];
 }
