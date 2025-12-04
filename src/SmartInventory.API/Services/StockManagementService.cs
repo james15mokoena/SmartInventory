@@ -8,7 +8,7 @@ namespace SmartInventory.API.Services;
 /// 
 /// </summary>
 /// <param name="stockRepo"></param>
-public class StockManagementService(StockManagementRepository stockRepo)
+public class StockManagementService(StockManagementRepository stockRepo, UserManagementService userService)
 {
     /// <summary>
     /// Used to interact with the database.
@@ -16,18 +16,45 @@ public class StockManagementService(StockManagementRepository stockRepo)
     private readonly StockManagementRepository _stockRepo = stockRepo;
 
     /// <summary>
+    /// Used to interact with the user management service.
+    /// </summary>
+    private readonly UserManagementService _userService = userService;
+
+    /// <summary>
     /// Used to record a stock transaction that adds stocks.
     /// </summary>
     /// <param name="sku">A product's stock-keeping unit number.</param>
     /// <param name="quantity">The quantity to be added to product.</param>
-    /// <param name="userId">An identifier for the user who initiated the transaction.</param>
-    /// <param name="reasonTypeId">The reason for which the transaction was initiated.</param>
+    /// <param name="username">An identifier for the user who initiated the transaction.</param>
+    /// <param name="reason">The reason for which the transaction was initiated.</param>
     /// <param name="isNewProduct">Indicates whether a new product is added.</param>
     /// <returns></returns>
-    public bool RecordIncomingStock(string sku, int quantity, int userId, int reasonTypeId, bool isNewProduct)
+    public bool RecordIncomingStock(string sku, int quantity, string username, string reason, bool isNewProduct)
     {
-        if (!string.IsNullOrEmpty(sku) && quantity > 0 && userId >= 0 && reasonTypeId >= 0)
-            return _stockRepo.RecordIncomingStock(sku, quantity, userId, reasonTypeId, isNewProduct);
+        if (!string.IsNullOrEmpty(sku) && quantity > 0 && !string.IsNullOrEmpty(username) && !string.IsNullOrEmpty(reason))
+        {
+            if(_userService.GetAdmin(username) is Admin admin)
+                return _stockRepo.RecordIncomingStock(sku, quantity, admin.Id, reason, isNewProduct);
+        }
+            
+        return false;
+    }
+
+    /// <summary>
+    /// Used to deduct the specified quantity from the stock quantity.
+    /// </summary>
+    /// <param name="sku"></param>
+    /// <param name="quantity"></param>
+    /// <param name="username"></param>
+    /// <param name="reasonType"></param>
+    /// <returns></returns>
+    public bool RecordOutgoingStock(string sku, int quantity, string username, string reason)
+    {
+        if (!string.IsNullOrEmpty(sku) && quantity > 0 && !string.IsNullOrEmpty(username) && !string.IsNullOrEmpty(reason))
+        {
+            if(_userService.GetAdmin(username) is Admin admin)      
+                return _stockRepo.RecordOutgoingStock(sku, quantity, admin.Id, reason);
+        }
         return false;
     }
 

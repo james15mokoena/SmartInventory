@@ -32,7 +32,7 @@ public class UserManagementRepository(DatabaseContext context)
     }
 
     /// <summary>
-    /// Verifies if there's a user with the given username.
+    /// Used to fetch a user by their username.
     /// </summary>
     /// <param name="username"></param>
     /// <returns></returns>

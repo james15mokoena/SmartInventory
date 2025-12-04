@@ -51,13 +51,13 @@ public class StockController(StockManagementService stockService) : ControllerBa
     /// </summary>
     /// <param name="sku"></param>
     /// <param name="quantity"></param>
-    /// <param name="userId"></param>
-    /// <param name="reasonTypeId"></param>
+    /// <param name="username"></param>
+    /// <param name="reason"></param>
     /// <param name="isNewProduct">Indicates whether a new product is added.</param>
     /// <returns></returns>
     [HttpPost]
-    public IActionResult RecordIncomingStock(string sku, int quantity, int userId, int reasonTypeId, bool isNewProduct) =>
-            _stockService.RecordIncomingStock(sku, quantity, userId, reasonTypeId, isNewProduct) ?
+    public IActionResult RecordIncomingStock(string sku, int quantity, string username, string reason, bool isNewProduct) =>
+            _stockService.RecordIncomingStock(sku, quantity, username, reason, isNewProduct) ?
             Ok("Stock transaction recorded successfully!") :
             BadRequest("Failed to record stock transaction!");
 
@@ -69,4 +69,18 @@ public class StockController(StockManagementService stockService) : ControllerBa
     public IActionResult ViewStockTransactions() => _stockService.GetStockTransactions() is List<StockTransactionDto> dtos ?
                                                     Ok(dtos) :
                                                     BadRequest("Failed to fetch stock transactions!");
+
+    /// <summary>
+    /// Records an outgoing stock transaction.
+    /// </summary>
+    /// <param name="sku"></param>
+    /// <param name="quantity"></param>
+    /// <param name="username"></param>
+    /// <param name="reason"></param>
+    /// <returns></returns>
+    [HttpPost]
+    public IActionResult RecordOutgoingStock(string sku, int quantity, string username, string reason) =>
+                                            _stockService.RecordOutgoingStock(sku, quantity, username, reason) ?
+                                            Ok("Stock transaction recorded successfully!") :
+                                            BadRequest("Failed to record stock transaction!");
 }
