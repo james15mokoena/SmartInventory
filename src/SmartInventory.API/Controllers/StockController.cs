@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using SmartInventory.API.Domain.DTO;
 using SmartInventory.API.Domain.Models;
 using SmartInventory.API.Services;
 
@@ -59,4 +60,13 @@ public class StockController(StockManagementService stockService) : ControllerBa
             _stockService.RecordIncomingStock(sku, quantity, userId, reasonTypeId, isNewProduct) ?
             Ok("Stock transaction recorded successfully!") :
             BadRequest("Failed to record stock transaction!");
+
+    /// <summary>
+    /// Fetches stock transactions.
+    /// </summary>
+    /// <returns></returns>
+    [HttpGet]
+    public IActionResult ViewStockTransactions() => _stockService.GetStockTransactions() is List<StockTransactionDto> dtos ?
+                                                    Ok(dtos) :
+                                                    BadRequest("Failed to fetch stock transactions!");
 }

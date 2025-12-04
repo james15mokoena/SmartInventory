@@ -1,3 +1,4 @@
+using SmartInventory.API.Domain.DTO;
 using SmartInventory.API.Domain.Models;
 using SmartInventory.API.Repositories;
 
@@ -49,5 +50,43 @@ public class StockManagementService(StockManagementRepository stockRepo)
     /// </summary>
     /// <returns></returns>
     public List<ReasonType?>? GetTransactionReasons() => _stockRepo.GetTransactionReasons();
-                                                            
+
+    /// <summary>
+    /// Used to fetch all stock transactions.
+    /// </summary>
+    /// <returns></returns>
+    public List<StockTransactionDto>? GetStockTransactions()
+    {
+        List<StockTransaction>? stockTransactions = _stockRepo.GetStockTransactions();
+
+        if (stockTransactions != null && stockTransactions.Count > 0)
+        {
+            List<StockTransactionDto> stockTransactionDtos = [];
+            foreach (StockTransaction stockTransaction in stockTransactions)
+                stockTransactionDtos.Add(ToStockTransactionDto(stockTransaction));
+
+            return stockTransactionDtos;
+        }
+        return null;
+    }
+
+    /// <summary>
+    /// Converts a StockTransaction object to StockTransactionDto object.
+    /// </summary>
+    /// <param name="stockTransaction"></param>
+    /// <returns></returns>
+    private static StockTransactionDto ToStockTransactionDto(StockTransaction stockTransaction)
+    {
+        return new StockTransactionDto
+        {
+            TransactionId = stockTransaction.TransactionId
+            ,UserId = stockTransaction.UserId
+            ,ProductId = stockTransaction.ProductId
+            ,NewStock = stockTransaction.NewStock
+            ,PreviousStock = stockTransaction.PreviousStock
+            ,QuantityChange = stockTransaction.QuantityChange
+            ,Date = stockTransaction.Date
+            ,ReasonTypeId = stockTransaction.ReasonTypeId
+        };
+    }
 }

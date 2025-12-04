@@ -115,4 +115,11 @@ public class StockManagementRepository(DatabaseContext context)
     /// <returns></returns>
     public int GetTransactionReasonId(string reason) => _context.ReasonTypes.FirstOrDefault(r => r.Reason == reason) is ReasonType r ?
                                                         r.Id : -1;
+
+    /// <summary>
+    /// Used to fetch all stock transactions.
+    /// </summary>
+    /// <returns></returns>
+    public List<StockTransaction>? GetStockTransactions() => [.. from stockTransaction in _context.StockTransactions
+                                                             select stockTransaction];
 }
