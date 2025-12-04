@@ -71,6 +71,16 @@ public class StockController(StockManagementService stockService) : ControllerBa
                                                     BadRequest("Failed to fetch stock transactions!");
 
     /// <summary>
+    /// Fetches a stock's transactions.
+    /// </summary>
+    /// <returns></returns>
+    [HttpGet("{sku}")]
+    public IActionResult ViewStockTransactionsBySku(string sku) =>
+                                            _stockService.GetStockTransactionsBySku(sku) is List<StockTransactionDto> dtos ?
+                                            Ok(dtos) :
+                                            BadRequest("Failed to fetch stock transactions!");
+
+    /// <summary>
     /// Records an outgoing stock transaction.
     /// </summary>
     /// <param name="sku"></param>

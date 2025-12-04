@@ -2,3 +2,4 @@
 -- SELECT * FROM Product;
 -- SELECT * FROM StockTransaction;
 SELECT * from ReasonType;
+-- delete from ReasonType where Reason = "Adjusted";

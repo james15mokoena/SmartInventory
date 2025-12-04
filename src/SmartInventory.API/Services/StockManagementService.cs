@@ -97,6 +97,25 @@ public class StockManagementService(StockManagementRepository stockRepo, UserMan
         return null;
     }
 
+     /// <summary>
+    /// Used to fetch a product's stock transactions.
+    /// </summary>
+    /// <returns></returns>
+    public List<StockTransactionDto>? GetStockTransactionsBySku(string sku)
+    {
+        List<StockTransaction>? stockTransactions = _stockRepo.GetStockTransactionsBySku(sku);
+
+        if (stockTransactions != null && stockTransactions.Count > 0)
+        {
+            List<StockTransactionDto> stockTransactionDtos = [];
+            foreach (StockTransaction stockTransaction in stockTransactions)
+                stockTransactionDtos.Add(ToStockTransactionDto(stockTransaction));
+
+            return stockTransactionDtos;
+        }
+        return null;
+    }
+
     /// <summary>
     /// Used to adjust a product's stock.
     /// </summary>

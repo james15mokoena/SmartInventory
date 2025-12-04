@@ -137,6 +137,15 @@ public class StockManagementRepository(DatabaseContext context, UserManagementRe
                                                                  select stockTransaction];
 
     /// <summary>
+    /// Used to fetch a product's stock transactions.
+    /// </summary>
+    /// <returns></returns>
+    public List<StockTransaction>? GetStockTransactionsBySku(string sku) =>
+                                                                 [.. from stockTransaction in _context.StockTransactions
+                                                                 where stockTransaction.ProductId == sku
+                                                                 select stockTransaction];
+
+    /// <summary>
     /// Used to deduct the specified quantity from the stock quantity.
     /// </summary>
     /// <param name="sku"></param>
@@ -180,7 +189,7 @@ public class StockManagementRepository(DatabaseContext context, UserManagementRe
         }
         return false;
     }
-    
+
     /// <summary>
     /// Used to record any adjustment made to a stock's quantity.
     /// </summary>
@@ -191,7 +200,7 @@ public class StockManagementRepository(DatabaseContext context, UserManagementRe
     /// <returns></returns>
     public bool RecordStockAdjustment(string sku, int quantity, int userId, string reason)
     {
-        if(_context.Products.FirstOrDefault(s => s.SKU == sku) is Product stock && quantity > 0 && userId >= 0 &&
+        if (_context.Products.FirstOrDefault(s => s.SKU == sku) is Product stock && quantity > 0 && userId >= 0 &&
             !string.IsNullOrEmpty(reason) && GetTransactionReasonId(reason) is int reasonId && reasonId >= 0)
         {
             bool isAdjusted = false;
@@ -259,5 +268,15 @@ public class StockManagementRepository(DatabaseContext context, UserManagementRe
             }
         }
         return false;
+    }
+
+    public string? GetStockMovementSummary(string sku)
+    {
+        if(_context.Products.FirstOrDefault(s => s.SKU == sku) is Product stock)
+        {
+            //GetT
+        }
+        
+        return null;
     }
 }
