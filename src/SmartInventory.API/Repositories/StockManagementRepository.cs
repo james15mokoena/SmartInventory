@@ -146,10 +146,10 @@ public class StockManagementRepository(DatabaseContext context, UserManagementRe
     /// <returns></returns>
     public bool RecordOutgoingStock(string sku, int quantity, int userId, string reason)
     {
-        if(_context.Products.FirstOrDefault(s => s.SKU == sku) is Product stock && userId >= 0 && !string.IsNullOrEmpty(reason)
+        if (_context.Products.FirstOrDefault(s => s.SKU == sku) is Product stock && userId >= 0 && !string.IsNullOrEmpty(reason)
                 && _context.ReasonTypes.FirstOrDefault(r => r.Reason == reason) is ReasonType reasonType)
         {
-            if(stock.CurrentStock - quantity >= 0)
+            if (stock.CurrentStock - quantity >= 0)
             {
                 _context.StockTransactions.Add(new StockTransaction
                 {
@@ -174,6 +174,86 @@ public class StockManagementRepository(DatabaseContext context, UserManagementRe
 
                 // deduct the stock quantity.
                 stock.CurrentStock -= quantity;
+                _context.Products.Update(stock);
+                return _context.SaveChanges() > 0;
+            }
+        }
+        return false;
+    }
+    
+    /// <summary>
+    /// Used to record any adjustment made to a stock's quantity.
+    /// </summary>
+    /// <param name="sku"></param>
+    /// <param name="quantity"></param>
+    /// <param name="userId"></param>
+    /// <param name="reason"></param>
+    /// <returns></returns>
+    public bool RecordStockAdjustment(string sku, int quantity, int userId, string reason)
+    {
+        if(_context.Products.FirstOrDefault(s => s.SKU == sku) is Product stock && quantity > 0 && userId >= 0 &&
+            !string.IsNullOrEmpty(reason) && GetTransactionReasonId(reason) is int reasonId && reasonId >= 0)
+        {
+            bool isAdjusted = false;
+
+            // stock is to be deducted
+            if (stock.CurrentStock - quantity >= 0 && (reason == "Damaged" || reason == "Returned"))
+            {
+                _context.StockTransactions.Add(new StockTransaction
+                {
+                    UserId = userId
+                    ,
+                    Date = DateTime.Now
+                    ,
+                    ProductId = stock.SKU
+                    ,
+                    Product = stock
+                    ,
+                    TransactionId = 0
+                    ,
+                    ReasonTypeId = reasonId
+                    ,
+                    QuantityChange = quantity
+                    ,
+                    PreviousStock = stock.CurrentStock
+                    ,
+                    NewStock = stock.CurrentStock - quantity
+                });
+
+                isAdjusted = true;
+                // decrement product quantity.
+                stock.CurrentStock -= quantity;
+            }
+            else if (reason == "Received")
+            {
+                _context.StockTransactions.Add(new StockTransaction
+                {
+                    UserId = userId
+                    ,
+                    Date = DateTime.Now
+                    ,
+                    ProductId = stock.SKU
+                    ,
+                    Product = stock
+                    ,
+                    TransactionId = 0
+                    ,
+                    ReasonTypeId = reasonId
+                    ,
+                    QuantityChange = quantity
+                    ,
+                    PreviousStock = stock.CurrentStock
+                    ,
+                    NewStock = stock.CurrentStock + quantity
+                });
+
+                isAdjusted = true;
+                // increment product quantity.
+                stock.CurrentStock += quantity;
+            }
+
+            if (isAdjusted)
+            {
                 _context.Products.Update(stock);
                 return _context.SaveChanges() > 0;
             }

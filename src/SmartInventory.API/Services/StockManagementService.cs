@@ -98,6 +98,22 @@ public class StockManagementService(StockManagementRepository stockRepo, UserMan
     }
 
     /// <summary>
+    /// Used to adjust a product's stock.
+    /// </summary>
+    /// <param name="sku"></param>
+    /// <param name="quantity"></param>
+    /// <param name="username"></param>
+    /// <param name="reason"></param>
+    /// <returns></returns>
+    public bool RecordStockAdjustment(string sku, int quantity, string username, string reason)
+    {
+        if (!string.IsNullOrEmpty(sku) && quantity > 0 && !string.IsNullOrEmpty(username) && _userService.GetAdmin(username) is Admin admin &&
+            !string.IsNullOrEmpty(reason))
+            return _stockRepo.RecordStockAdjustment(sku, quantity, admin.Id, reason);
+        return false;
+    }
+
+    /// <summary>
     /// Converts a StockTransaction object to StockTransactionDto object.
     /// </summary>
     /// <param name="stockTransaction"></param>

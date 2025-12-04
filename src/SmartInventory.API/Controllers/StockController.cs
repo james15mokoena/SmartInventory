@@ -83,4 +83,18 @@ public class StockController(StockManagementService stockService) : ControllerBa
                                             _stockService.RecordOutgoingStock(sku, quantity, username, reason) ?
                                             Ok("Stock transaction recorded successfully!") :
                                             BadRequest("Failed to record stock transaction!");
+
+    /// <summary>
+    /// Adjusts a stock's quantity.
+    /// </summary>
+    /// <param name="sku"></param>
+    /// <param name="quantity"></param>
+    /// <param name="username"></param>
+    /// <param name="reason"></param>
+    /// <returns></returns>
+    [HttpPost]
+    public IActionResult RecordStockAdjustment(string sku, int quantity, string username, string reason) =>
+                                            _stockService.RecordStockAdjustment(sku, quantity, username, reason) ?
+                                            Ok("Stock adjusted successfully!") :
+                                            BadRequest("Failed to adjust stock!");
 }
