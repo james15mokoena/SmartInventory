@@ -21,11 +21,12 @@ public class StockManagementService(StockManagementRepository stockRepo)
     /// <param name="quantity">The quantity to be added to product.</param>
     /// <param name="userId">An identifier for the user who initiated the transaction.</param>
     /// <param name="reasonTypeId">The reason for which the transaction was initiated.</param>
+    /// <param name="isNewProduct">Indicates whether a new product is added.</param>
     /// <returns></returns>
-    public bool RecordIncomingStock(string sku, int quantity, int userId, int reasonTypeId)
+    public bool RecordIncomingStock(string sku, int quantity, int userId, int reasonTypeId, bool isNewProduct)
     {
         if (!string.IsNullOrEmpty(sku) && quantity > 0 && userId >= 0 && reasonTypeId >= 0)
-            return _stockRepo.RecordIncomingStock(sku, quantity, userId, reasonTypeId);
+            return _stockRepo.RecordIncomingStock(sku, quantity, userId, reasonTypeId, isNewProduct);
         return false;
     }
 

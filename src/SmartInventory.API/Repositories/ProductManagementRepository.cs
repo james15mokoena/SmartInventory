@@ -7,7 +7,8 @@ namespace SmartInventory.API.Repositories;
 /// <summary>
 /// Used to interact with the database.
 /// </summary>
-public class ProductManagementRepository(DatabaseContext context)
+public class ProductManagementRepository(DatabaseContext context, StockManagementRepository stockRepo,
+                UserManagementRepository userRepo)
 {
     /// <summary>
     /// Used to interact with the database.
@@ -15,14 +16,34 @@ public class ProductManagementRepository(DatabaseContext context)
     private readonly DatabaseContext _context = context;
 
     /// <summary>
+    /// Used to interact with the stock management subsystem.
+    /// </summary>
+    private readonly StockManagementRepository _stockRepo = stockRepo;
+
+    /// <summary>
+    /// Used to interact with the user management subsystem.
+    /// </summary>
+    private readonly UserManagementRepository _userRepo = userRepo;
+
+    /// <summary>
     /// Used to add a new product in the database.
     /// </summary>
     /// <param name="newProduct"></param>
+    /// /// <param name="username"></param>
     /// <returns></returns>
-    public bool CreateProduct(Product newProduct)
+    public bool CreateProduct(Product newProduct, string username)
     {
         _context.Products.Add(newProduct);
-        return _context.SaveChanges() > 0;
+
+        if (_context.SaveChanges() > 0)
+        {
+            if (_userRepo.GetUserByUsername(username) is Admin admin)
+            {
+                if(_stockRepo.GetTransactionReasonId("Received") is int id && id >= 0)
+                    return _stockRepo.RecordIncomingStock(newProduct.SKU, newProduct.CurrentStock, admin.Id, id,true);
+            }
+        }
+        return false;
     }
 
     /// <summary>

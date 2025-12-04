@@ -36,7 +36,7 @@ public class UserManagementRepository(DatabaseContext context)
     /// </summary>
     /// <param name="username"></param>
     /// <returns></returns>
-    public IUser? GetUserByUsernameAndPassword(string username)
+    public IUser? GetUserByUsername(string username)
     {
         // check if its admin
         Admin? admin = _context.Admins.FirstOrDefault(a => a.Username == username);

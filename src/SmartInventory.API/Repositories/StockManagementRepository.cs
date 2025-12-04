@@ -20,8 +20,9 @@ public class StockManagementRepository(DatabaseContext context)
     /// <param name="quantity">The quantity to be added to product.</param>
     /// <param name="userId">An identifier for the user who initiated the transaction.</param>
     /// <param name="reasonTypeId">The reason for which the transaction was initiated.</param>
+    /// <param name="isNewProduct">Indicates whether a new product is added.</param>
     /// <returns></returns>
-    public bool RecordIncomingStock(string sku, int quantity, int userId, int reasonTypeId)
+    public bool RecordIncomingStock(string sku, int quantity, int userId, int reasonTypeId, bool isNewProduct)
     {
         if (_context.Products.FirstOrDefault(s => s.SKU == sku) is Product stock)
         {
@@ -39,9 +40,9 @@ public class StockManagementRepository(DatabaseContext context)
                     ,
                     Product = stock
                     ,
-                    PreviousStock = stock.CurrentStock
+                    PreviousStock = isNewProduct ? 0 : stock.CurrentStock
                     ,
-                    NewStock = stock.CurrentStock + quantity
+                    NewStock = isNewProduct ? quantity : stock.CurrentStock + quantity
                     ,
                     QuantityChange = quantity
                     ,
@@ -50,15 +51,16 @@ public class StockManagementRepository(DatabaseContext context)
                     TransactionId = 0
                 };
 
-                // add more stocks.
-                stock.CurrentStock += quantity;
-
-                _context.Update(stock);
-                if (_context.SaveChanges() > 0)
+                // add more stocks, if the product already exists.
+                if (!isNewProduct)
                 {
-                    _context.StockTransactions.Add(transaction);
-                    return _context.SaveChanges() > 0;
+                    stock.CurrentStock += quantity;
+                    _context.Update(stock);
+                    _context.SaveChanges();
                 }
+
+                _context.StockTransactions.Add(transaction);
+                return _context.SaveChanges() > 0;
             }
         }
         return false;
@@ -105,4 +107,12 @@ public class StockManagementRepository(DatabaseContext context)
     /// </summary>
     /// <returns></returns>
     public List<ReasonType?>? GetTransactionReasons() => [.. _context.ReasonTypes.DefaultIfEmpty()];
+
+    /// <summary>
+    /// Used to fetch the ID of the passed transaction reason.
+    /// </summary>
+    /// <param name="reason"></param>
+    /// <returns></returns>
+    public int GetTransactionReasonId(string reason) => _context.ReasonTypes.FirstOrDefault(r => r.Reason == reason) is ReasonType r ?
+                                                        r.Id : -1;
 }

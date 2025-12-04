@@ -86,10 +86,10 @@
           </mxGeometry>
         </mxCell>
         <mxCell id="aEIqKtcWxCeAgxQL6gwK-5" value="View transaction reasons" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="400" y="720" width="130" height="80" as="geometry" />
+          <mxGeometry x="390" y="720" width="130" height="80" as="geometry" />
         </mxCell>
         <mxCell id="aEIqKtcWxCeAgxQL6gwK-6" value="Delete transaction reason" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="405" y="820" width="130" height="80" as="geometry" />
+          <mxGeometry x="400" y="820" width="130" height="80" as="geometry" />
         </mxCell>
         <mxCell id="aEIqKtcWxCeAgxQL6gwK-7" value="" style="endArrow=none;html=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" target="aEIqKtcWxCeAgxQL6gwK-5">
           <mxGeometry width="50" height="50" relative="1" as="geometry">

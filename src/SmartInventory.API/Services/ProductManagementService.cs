@@ -20,14 +20,16 @@ public class ProductManagementService(ProductManagementRepository productRepo, S
     /// Adds a new product.
     /// </summary>
     /// <param name="newProduct"></param>
+    /// <param name="username"></param>
     /// <returns></returns>
-    public bool AddProduct(ProductDto newProduct)
+    public bool AddProduct(ProductDto newProduct, string username)
     {
         if (!string.IsNullOrEmpty(newProduct.SKU) && !string.IsNullOrEmpty(newProduct.Name) &&
             !string.IsNullOrEmpty(newProduct.Description) && !string.IsNullOrEmpty(newProduct.Category) &&
             newProduct.CostPrice >= 0.0 && newProduct.UnitPrice >= 0.0 && newProduct.CurrentStock >= 0 &&
             newProduct.DateCreated != default && newProduct.LastUpdated != default && newProduct.MinimumStockLevel >= 0 &&
-            newProduct.ReorderQuantity >= 0 && newProduct.UnitMeasurement >= 0.0 && newProduct.SupplierId >= 0)
+            newProduct.ReorderQuantity >= 0 && newProduct.UnitMeasurement >= 0.0 && newProduct.SupplierId >= 0 &&
+            !string.IsNullOrEmpty(username))
         {
             // get the supplier of this product.
 
@@ -53,7 +55,7 @@ public class ProductManagementService(ProductManagementRepository productRepo, S
                     Supplier = supplier,
                     PurchaseOrderItems = [],
                     StockTransactions = []
-                });
+                },username);
             }
         }
 

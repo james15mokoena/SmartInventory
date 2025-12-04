@@ -52,10 +52,11 @@ public class StockController(StockManagementService stockService) : ControllerBa
     /// <param name="quantity"></param>
     /// <param name="userId"></param>
     /// <param name="reasonTypeId"></param>
+    /// <param name="isNewProduct">Indicates whether a new product is added.</param>
     /// <returns></returns>
     [HttpPost]
-    public IActionResult RecordIncomingStock(string sku, int quantity, int userId, int reasonTypeId) =>
-            _stockService.RecordIncomingStock(sku, quantity, userId, reasonTypeId) ?
+    public IActionResult RecordIncomingStock(string sku, int quantity, int userId, int reasonTypeId, bool isNewProduct) =>
+            _stockService.RecordIncomingStock(sku, quantity, userId, reasonTypeId, isNewProduct) ?
             Ok("Stock transaction recorded successfully!") :
             BadRequest("Failed to record stock transaction!");
 }

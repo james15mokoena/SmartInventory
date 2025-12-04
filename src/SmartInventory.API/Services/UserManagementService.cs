@@ -47,12 +47,11 @@ public class UserManagementService(UserManagementRepository userManagementReposi
     {
         if (!string.IsNullOrEmpty(username) && !string.IsNullOrEmpty(password))
         {
-            if (_userManRepo.GetUserByUsernameAndPassword(username) is Admin admin)
+            if (_userManRepo.GetUserByUsername(username) is Admin admin)
                 return _passwordService.VerifyPassword(password, admin.PasswordHash);
                 
-            if(_userManRepo.GetUserByUsernameAndPassword(username) is Staff staff)
+            if(_userManRepo.GetUserByUsername(username) is Staff staff)
                 return _passwordService.VerifyPassword(password, staff.PasswordHash);
-            
         }
             
         return false;
