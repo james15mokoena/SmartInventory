@@ -36,6 +36,11 @@ public class StockTransactionDto
     public int ReasonTypeId { get; set; }
 
     /// <summary>
+    /// The reason for which the transaction was made.
+    /// </summary>
+    public string? Reason { get; set; }
+
+    /// <summary>
     /// The stock quantity before this transaction was applied.
     /// </summary>
     public int PreviousStock { get; set; }

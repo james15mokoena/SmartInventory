@@ -121,6 +121,15 @@ public class StockManagementRepository(DatabaseContext context, UserManagementRe
                                                          select transReason).First().Id;
 
     /// <summary>
+    /// Used to fetch the reason for the stock transaction made.
+    /// </summary>
+    /// <param name="reasonId"></param>
+    /// <returns></returns>
+    public string GetTransactionReason(int reasonId) => (from transReason in _context.ReasonTypes
+                                                         where transReason.Id == reasonId
+                                                         select transReason).First().Reason;
+
+    /// <summary>
     /// Used to fetch all stock transactions.
     /// </summary>
     /// <returns></returns>

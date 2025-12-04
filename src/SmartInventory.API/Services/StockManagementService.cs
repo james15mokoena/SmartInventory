@@ -102,7 +102,7 @@ public class StockManagementService(StockManagementRepository stockRepo, UserMan
     /// </summary>
     /// <param name="stockTransaction"></param>
     /// <returns></returns>
-    private static StockTransactionDto ToStockTransactionDto(StockTransaction stockTransaction)
+    private StockTransactionDto ToStockTransactionDto(StockTransaction stockTransaction)
     {
         return new StockTransactionDto
         {
@@ -114,6 +114,7 @@ public class StockManagementService(StockManagementRepository stockRepo, UserMan
             ,QuantityChange = stockTransaction.QuantityChange
             ,Date = stockTransaction.Date
             ,ReasonTypeId = stockTransaction.ReasonTypeId
+            ,Reason = _stockRepo.GetTransactionReason(stockTransaction.ReasonTypeId)
         };
     }
 }
