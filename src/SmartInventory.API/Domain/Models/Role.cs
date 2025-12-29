@@ -21,6 +21,11 @@ public class Role
     /// </summary>
     public required string Name { get; set; }
 
+    /// <summary>
+    /// Indicates if this role is still being used.
+    /// </summary>
+    public required bool IsActive { get; set; }
+
     // navigation properties
 
     /// <summary>
