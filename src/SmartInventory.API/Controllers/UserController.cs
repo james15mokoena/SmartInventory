@@ -25,7 +25,7 @@ public class UserController(UserManagementService uService) : ControllerBase
     /// <returns></returns>
     [HttpPost]
     public IActionResult CreateAdmin(Admin admin) => _userService.CreateUser(admin) ?
-                                                    CreatedAtAction(nameof(CreateAdmin),admin) :
+                                                    CreatedAtAction(nameof(CreateAdmin), admin) :
                                                     BadRequest("Failed to create admin!");
 
     /// <summary>
@@ -35,7 +35,7 @@ public class UserController(UserManagementService uService) : ControllerBase
     /// <returns></returns>
     [HttpPost]
     public IActionResult CreateStaffMember(Staff staff) => _userService.CreateUser(staff) ?
-                                                           CreatedAtAction(nameof(CreateStaffMember),staff) :
+                                                           CreatedAtAction(nameof(CreateStaffMember), staff) :
                                                            BadRequest("Failed to create staff member!");
 
     /// <summary>
@@ -133,4 +133,44 @@ public class UserController(UserManagementService uService) : ControllerBase
     public IActionResult EditStaffMember(UserDto updatedStaffMember) => _userService.EditStaffMember(updatedStaffMember) is UserDto dto ?
                                                              Ok(dto) :
                                                              BadRequest("Failed to update staff member!");
+
+    /// <summary>
+    /// Updates the active status of a role option.
+    /// </summary>
+    /// <param name="roleId"></param>
+    /// <returns></returns>
+    [HttpPut("{roleId}")]
+    public IActionResult ToggleRoleStatus(int roleId) => roleId >= 0 && _userService.ToggleRoleStatus(roleId) ?
+                                                        Ok("Role status is updated successfully!") :
+                                                        BadRequest("Failed to update role status!");
+
+    /// <summary>
+    /// Updates the active status of a permission option.
+    /// </summary>
+    /// <param name="permId"></param>
+    /// <returns></returns>
+    [HttpPut("{permId}")]
+    public IActionResult TogglePermissionStatus(int permId) => permId >= 0 && _userService.TogglePermissionStatus(permId) ?
+                                                        Ok("Permission status is updated successfully!") :
+                                                        BadRequest("Failed to update permission status!");
+
+    /// <summary>
+    /// Adds a new role.
+    /// </summary>
+    /// <param name="newRole"></param>
+    /// <returns></returns>
+    [HttpPost]
+    public IActionResult AddRole(RoleDto newRole) => !string.IsNullOrEmpty(newRole.Name) && _userService.AddRole(newRole) ?
+                                                    Ok(newRole) :
+                                                    BadRequest("Failed to add a new role.");
+
+    /// <summary>
+    /// Adds a new permission.
+    /// </summary>
+    /// <param name="newPerm"></param>
+    /// <returns></returns>
+    [HttpPost]
+    public IActionResult AddPermission(PermissionDto newPerm) => !string.IsNullOrEmpty(newPerm.Name) && _userService.AddPermission(newPerm) ?
+                                                    Ok(newPerm) :
+                                                    BadRequest("Failed to add a new permission.");
 }

@@ -158,4 +158,32 @@ public class UserManagementService(UserManagementRepository userManagementReposi
 
         return null;
     }
+
+    /// <summary>
+    /// Updates the active status of a Role options.
+    /// </summary>
+    /// <param name="roleId"></param>
+    /// <returns></returns>
+    public bool ToggleRoleStatus(int roleId) => roleId >= 0 && _userManRepo.ToggleRoleStatus(roleId);
+
+    /// <summary>
+    /// Updates the active status of a Permission options.
+    /// </summary>
+    /// <param name="permId"></param>
+    /// <returns></returns>
+    public bool TogglePermissionStatus(int permId) => permId >= 0 && _userManRepo.TogglePermissionStatus(permId);
+
+    /// <summary>
+    /// Adds a new role.
+    /// </summary>
+    /// <param name="newRole"></param>
+    /// <returns></returns>
+    public bool AddRole(RoleDto newRole) => !string.IsNullOrEmpty(newRole.Name) && _userManRepo.AddRole(newRole);
+
+    /// <summary>
+    /// Adds a new permission.
+    /// </summary>
+    /// <param name="newPerm"></param>
+    /// <returns></returns>
+    public bool AddPermission(PermissionDto newPerm) => !string.IsNullOrEmpty(newPerm.Name) && _userManRepo.AddPermission(newPerm);
 }

@@ -169,7 +169,7 @@ public class UserManagementRepository(DatabaseContext context)
 
         return null;
     }
-    
+
     /// <summary>
     /// Edits a staff member's data.
     /// </summary>
@@ -180,7 +180,7 @@ public class UserManagementRepository(DatabaseContext context)
         Staff? staff = GetStaffMember(updatedStaffMember.Username!);
         bool isUpdated = false;
 
-        if(staff != null)
+        if (staff != null)
         {
             if (updatedStaffMember.Username != staff.Username)
             {
@@ -220,5 +220,88 @@ public class UserManagementRepository(DatabaseContext context)
         }
 
         return null;
+    }
+
+    /// <summary>
+    /// Updates the active status of a Role.
+    /// </summary>
+    /// <param name="roleId"></param>
+    /// <returns></returns>
+    public bool ToggleRoleStatus(int roleId)
+    {
+        if (_context.Roles.FirstOrDefault(r => r.Id == roleId) is Role role)
+        {
+            role.IsActive = !role.IsActive;
+            _context.Update(role);
+            return _context.SaveChanges() > 0;
+        }
+        return false;
+    }
+
+    /// <summary>
+    /// Updates the active status of a Permission.
+    /// </summary>
+    /// <param name="permId"></param>
+    /// <returns></returns>
+    public bool TogglePermissionStatus(int permId)
+    {
+        if (_context.Permissions.FirstOrDefault(p => p.Id == permId) is Permission permission)
+        {
+            permission.IsActive = !permission.IsActive;
+            _context.Update(permission);
+            return _context.SaveChanges() > 0;
+        }
+        return false;
+    }
+
+    /// <summary>
+    /// Adds a new role.
+    /// </summary>
+    /// <param name="newRole"></param>
+    /// <returns></returns>
+    public bool AddRole(RoleDto newRole)
+    {
+        if (!string.IsNullOrEmpty(newRole.Name) && _context.Roles.FirstOrDefault(r => r.Name == newRole.Name) == null)
+        {
+            _context.Roles.Add(new()
+            {
+                Id = 0
+                ,
+                Name = newRole.Name
+                ,
+                IsActive = true
+                , Permissions = []
+            });
+
+            return _context.SaveChanges() > 0;
+        }
+        return false;
+    }
+    
+    /// <summary>
+    /// Adds a new permission.
+    /// </summary>
+    /// <param name="newPerm"></param>
+    /// <returns></returns>
+    public bool AddPermission(PermissionDto newPerm)
+    {
+        if (!string.IsNullOrEmpty(newPerm.Name) && _context.Permissions.FirstOrDefault(p => p.Name == newPerm.Name) == null)
+        {
+            _context.Permissions.Add(new()
+            {
+                Id = 0
+                ,
+                Name = newPerm.Name
+                ,
+                IsActive = true
+                ,
+                Description = newPerm.Description!
+                ,
+                Roles = []
+            });
+            
+            return _context.SaveChanges() > 0;
+        }
+        return false;
     }
 }

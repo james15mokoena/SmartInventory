@@ -26,6 +26,11 @@ public class Permission
     [MaxLength(255)]
     public required string Description { get; set; }
 
+    /// <summary>
+    /// Indicates if this permission is still being used.
+    /// </summary>
+    public required bool IsActive { get; set; }
+
     // navigation properties
 
     /// <summary>
