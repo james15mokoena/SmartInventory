@@ -19,16 +19,6 @@ public class UserController(UserManagementService uService) : ControllerBase
     private readonly UserManagementService _userService = uService;
 
     /// <summary>
-    /// Creates a new admin.
-    /// </summary>
-    /// <param name="admin"></param>
-    /// <returns></returns>
-    [HttpPost]
-    public IActionResult CreateAdmin(Admin admin) => _userService.CreateUser(admin) ?
-                                                    CreatedAtAction(nameof(CreateAdmin), admin) :
-                                                    BadRequest("Failed to create admin!");
-
-    /// <summary>
     /// Creates a new staff member.
     /// </summary>
     /// <param name="staff"></param>
@@ -59,16 +49,6 @@ public class UserController(UserManagementService uService) : ControllerBase
                                                                       BadRequest("Failed to change active status!");
 
     /// <summary>
-    /// Gets an adminstrator with the given username.
-    /// </summary>
-    /// <param name="username"></param>
-    /// <returns></returns>
-    [HttpGet("{username}")]
-    public IActionResult ViewAdmin(string username) => _userService.GetAdmin(username) is Admin admin ?
-                                                       Ok(admin) :
-                                                       BadRequest("Failed to get the admin!");
-
-    /// <summary>
     /// Gets a staff memmber with the given username.
     /// </summary>
     /// <param name="username"></param>
@@ -77,24 +57,6 @@ public class UserController(UserManagementService uService) : ControllerBase
     public IActionResult ViewStaffMember(string username) => _userService.GetStaffMember(username) is Staff staff ?
                                                        Ok(staff) :
                                                        BadRequest("Failed to get the staff member!");
-
-    /// <summary>
-    /// Get all active administrators.
-    /// </summary>
-    /// <returns></returns>
-    [HttpGet]
-    public IActionResult ViewActivatedAdmins() => _userService.GetActivatedAdmins() is List<Admin> admins ?
-                                                Ok(admins) :
-                                                BadRequest("Failed to get active administrators!");
-
-    /// <summary>
-    /// Get all deactivated administrators.
-    /// </summary>
-    /// <returns></returns>
-    [HttpGet]
-    public IActionResult ViewDeactivatedAdmins() => _userService.GetDeactivatedAdmins() is List<Admin> admins ?
-                                                    Ok(admins) :
-                                                    BadRequest("Failed to get deactivated administrators!");
 
     /// <summary>
     /// Get all activated staff members.
@@ -113,16 +75,6 @@ public class UserController(UserManagementService uService) : ControllerBase
     public IActionResult ViewDeactivatedStaff() => _userService.GetDeactivatedStaff() is List<Staff> staff ?
                                                  Ok(staff) :
                                                  BadRequest("Failed to get deactivated staff members!");
-
-    /// <summary>
-    /// Edits admin's data.
-    /// </summary>
-    /// <param name="updatedAdmin"></param>
-    /// <returns></returns>
-    [HttpPut]
-    public IActionResult EditAdmin(UserDto updatedAdmin) => _userService.EditAdmin(updatedAdmin) is UserDto dto ?
-                                                             Ok(dto) :
-                                                             BadRequest("Failed to update admin!");
 
     /// <summary>
     /// Edits a staff member's data.

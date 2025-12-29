@@ -8,7 +8,6 @@ namespace SmartInventory.API.Data;
 /// </summary>
 public class DatabaseContext(DbContextOptions<DatabaseContext> options) : DbContext(options)
 {
-    public DbSet<Admin> Admins { get; set; }
     
     public DbSet<Staff> Staff { get; set; }
     

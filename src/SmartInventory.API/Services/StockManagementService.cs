@@ -33,8 +33,9 @@ public class StockManagementService(StockManagementRepository stockRepo, UserMan
     {
         if (!string.IsNullOrEmpty(sku) && quantity > 0 && !string.IsNullOrEmpty(username) && !string.IsNullOrEmpty(reason))
         {
-            if(_userService.GetAdmin(username) is Admin admin)
-                return _stockRepo.RecordIncomingStock(sku, quantity, admin.Id, reason, isNewProduct);
+            // FIX: Username must be used.
+            //if(_userService.GetAdmin(username) is Admin admin)
+              //  return _stockRepo.RecordIncomingStock(sku, quantity, admin.Id, reason, isNewProduct);
         }
             
         return false;
@@ -52,8 +53,9 @@ public class StockManagementService(StockManagementRepository stockRepo, UserMan
     {
         if (!string.IsNullOrEmpty(sku) && quantity > 0 && !string.IsNullOrEmpty(username) && !string.IsNullOrEmpty(reason))
         {
-            if(_userService.GetAdmin(username) is Admin admin)      
-                return _stockRepo.RecordOutgoingStock(sku, quantity, admin.Id, reason);
+            // FIX: Username must be used.
+            //if(_userService.GetAdmin(username) is Admin admin)      
+              //  return _stockRepo.RecordOutgoingStock(sku, quantity, admin.Id, reason);
         }
         return false;
     }
@@ -126,10 +128,25 @@ public class StockManagementService(StockManagementRepository stockRepo, UserMan
     /// <returns></returns>
     public bool RecordStockAdjustment(string sku, int quantity, string username, string reason)
     {
-        if (!string.IsNullOrEmpty(sku) && quantity > 0 && !string.IsNullOrEmpty(username) && _userService.GetAdmin(username) is Admin admin &&
-            !string.IsNullOrEmpty(reason))
-            return _stockRepo.RecordStockAdjustment(sku, quantity, admin.Id, reason);
+        // FIX: Username must be used
+        if (!string.IsNullOrEmpty(sku) && quantity > 0 && !string.IsNullOrEmpty(username) && !string.IsNullOrEmpty(reason))
+            return _stockRepo.RecordStockAdjustment(sku, quantity, 0, reason);
         return false;
+    }
+
+    /// <summary>
+    /// Generates the stock report.
+    /// </summary>
+    /// <param name="company"></param>
+    /// <param name="signature"></param>
+    /// <returns></returns>
+    public StockReport? GetStockReport(string company, string signature)
+    {
+        if (!string.IsNullOrEmpty(company) && !string.IsNullOrEmpty(signature))
+        {
+
+        }
+        return null;
     }
 
     /// <summary>
@@ -142,14 +159,22 @@ public class StockManagementService(StockManagementRepository stockRepo, UserMan
         return new StockTransactionDto
         {
             TransactionId = stockTransaction.TransactionId
-            ,UserId = stockTransaction.UserId
-            ,ProductId = stockTransaction.ProductId
-            ,NewStock = stockTransaction.NewStock
-            ,PreviousStock = stockTransaction.PreviousStock
-            ,QuantityChange = stockTransaction.QuantityChange
-            ,Date = stockTransaction.Date
-            ,ReasonTypeId = stockTransaction.ReasonTypeId
-            ,Reason = _stockRepo.GetTransactionReason(stockTransaction.ReasonTypeId)
+            ,
+            UserId = stockTransaction.UserId
+            ,
+            ProductId = stockTransaction.ProductId
+            ,
+            NewStock = stockTransaction.NewStock
+            ,
+            PreviousStock = stockTransaction.PreviousStock
+            ,
+            QuantityChange = stockTransaction.QuantityChange
+            ,
+            Date = stockTransaction.Date
+            ,
+            ReasonTypeId = stockTransaction.ReasonTypeId
+            ,
+            Reason = _stockRepo.GetTransactionReason(stockTransaction.ReasonTypeId)
         };
     }
 }

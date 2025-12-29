@@ -21,14 +21,9 @@ public class UserManagementService(UserManagementRepository userManagementReposi
     /// </summary>
     /// <param name="newUser"></param>
     /// <returns>true if user was created successfully, otherwise false.</returns>
-    public bool CreateUser(IUser user)
+    public bool CreateUser(Staff user)
     {
-        if (IsDataValid(user) is Admin admin)
-        {
-            admin.PasswordHash = _passwordService.HashPassword(admin.PasswordHash);
-            return _userManRepo.CreateUser(admin);
-        }
-        else if (IsDataValid(user) is Staff staff)
+        if (IsDataValid(user) is Staff staff)
         {
             staff.PasswordHash = _passwordService.HashPassword(staff.PasswordHash);
             return _userManRepo.CreateUser(staff);
@@ -36,27 +31,18 @@ public class UserManagementService(UserManagementRepository userManagementReposi
 
         return false;
     }
-    
+
     /// <summary>
     /// Checks if a user with the given username and password exists.
     /// </summary>
     /// <param name="username"></param>
     /// <param name="password"></param>
     /// <returns></returns>
-    public bool CheckUserExistsByUsernameAndPassword(string username, string password)
-    {
-        if (!string.IsNullOrEmpty(username) && !string.IsNullOrEmpty(password))
-        {
-            if (_userManRepo.GetUserByUsername(username) is Admin admin)
-                return _passwordService.VerifyPassword(password, admin.PasswordHash);
-                
-            if(_userManRepo.GetUserByUsername(username) is Staff staff)
-                return _passwordService.VerifyPassword(password, staff.PasswordHash);
-        }
-            
-        return false;
-    }
-
+    public bool CheckUserExistsByUsernameAndPassword(string username, string password) =>
+                !string.IsNullOrEmpty(username) && !string.IsNullOrEmpty(password) &&
+                _userManRepo.GetUserByUsername(username) is Staff staff &&
+                _passwordService.VerifyPassword(password, staff.PasswordHash);
+    
     /// <summary>
     /// Activates or deactivates a user (admin/staff).
     /// </summary>
@@ -65,30 +51,11 @@ public class UserManagementService(UserManagementRepository userManagementReposi
     public bool ToggleUserActivation(string username) => _userManRepo.ToggleUserActivation(username);
 
     /// <summary>
-    /// Gets an administrator with the given username.
-    /// </summary>
-    /// <param name="username"></param>
-    /// <returns></returns>
-    public Admin? GetAdmin(string username) => _userManRepo.GetAdmin(username);
-
-    /// <summary>
     /// Gets a staff member with the given username.
     /// </summary>
     /// <param name="username"></param>
     /// <returns></returns>
     public Staff? GetStaffMember(string username) => _userManRepo.GetStaffMember(username);
-
-    /// <summary>
-    /// Gets all active administrators.
-    /// </summary>
-    /// <returns></returns>
-    public List<Admin>? GetActivatedAdmins() => _userManRepo.GetActivatedAdmins();
-
-    /// <summary>
-    /// Gets all deactivated administrators.
-    /// </summary>
-    /// <returns></returns>
-    public List<Admin>? GetDeactivatedAdmins() => _userManRepo.GetDeactivatedAdmins();
 
     /// <summary>
     /// Gets all active staff members.
@@ -101,21 +68,6 @@ public class UserManagementService(UserManagementRepository userManagementReposi
     /// </summary>
     /// <returns></returns>
     public List<Staff>? GetDeactivatedStaff() => _userManRepo.GetDeactivatedStaff();
-
-    /// <summary>
-    /// Edits an admin's data.
-    /// </summary>
-    /// <param name="updatedAdmin"></param>
-    /// <returns></returns>
-    public UserDto? EditAdmin(UserDto updatedAdmin)
-    {
-        if (updatedAdmin.Id >= 0 && !string.IsNullOrEmpty(updatedAdmin.FirstName) &&
-           !string.IsNullOrEmpty(updatedAdmin.LastName) && !string.IsNullOrEmpty(updatedAdmin.Email) &&
-           !string.IsNullOrEmpty(updatedAdmin.Username) && updatedAdmin.RoleId >= 0)
-            return _userManRepo.EditAdmin(updatedAdmin) is Admin a ? updatedAdmin : null;
-
-        return null;
-    }
 
     /// <summary>
     /// Edits a staff member's data.
@@ -139,12 +91,7 @@ public class UserManagementService(UserManagementRepository userManagementReposi
     /// <returns>the new user, otherwise null.</returns>
     private static IUser? IsDataValid(IUser user)
     {
-        if (user is Admin newAdmin)
-            return (!string.IsNullOrEmpty(newAdmin.Username) && !string.IsNullOrEmpty(newAdmin.FirstName) &&
-                   !string.IsNullOrEmpty(newAdmin.LastName) && !string.IsNullOrEmpty(newAdmin.Email) &&
-                   !string.IsNullOrEmpty(newAdmin.PasswordHash) && newAdmin.IsActive &&
-                   newAdmin.DateCreated != default && newAdmin.RoleId >= 0) ? newAdmin : null;
-        else if (user is Staff newStaff)
+        if (user is Staff newStaff)
             return (!string.IsNullOrEmpty(newStaff.Username) && !string.IsNullOrEmpty(newStaff.FirstName) &&
                    !string.IsNullOrEmpty(newStaff.LastName) && !string.IsNullOrEmpty(newStaff.Email) &&
                    !string.IsNullOrEmpty(newStaff.PasswordHash) && newStaff.IsActive &&

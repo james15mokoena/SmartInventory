@@ -37,8 +37,8 @@ public class ProductManagementRepository(DatabaseContext context, StockManagemen
 
         if (_context.SaveChanges() > 0)
         {
-            if (_userRepo.GetUserByUsername(username) is Admin admin)
-                return _stockRepo.RecordIncomingStock(newProduct.SKU, newProduct.CurrentStock, admin.Id, "Received",true);
+            //if (_userRepo.GetUserByUsername(username) is Admin admin)
+              //  return _stockRepo.RecordIncomingStock(newProduct.SKU, newProduct.CurrentStock, admin.Id, "Received",true);
         }
         return false;
     }

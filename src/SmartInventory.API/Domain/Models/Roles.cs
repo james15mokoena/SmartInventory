@@ -18,17 +18,17 @@ public static class Roles
     /// <summary>
     /// Can manually create stock transactions, in addition to automatic creation.
     /// </summary>
-    public const string InventoryManager = "InventoryManager";
+    public const string InventoryManager = "StockManager";
 
     /// <summary>
     /// Creates and manages purchase orders.
     /// </summary>
-    public const string ProcumentOfficer = "ProcurementOfficer";
+    public const string ProcumentOfficer = "ProcurementManager";
 
     /// <summary>
     /// Sells items.
     /// </summary>
-    public const string SalesUser = "SalesUser";
+    public const string SalesUser = "SalesManager";
 
     /// <summary>
     /// Can view but not modify.

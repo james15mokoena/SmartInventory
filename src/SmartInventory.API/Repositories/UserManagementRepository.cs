@@ -19,15 +19,10 @@ public class UserManagementRepository(DatabaseContext context)
     /// </summary>
     /// <param name="newUser"></param>
     /// <returns>true if user was created successfully, otherwise false.</returns>
-    public bool CreateUser(IUser newUser)
+    public bool CreateUser(Staff newStaff)
     {
-        if (newUser is Admin newAdmin)
-            _context.Admins.Add(newAdmin);
-        else if (newUser is Staff newStaff)
-            _context.Staff.Add(newStaff);
-        else if (newUser is Supplier newSupplier)
-            _context.Suppliers.Add(newSupplier);
-
+        _context.Staff.Add(newStaff);
+        
         return _context.SaveChanges() > 0;
     }
 
@@ -36,56 +31,24 @@ public class UserManagementRepository(DatabaseContext context)
     /// </summary>
     /// <param name="username"></param>
     /// <returns></returns>
-    public IUser? GetUserByUsername(string username)
-    {
-        // check if its admin
-        Admin? admin = _context.Admins.FirstOrDefault(a => a.Username == username);
-        if (admin != null) return admin;
-
-        // check if its staff
-        Staff? staff = _context.Staff.FirstOrDefault(s => s.Username == username);
-        if (staff != null) return staff;
-
-        return null;
-    }
+    public Staff? GetUserByUsername(string username) => _context.Staff.FirstOrDefault(s => s.Username == username) ?? null;
 
     /// <summary>
-    /// Activates or deactivates a user (admin/staff).
+    /// Activates or deactivates a user.
     /// </summary>
     /// <param name="username"></param>
     /// <returns></returns>
     public bool ToggleUserActivation(string username)
     {
-        if (!string.IsNullOrEmpty(username))
+        if (!string.IsNullOrEmpty(username) && _context.Staff.FirstOrDefault(s => s.Username == username) is Staff staff)
         {
-            // check if its admin
-            Admin? admin = _context.Admins.FirstOrDefault(a => a.Username == username);
-            if (admin != null)
-            {
-                admin.IsActive = !admin.IsActive;
-                _context.Update(admin);
-                return _context.SaveChanges() > 0;
-            }
-
-            // check if its staff
-            Staff? staff = _context.Staff.FirstOrDefault(s => s.Username == username);
-            if (staff != null)
-            {
-                staff.IsActive = !staff.IsActive;
-                _context.Update(staff);
-                return _context.SaveChanges() > 0;
-            }
+            staff.IsActive = !staff.IsActive;
+            _context.Update(staff);
+            return _context.SaveChanges() > 0;
         }
-
+        
         return false;
     }
-
-    /// <summary>
-    /// Fetches an administrator with the given username.
-    /// </summary>
-    /// <param name="username"></param>
-    /// <returns></returns>
-    public Admin? GetAdmin(string username) => _context.Admins.FirstOrDefault(a => a.Username == username) ?? null;
 
     /// <summary>
     /// Fetches a staff member with the given username.
@@ -93,18 +56,6 @@ public class UserManagementRepository(DatabaseContext context)
     /// <param name="username"></param>
     /// <returns></returns>
     public Staff? GetStaffMember(string username) => _context.Staff.FirstOrDefault(s => s.Username == username) ?? null;
-
-    /// <summary>
-    /// Fetches all activated administrators.
-    /// </summary>
-    /// <returns></returns>
-    public List<Admin>? GetActivatedAdmins() => [.. _context.Admins.Where(a => a.IsActive == true)];
-
-    /// <summary>
-    /// Fetches all deactivated administrators.
-    /// </summary>
-    /// <returns></returns>
-    public List<Admin>? GetDeactivatedAdmins() => [.. _context.Admins.Where(a => a.IsActive == false)];
 
     /// <summary>
     /// Fetches all activated staff members.
@@ -117,58 +68,6 @@ public class UserManagementRepository(DatabaseContext context)
     /// </summary>
     /// <returns></returns>
     public List<Staff>? GetDeactivatedStaff() => [.. _context.Staff.Where(a => a.IsActive == false)];
-
-    /// <summary>
-    /// Edits an admin's data.
-    /// </summary>
-    /// <param name="updatedAdmin"></param>
-    /// <returns></returns>
-    public Admin? EditAdmin(UserDto updatedAdmin)
-    {
-        Admin? admin = GetAdmin(updatedAdmin.Username!);
-        bool isUpdated = false;
-
-        if (admin != null)
-        {
-            if (updatedAdmin.Username != admin.Username)
-            {
-                admin.Username = updatedAdmin.Username!;
-                isUpdated = true;
-            }
-
-            if (updatedAdmin.Email != admin.Email)
-            {
-                admin.Email = updatedAdmin.Email!;
-                isUpdated = true;
-            }
-
-            if (updatedAdmin.FirstName != admin.FirstName)
-            {
-                admin.FirstName = updatedAdmin.FirstName!;
-                isUpdated = true;
-            }
-
-            if (updatedAdmin.LastName != admin.LastName)
-            {
-                admin.LastName = updatedAdmin.LastName!;
-                isUpdated = true;
-            }
-
-            if (updatedAdmin.RoleId != admin.RoleId)
-            {
-                admin.RoleId = updatedAdmin.RoleId!;
-                isUpdated = true;
-            }
-
-            if (isUpdated)
-            {
-                _context.Update(admin);
-                return _context.SaveChanges() > 0 ? admin : null;
-            }
-        }
-
-        return null;
-    }
 
     /// <summary>
     /// Edits a staff member's data.
@@ -277,7 +176,7 @@ public class UserManagementRepository(DatabaseContext context)
         }
         return false;
     }
-    
+
     /// <summary>
     /// Adds a new permission.
     /// </summary>
@@ -299,9 +198,20 @@ public class UserManagementRepository(DatabaseContext context)
                 ,
                 Roles = []
             });
-            
+
             return _context.SaveChanges() > 0;
         }
+        return false;
+    }
+    
+    /// <summary>
+    /// Assigns a permission 
+    /// </summary>
+    /// <param name="username"></param>
+    /// <param name="permission"></param>
+    /// <returns></returns>
+    public bool AssignPermission(string username, string permission)
+    {
         return false;
     }
 }

@@ -1,4 +1,5 @@
 using SmartInventory.API.Data;
+using SmartInventory.API.Domain.DTO;
 using SmartInventory.API.Domain.Models;
 
 namespace SmartInventory.API.Repositories;
@@ -273,7 +274,50 @@ public class StockManagementRepository(DatabaseContext context, UserManagementRe
         return false;
     }
 
-    //public 
+    /// <summary>
+    /// Generates a stock report.
+    /// </summary>
+    /// <param name="company">The name of the generating company.</param>
+    /// <param name="Signature">An identifier for the person who generated the report.</param>
+    /// <returns></returns>
+    public StockReport? GetStockReport(string company, string Signature)
+    {
+        List<Product>? stocks = [.. from stock in _context.Products
+                                select stock];
+
+        if (stocks.Count > 0)
+        {
+            StockReport report = new()
+            {
+                CompanyName = company
+                ,Signature = Signature
+            };
+
+            foreach (var stock in stocks)
+            {
+                StockReportItem item = new()
+                {
+                    Code = stock.SKU
+                    ,
+                    Category = stock.Category
+                    ,
+                    Name = stock.Name
+                    ,
+                    StockLevel = stock.CurrentStock
+                    ,
+                    ReorderLevel = stock.ReorderQuantity
+                    ,
+                    MaximumLevel = 100
+                };
+
+                report.Items.Add(item);
+            }
+
+            return report;
+        }        
+        
+        return null;
+    }
 
     public string? GetStockMovementSummary(string sku)
     {
