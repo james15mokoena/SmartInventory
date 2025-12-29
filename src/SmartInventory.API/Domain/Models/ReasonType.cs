@@ -20,4 +20,9 @@ public class ReasonType
     /// Possible reasons: Recevied, Issued, Adjusted, Damaged or Returned.
     /// </summary>
     public required string Reason { get; set; }
+
+    /// <summary>
+    /// Indicates if this reason is still used, and avoids deleting it instead.
+    /// </summary>
+    public required bool IsActive { get; set; }
 }

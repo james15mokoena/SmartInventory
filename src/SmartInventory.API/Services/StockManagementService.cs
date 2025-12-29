@@ -70,7 +70,7 @@ public class StockManagementService(StockManagementRepository stockRepo, UserMan
     /// </summary>
     /// <param name="reasonTypeId"></param>
     /// <returns></returns>
-    public bool DeleteTransactionReason(int reasonTypeId) => reasonTypeId >= 0 && _stockRepo.DeleteTransactionReason(reasonTypeId);
+    public bool ToggleTransactionReasonStatus(int reasonTypeId) => reasonTypeId >= 0 && _stockRepo.ToggleTransactionReasonStatus(reasonTypeId);
 
     /// <summary>
     /// Used to get all transaction reasons.

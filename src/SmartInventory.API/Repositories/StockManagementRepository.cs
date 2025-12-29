@@ -82,6 +82,8 @@ public class StockManagementRepository(DatabaseContext context, UserManagementRe
                 Id = 0
                 ,
                 Reason = reasonType.Reason
+                ,
+                IsActive = true
             });
 
             return _context.SaveChanges() > 0;
@@ -90,15 +92,16 @@ public class StockManagementRepository(DatabaseContext context, UserManagementRe
     }
 
     /// <summary>
-    /// Used to delete a transaction reason.
+    /// Used to activate or deactivate a transaction reason.
     /// </summary>
     /// <param name="reasonTypeId"></param>
     /// <returns></returns>
-    public bool DeleteTransactionReason(int reasonTypeId)
+    public bool ToggleTransactionReasonStatus(int reasonTypeId)
     {
         if (_context.ReasonTypes.FirstOrDefault(r => r.Id == reasonTypeId) is ReasonType reason)
         {
-            _context.ReasonTypes.Remove(reason);
+            reason.IsActive = !reason.IsActive;
+            _context.Update(reason);
             return _context.SaveChanges() > 0;
         }
         return false;

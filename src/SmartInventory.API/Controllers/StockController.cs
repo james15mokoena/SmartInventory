@@ -28,14 +28,14 @@ public class StockController(StockManagementService stockService) : ControllerBa
                                                                         BadRequest("Failed to add a new transaction reason!");
 
     /// <summary>
-    /// Deletes a transaction reason.
+    /// Activates or deactivate a transaction reason.
     /// </summary>
     /// <param name="reasonType"></param>
     /// <returns></returns>
-    [HttpDelete("{reasonTypeId}")]
-    public IActionResult DeleteTransactionReason(int reasonTypeId) => _stockService.DeleteTransactionReason(reasonTypeId) ?
-                                                                        Ok("Transaction reason deleted successfully!") :
-                                                                        BadRequest("Failed to delete a transaction reason!");
+    [HttpPut("{reasonTypeId}")]
+    public IActionResult ToggleTransactionReasonStatus(int reasonTypeId) => _stockService.ToggleTransactionReasonStatus(reasonTypeId) ?
+                                                                        Ok("Transaction reason status updated successfully!") :
+                                                                        BadRequest("Failed to update the transaction reason's status!");
 
     /// <summary>
     /// Fetches transaction reasons.
