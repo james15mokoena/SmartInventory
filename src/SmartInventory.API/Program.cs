@@ -25,6 +25,7 @@ builder.Services.AddDbContext<DatabaseContext>(options => options.UseMySql(conne
 builder.Services.AddControllers();
 
 // add repositories to the DI container.
+builder.Services.AddScoped<PermissionManagementRepository>();
 builder.Services.AddScoped<UserManagementRepository>();
 builder.Services.AddScoped<SupplierManagementRepository>();
 builder.Services.AddScoped<ProductManagementRepository>();
@@ -32,6 +33,7 @@ builder.Services.AddScoped<StockManagementRepository>();
 
 // add services to the DI container
 builder.Services.AddScoped<PasswordService>();
+builder.Services.AddScoped<PermissionManagementService>();
 builder.Services.AddScoped<UserManagementService>();
 builder.Services.AddScoped<SupplierManagementService>();
 builder.Services.AddScoped<ProductManagementService>();

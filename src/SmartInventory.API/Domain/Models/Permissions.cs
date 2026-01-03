@@ -48,16 +48,16 @@ public static class Permissions
 
     public const string RecordAdjustment = "RecordAdjustment";
 
-    public const string ViewStockLevels = "ViewStockLevels";
+    public const string ViewStockLevels = "ViewStockReports";
 
 
     // ***** Forecast Management permissions ***** //
 
     public const string ViewForecast = "ViewForecast";
 
-    public const string ViewForecastAlerts = "ViewForecastAlerts";
+    public const string ViewForecastAlerts = "ReceiveForecastAlerts";
 
-    public const string RefreshForecasts = "RefreshForecasts";
+    //public const string RefreshForecasts = "RefreshForecasts";
 
     
     // ***** Procument Management permissions ***** //
@@ -82,9 +82,9 @@ public static class Permissions
     
     // ***** Notifications Management permissions ***** //
 
-    public const string ViewLowStockAlerts = "ViewLowStockAlerts";
+    /*public const string ViewLowStockAlerts = "ViewLowStockAlerts";
 
     public const string ViewStockoutPredictionAlerts = "ViewStockoutPredictionAlerts";
 
-    public const string ViewSlowMovingAlerts = "ViewSlowMovingAlerts";
+    public const string ViewSlowMovingAlerts = "ViewSlowMovingAlerts";*/
 }

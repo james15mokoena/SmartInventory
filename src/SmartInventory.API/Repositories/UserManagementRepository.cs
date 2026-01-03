@@ -7,12 +7,17 @@ namespace SmartInventory.API.Repositories;
 /// <summary>
 /// Defines functionality for communicating with the database.
 /// </summary>
-public class UserManagementRepository(DatabaseContext context)
+public class UserManagementRepository(DatabaseContext context, PermissionManagementRepository permMan)
 {
     /// <summary>
     /// Used to interact with the database.
     /// </summary>
     private readonly DatabaseContext _context = context;
+
+    /// <summary>
+    /// Purpose: Used by this subsystem to assign roles to users.
+    /// </summary>
+    private readonly PermissionManagementRepository _permRepo = permMan;
 
     /// <summary>
     /// Creates a new user.
@@ -119,99 +124,5 @@ public class UserManagementRepository(DatabaseContext context)
         }
 
         return null;
-    }
-
-    /// <summary>
-    /// Updates the active status of a Role.
-    /// </summary>
-    /// <param name="roleId"></param>
-    /// <returns></returns>
-    public bool ToggleRoleStatus(int roleId)
-    {
-        if (_context.Roles.FirstOrDefault(r => r.Id == roleId) is Role role)
-        {
-            role.IsActive = !role.IsActive;
-            _context.Update(role);
-            return _context.SaveChanges() > 0;
-        }
-        return false;
-    }
-
-    /// <summary>
-    /// Updates the active status of a Permission.
-    /// </summary>
-    /// <param name="permId"></param>
-    /// <returns></returns>
-    public bool TogglePermissionStatus(int permId)
-    {
-        if (_context.Permissions.FirstOrDefault(p => p.Id == permId) is Permission permission)
-        {
-            permission.IsActive = !permission.IsActive;
-            _context.Update(permission);
-            return _context.SaveChanges() > 0;
-        }
-        return false;
-    }
-
-    /// <summary>
-    /// Adds a new role.
-    /// </summary>
-    /// <param name="newRole"></param>
-    /// <returns></returns>
-    public bool AddRole(RoleDto newRole)
-    {
-        if (!string.IsNullOrEmpty(newRole.Name) && _context.Roles.FirstOrDefault(r => r.Name == newRole.Name) == null)
-        {
-            _context.Roles.Add(new()
-            {
-                Id = 0
-                ,
-                Name = newRole.Name
-                ,
-                IsActive = true
-                , Permissions = []
-            });
-
-            return _context.SaveChanges() > 0;
-        }
-        return false;
-    }
-
-    /// <summary>
-    /// Adds a new permission.
-    /// </summary>
-    /// <param name="newPerm"></param>
-    /// <returns></returns>
-    public bool AddPermission(PermissionDto newPerm)
-    {
-        if (!string.IsNullOrEmpty(newPerm.Name) && _context.Permissions.FirstOrDefault(p => p.Name == newPerm.Name) == null)
-        {
-            _context.Permissions.Add(new()
-            {
-                Id = 0
-                ,
-                Name = newPerm.Name
-                ,
-                IsActive = true
-                ,
-                Description = newPerm.Description!
-                ,
-                Roles = []
-            });
-
-            return _context.SaveChanges() > 0;
-        }
-        return false;
-    }
-    
-    /// <summary>
-    /// Assigns a permission 
-    /// </summary>
-    /// <param name="username"></param>
-    /// <param name="permission"></param>
-    /// <returns></returns>
-    public bool AssignPermission(string username, string permission)
-    {
-        return false;
     }
 }
