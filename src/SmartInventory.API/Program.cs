@@ -40,6 +40,7 @@ builder.Services.AddScoped<ProductManagementService>();
 builder.Services.AddScoped<StockManagementService>();
 
 // add controllers to the DI container.
+builder.Services.AddScoped<PermissionController>();
 builder.Services.AddScoped<UserController>();
 builder.Services.AddScoped<SupplierController>();
 builder.Services.AddScoped<ProductController>();

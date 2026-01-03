@@ -88,4 +88,25 @@ public class PermissionController(PermissionManagementService perm) : Controller
     public IActionResult AddPermission(PermissionDto newPerm) => !string.IsNullOrEmpty(newPerm.Name) && _permService.AddPermission(newPerm) ?
                                                     Ok(newPerm) :
                                                     BadRequest("Failed to add a new permission.");
+
+    /// <summary>
+    /// Assigns a permission to a role, enabling the role to perform some function in the system.
+    /// </summary>
+    /// <param name="role"></param>
+    /// <param name="permission"></param>
+    /// <returns></returns>
+    [HttpPost("{role}/{permission}")]
+    public IActionResult AssignPermission(string role, string permission) => _permService.AssignPermission(role, permission) ?
+                                                                            Ok("Permission assigned successfully!") :
+                                                                            BadRequest("Failed to assign the permission to the role.");
+
+    /// <summary>
+    /// Fetches the permissions assigned to the user.
+    /// </summary>
+    /// <param name="username"></param>
+    /// <returns></returns>
+    [HttpGet("{username}")]
+    public IActionResult GetAssignedPermissionsByUsername(string username) =>
+        !string.IsNullOrEmpty(username) && _permService.GetAssignedPermissionsByUsername(username) is List<PermissionDto> perms ?
+        Ok(perms) : BadRequest("Failed to fetched the permissions assigned to this user!");
 }

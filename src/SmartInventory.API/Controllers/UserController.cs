@@ -22,9 +22,10 @@ public class UserController(UserManagementService uService) : ControllerBase
     /// Creates a new staff member.
     /// </summary>
     /// <param name="staff"></param>
+    /// <param name="role"></param>
     /// <returns></returns>
     [HttpPost]
-    public IActionResult CreateStaffMember(Staff staff) => _userService.CreateUser(staff) ?
+    public IActionResult CreateStaffMember(Staff staff, string role) => _userService.CreateUser(staff,role) ?
                                                            CreatedAtAction(nameof(CreateStaffMember), staff) :
                                                            BadRequest("Failed to create staff member!");
 

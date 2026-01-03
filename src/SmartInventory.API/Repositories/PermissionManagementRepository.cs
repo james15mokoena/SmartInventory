@@ -16,6 +16,94 @@ public class PermissionManagementRepository(DatabaseContext context)
     private readonly DatabaseContext _context = context;
 
     /// <summary>
+    /// Purpose: Fetches a role by name.
+    /// </summary>
+    /// <param name="name"></param>
+    /// <returns></returns>
+    public RoleDto? GetRoleByName(string name)
+    {
+        if (!string.IsNullOrEmpty(name) && _context.Roles.FirstOrDefault(r => r.Name == name) is Role role)
+        {
+            return new RoleDto()
+            {
+                Id = role.Id
+                ,
+                Name = role.Name
+                ,
+                IsActive = role.IsActive
+            };
+        }
+        return null;
+    }
+
+    /// <summary>
+    /// Purpose: Fetches a role by its ID.
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    public RoleDto? GetRoleById(int id)
+    {
+        if (id >= 0 && _context.Roles.FirstOrDefault(r => r.Id == id) is Role role)
+        {
+            return new RoleDto()
+            {
+                Id = role.Id
+                ,
+                Name = role.Name
+                ,
+                IsActive = role.IsActive                
+            };
+        }
+        return null;
+    }
+
+    /// <summary>
+    /// Purpose: Fetches a permission by name.
+    /// </summary>
+    /// <param name="name"></param>
+    /// <returns></returns>
+    public PermissionDto? GetPermissionByName(string name)
+    {
+        if (!string.IsNullOrEmpty(name) && _context.Permissions.FirstOrDefault(r => r.Name == name) is Permission perm)
+        {
+            return new PermissionDto()
+            {
+                Id = perm.Id
+                ,
+                Name = perm.Name
+                ,
+                IsActive = perm.IsActive
+                ,
+                Description = perm.Description
+            };
+        }
+        return null;
+    }
+
+    /// <summary>
+    /// Purpose: Fetches a permission by its ID.
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    public PermissionDto? GetPermissionById(int id)
+    {
+        if (id >= 0 && _context.Permissions.FirstOrDefault(r => r.Id == id) is Permission perm)
+        {
+            return new PermissionDto()
+            {
+                Id = perm.Id
+                ,
+                Name = perm.Name
+                ,
+                IsActive = perm.IsActive
+                ,
+                Description = perm.Description
+            };
+        }
+        return null;
+    }
+
+    /// <summary>
     /// Purpose: Fetches all active permissions.
     /// </summary>
     /// <returns></returns>
@@ -221,7 +309,7 @@ public class PermissionManagementRepository(DatabaseContext context)
         }
         return false;
     }
-    
+
     /// <summary>
     /// Purpose: Assigns a permission to a role, enabling the role to perform some function in the
     /// system.
@@ -231,8 +319,9 @@ public class PermissionManagementRepository(DatabaseContext context)
     /// <returns></returns>
     public bool AssignPermission(RoleDto role, PermissionDto permission)
     {
-        if(_context.Roles.FirstOrDefault(r => r.Name == role.Name) is Role r &&
-            _context.Permissions.FirstOrDefault(p => p.Name == permission.Name) is Permission p)
+        if (_context.Roles.FirstOrDefault(r => r.Name == role.Name) is Role r &&
+            _context.Permissions.FirstOrDefault(p => p.Name == permission.Name) is Permission p &&
+            _context.RolePermissions.FirstOrDefault(rp => rp.RoleId == r.Id && rp.PermissionId == p.Id) == null)
         {
             _context.RolePermissions.Add(new()
             {
@@ -248,5 +337,39 @@ public class PermissionManagementRepository(DatabaseContext context)
             return _context.SaveChanges() > 0;
         }
         return false;
+    }
+    
+    /// <summary>
+    /// Fetches all permissions assigned to a user.
+    /// </summary>
+    /// <param name="username"></param>
+    /// <returns></returns>
+    public List<PermissionDto>? GetAssignedPermissionsByUsername(string username)
+    {
+        if (!string.IsNullOrEmpty(username) && _context.Staff.FirstOrDefault(s => s.Username == username) is Staff staff)
+        {
+            List<RolePermission> rolePerms = [.. from perm in _context.RolePermissions
+                                              where perm.RoleId == staff.RoleId
+                                              select perm];
+
+            List<PermissionDto> perms = [];
+
+            foreach (RolePermission rolePerm in rolePerms)
+            {
+                PermissionDto perm = GetPermissionById(rolePerm.PermissionId)!;
+                perms.Add(new()
+                {
+                    Id = perm.Id
+                    ,
+                    Name = perm.Name
+                    ,
+                    IsActive = perm.IsActive
+                    ,
+                    Description = perm.Description
+                });
+            }
+            return perms;
+        }
+        return null;
     }
 }

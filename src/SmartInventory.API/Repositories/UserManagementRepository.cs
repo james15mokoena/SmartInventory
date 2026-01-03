@@ -22,11 +22,16 @@ public class UserManagementRepository(DatabaseContext context, PermissionManagem
     /// <summary>
     /// Creates a new user.
     /// </summary>
-    /// <param name="newUser"></param>
+    /// <param name="newStaff"></param>
+    /// <param name="role"></param>
     /// <returns>true if user was created successfully, otherwise false.</returns>
-    public bool CreateUser(Staff newStaff)
+    public bool CreateUser(Staff newStaff, string role)
     {
-        _context.Staff.Add(newStaff);
+        if(_permRepo.GetRoleByName(role) is RoleDto r && GetUserByUsername(newStaff.Username) == null)
+        {
+            newStaff.RoleId = r.Id;  
+            _context.Staff.Add(newStaff);            
+        }
         
         return _context.SaveChanges() > 0;
     }

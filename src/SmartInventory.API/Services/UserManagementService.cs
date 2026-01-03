@@ -20,13 +20,15 @@ public class UserManagementService(UserManagementRepository userManagementReposi
     /// Creates a new user.
     /// </summary>
     /// <param name="newUser"></param>
+    /// <param name="role"></param>
     /// <returns>true if user was created successfully, otherwise false.</returns>
-    public bool CreateUser(Staff user)
+    public bool CreateUser(Staff user, string role)
     {
-        if (IsDataValid(user) is Staff staff)
+        if (IsDataValid(user) is Staff staff && !string.IsNullOrEmpty(role))
         {
             staff.PasswordHash = _passwordService.HashPassword(staff.PasswordHash);
-            return _userManRepo.CreateUser(staff);
+
+            return _userManRepo.CreateUser(staff,role);
         }
 
         return false;

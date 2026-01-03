@@ -13,25 +13,25 @@ public static class Roles
     /// <summary>
     /// Approves stock adjustments and purchase orders.
     /// </summary>
-    public const string Manager = "General Manager";
+    public const string GeneralManager = "General Manager";
 
     /// <summary>
     /// Can manually create stock transactions, in addition to automatic creation.
     /// </summary>
-    public const string InventoryManager = "Stock Manager";
+    public const string StockManager = "Stock Manager";
 
     /// <summary>
     /// Creates and manages purchase orders.
     /// </summary>
-    public const string ProcumentOfficer = "Procurement Manager";
+    public const string ProcumentManager = "Procurement Manager";
 
     /// <summary>
     /// Performs sales related functions on the system.
     /// </summary>
-    public const string SalesUser = "Sales Manager";
+    public const string SalesManager = "Sales Manager";
 
     /// <summary>
     /// Can view but not modify.
     /// </summary>
-    public const string Visitor = "Visitor";
+    public const string GeneralUser = "General User";
 }

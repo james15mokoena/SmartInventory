@@ -62,4 +62,23 @@ public class PermissionManagementService(PermissionManagementRepository permMan)
     /// <param name="newPerm"></param>
     /// <returns></returns>
     public bool AddPermission(PermissionDto newPerm) => !string.IsNullOrEmpty(newPerm.Name) && _permRepo.AddPermission(newPerm);
+
+    /// <summary>
+    /// Purpose: Assigns a permission to a role, enabling the role to perform some function in the
+    /// system.
+    /// </summary>
+    /// <param name="role"></param>
+    /// <param name="permission"></param>
+    /// <returns></returns>
+    public bool AssignPermission(string role, string permission) =>
+        _permRepo.GetRoleByName(role) is RoleDto r &&
+        _permRepo.GetPermissionByName(permission) is PermissionDto p && _permRepo.AssignPermission(r, p);
+
+    /// <summary>
+    /// Fetches all permissions assigned to a user.
+    /// </summary>
+    /// <param name="username"></param>
+    /// <returns></returns>
+    public List<PermissionDto>? GetAssignedPermissionsByUsername(string username) =>
+        !string.IsNullOrEmpty(username) && _permRepo.GetAssignedPermissionsByUsername(username) is List<PermissionDto> perms ? perms : null;
 }
