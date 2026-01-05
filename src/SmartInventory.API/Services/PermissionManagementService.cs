@@ -1,4 +1,5 @@
 using SmartInventory.API.Domain.DTO;
+using SmartInventory.API.Domain.Models;
 using SmartInventory.API.Repositories;
 
 namespace SmartInventory.API.Services;
@@ -81,4 +82,24 @@ public class PermissionManagementService(PermissionManagementRepository permMan)
     /// <returns></returns>
     public List<PermissionDto>? GetAssignedPermissionsByUsername(string username) =>
         !string.IsNullOrEmpty(username) && _permRepo.GetAssignedPermissionsByUsername(username) is List<PermissionDto> perms ? perms : null;
+
+    /// <summary>
+    /// Checks if a user is authorized to perform the requested function.
+    /// </summary>
+    /// <param name="username"></param>
+    /// <param name="permissionName"></param>
+    /// <returns></returns>
+    public bool IsAuthorized(string username, string permissionName)
+    {
+        if (GetAssignedPermissionsByUsername(username) is List<PermissionDto> permissions)
+        {
+            foreach(PermissionDto permission in permissions)
+            {
+                if (permission.Name == permissionName)
+                    return true;
+            }
+        }
+        
+        return false;
+    }
 }

@@ -8,7 +8,7 @@ namespace SmartInventory.API.Services;
 /// 
 /// </summary>
 /// <param name="stockRepo"></param>
-public class StockManagementService(StockManagementRepository stockRepo, UserManagementService userService)
+public class StockManagementService(StockManagementRepository stockRepo, UserManagementService userService, PermissionManagementService permServ)
 {
     /// <summary>
     /// Used to interact with the database.
@@ -19,6 +19,11 @@ public class StockManagementService(StockManagementRepository stockRepo, UserMan
     /// Used to interact with the user management service.
     /// </summary>
     private readonly UserManagementService _userService = userService;
+
+    /// <summary>
+    /// Used to interact with the permission management service.
+    /// </summary>
+    private readonly PermissionManagementService _permService = permServ;
 
     /// <summary>
     /// Used to record a stock transaction that adds stocks.
@@ -140,14 +145,10 @@ public class StockManagementService(StockManagementRepository stockRepo, UserMan
     /// <param name="company"></param>
     /// <param name="signature"></param>
     /// <returns></returns>
-    public StockReport? GetStockReport(string company, string signature)
-    {
-        if (!string.IsNullOrEmpty(company) && !string.IsNullOrEmpty(signature))
-        {
+    public StockReport? GetStockReport(string company, string signature) =>
+        !string.IsNullOrEmpty(company) && !string.IsNullOrEmpty(signature) && _permService.IsAuthorized(signature, "ViewStockReports") &&        
+        _stockRepo.GetStockReport(company, signature) is StockReport stockReport ? stockReport : null;
 
-        }
-        return null;
-    }
 
     /// <summary>
     /// Converts a StockTransaction object to StockTransactionDto object.

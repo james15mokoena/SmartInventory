@@ -109,37 +109,43 @@ public class ProductManagementRepository(DatabaseContext context, StockManagemen
 
             if (product.CostPrice != updatedProduct.CostPrice)
             {
-                product.CostPrice = updatedProduct.CostPrice!;
+                product.CostPrice = updatedProduct.CostPrice;
                 isUpdated = true;
             }
 
             if (product.UnitPrice != updatedProduct.UnitPrice)
             {
-                product.UnitPrice = updatedProduct.UnitPrice!;
+                product.UnitPrice = updatedProduct.UnitPrice;
                 isUpdated = true;
             }
 
             if (product.CurrentStock != updatedProduct.CurrentStock)
             {
-                product.CurrentStock = updatedProduct.CurrentStock!;
+                product.CurrentStock = updatedProduct.CurrentStock;
                 isUpdated = true;
             }
 
             if (product.MinimumStockLevel != updatedProduct.MinimumStockLevel)
             {
-                product.MinimumStockLevel = updatedProduct.MinimumStockLevel!;
+                product.MinimumStockLevel = updatedProduct.MinimumStockLevel;
+                isUpdated = true;
+            }
+
+            if(product.MaximumStockLevel != updatedProduct.MaximumStockLevel)
+            {
+                product.MaximumStockLevel = updatedProduct.MaximumStockLevel;
                 isUpdated = true;
             }
 
             if (product.ReorderQuantity != updatedProduct.ReorderQuantity)
             {
-                product.ReorderQuantity = updatedProduct.ReorderQuantity!;
+                product.ReorderQuantity = updatedProduct.ReorderQuantity;
                 isUpdated = true;
             }
 
             if (product.UnitMeasurement != updatedProduct.UnitMeasurement)
             {
-                product.UnitMeasurement = updatedProduct.UnitMeasurement!;
+                product.UnitMeasurement = updatedProduct.UnitMeasurement;
                 isUpdated = true;
             }
 

@@ -1,4 +1,11 @@
+-- SELECT * FROM Product;
 SELECT * FROM Staff;
 -- SELECT * FROM RolePermission;
 -- SELECT * from Role;
 -- update Role set Name = "General User" WHERE Name = "Visitor";
+-- update Product set MaximumStockLevel = 100;
+-- SELECT * FROM RolePermission;
+-- SELECT DISTINCT Name from Permission as p
+-- INNER JOIN RolePermission as rp
+-- ON p.Id = rp.PermissionId
+-- WHERE rp.RoleId = 5;

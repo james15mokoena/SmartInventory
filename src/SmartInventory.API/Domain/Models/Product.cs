@@ -58,6 +58,11 @@ public class Product
     public int ReorderQuantity { get; set; }
 
     /// <summary>
+    /// The maximum number of items of this product allowable.
+    /// </summary>
+    public int MaximumStockLevel { get; set; }
+
+    /// <summary>
     /// The group under which the product is classified.
     /// </summary>
     public required string Category { get; set; }

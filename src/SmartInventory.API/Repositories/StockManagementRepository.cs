@@ -278,9 +278,9 @@ public class StockManagementRepository(DatabaseContext context, UserManagementRe
     /// Generates a stock report.
     /// </summary>
     /// <param name="company">The name of the generating company.</param>
-    /// <param name="Signature">An identifier for the person who generated the report.</param>
+    /// <param name="signature">An identifier for the person who generated the report.</param>
     /// <returns></returns>
-    public StockReport? GetStockReport(string company, string Signature)
+    public StockReport? GetStockReport(string company, string signature)
     {
         List<Product>? stocks = [.. from stock in _context.Products
                                 select stock];
@@ -290,7 +290,7 @@ public class StockManagementRepository(DatabaseContext context, UserManagementRe
             StockReport report = new()
             {
                 CompanyName = company
-                ,Signature = Signature
+                ,Signature = signature
             };
 
             foreach (var stock in stocks)
@@ -307,7 +307,7 @@ public class StockManagementRepository(DatabaseContext context, UserManagementRe
                     ,
                     ReorderLevel = stock.ReorderQuantity
                     ,
-                    MaximumLevel = 100
+                    MaximumLevel = stock.MaximumStockLevel
                 };
 
                 report.Items.Add(item);

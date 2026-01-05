@@ -42,6 +42,11 @@ public class ProductDto
     public int MinimumStockLevel { get; set; }
 
     /// <summary>
+    /// The maximum number of items of this product allowable.
+    /// </summary>
+    public int MaximumStockLevel { get; set; }
+
+    /// <summary>
     /// The real time quantity available.
     /// </summary>
     public int CurrentStock { get; set; }
