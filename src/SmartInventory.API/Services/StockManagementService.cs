@@ -34,17 +34,10 @@ public class StockManagementService(StockManagementRepository stockRepo, UserMan
     /// <param name="reason">The reason for which the transaction was initiated.</param>
     /// <param name="isNewProduct">Indicates whether a new product is added.</param>
     /// <returns></returns>
-    public bool RecordIncomingStock(string sku, int quantity, string username, string reason, bool isNewProduct)
-    {
-        if (!string.IsNullOrEmpty(sku) && quantity > 0 && !string.IsNullOrEmpty(username) && !string.IsNullOrEmpty(reason))
-        {
-            // FIX: Username must be used.
-            //if(_userService.GetAdmin(username) is Admin admin)
-              //  return _stockRepo.RecordIncomingStock(sku, quantity, admin.Id, reason, isNewProduct);
-        }
-            
-        return false;
-    }
+    public bool RecordIncomingStock(string sku, int quantity, string username, string reason, bool isNewProduct) =>
+        !string.IsNullOrEmpty(sku) && quantity > 0 && !string.IsNullOrEmpty(username) && !string.IsNullOrEmpty(reason) &&
+        _permService.IsAuthorized(username, "RecordIncomingStock") && _userService.GetStaffMember(username) is Staff staff &&
+        _stockRepo.RecordIncomingStock(sku, quantity, staff.Id, reason, isNewProduct);
 
     /// <summary>
     /// Used to deduct the specified quantity from the stock quantity.
@@ -52,18 +45,12 @@ public class StockManagementService(StockManagementRepository stockRepo, UserMan
     /// <param name="sku"></param>
     /// <param name="quantity"></param>
     /// <param name="username"></param>
-    /// <param name="reasonType"></param>
+    /// <param name="reason"></param>
     /// <returns></returns>
-    public bool RecordOutgoingStock(string sku, int quantity, string username, string reason)
-    {
-        if (!string.IsNullOrEmpty(sku) && quantity > 0 && !string.IsNullOrEmpty(username) && !string.IsNullOrEmpty(reason))
-        {
-            // FIX: Username must be used.
-            //if(_userService.GetAdmin(username) is Admin admin)      
-              //  return _stockRepo.RecordOutgoingStock(sku, quantity, admin.Id, reason);
-        }
-        return false;
-    }
+    public bool RecordOutgoingStock(string sku, int quantity, string username, string reason) => 
+    !string.IsNullOrEmpty(sku) && quantity > 0 && !string.IsNullOrEmpty(username) && !string.IsNullOrEmpty(reason) &&
+        _permService.IsAuthorized(username, "RecordOutgoingStock") && _userService.GetStaffMember(username) is Staff staff &&
+        _stockRepo.RecordOutgoingStock(sku, quantity, staff.Id, reason);
 
     /// <summary>
     /// Used to add a new transaction reason.
@@ -148,7 +135,6 @@ public class StockManagementService(StockManagementRepository stockRepo, UserMan
     public StockReport? GetStockReport(string company, string signature) =>
         !string.IsNullOrEmpty(company) && !string.IsNullOrEmpty(signature) && _permService.IsAuthorized(signature, "ViewStockReports") &&        
         _stockRepo.GetStockReport(company, signature) is StockReport stockReport ? stockReport : null;
-
 
     /// <summary>
     /// Converts a StockTransaction object to StockTransactionDto object.

@@ -6,7 +6,7 @@ namespace SmartInventory.API.Domain.DTO;
 public class StockReport
 {
     /// <summary>
-    /// The name of the company.
+    /// The name of the business.
     /// </summary>
     public string? CompanyName { get; set; }
 
@@ -16,7 +16,7 @@ public class StockReport
     public string? DocName { get; set; } = "Stock (Inventory) Report";
 
     /// <summary>
-    /// Identifies the person who generated the report.
+    /// The name of the person responsible for managing stock.
     /// </summary>
     public string? Signature { get; set; }
 

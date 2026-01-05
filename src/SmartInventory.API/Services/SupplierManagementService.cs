@@ -20,27 +20,23 @@ public class SupplierManagementService(SupplierManagementRepository suppRepo)
     /// </summary>
     /// <param name="newSupplier"></param>
     /// <returns></returns>
-    public bool CreateSupplier(SupplierDto newSupplier) //=> IsDataValid(newSupplier) && _suppManRepo.CreateSupplier(newSupplier);
+    public bool CreateSupplier(SupplierDto newSupplier)
     {
-        if (newSupplier.Id >= 0 && !string.IsNullOrEmpty(newSupplier.Address) &&
-           !string.IsNullOrEmpty(newSupplier.Email) && !string.IsNullOrEmpty(newSupplier.Phone) &&
-           !string.IsNullOrEmpty(newSupplier.SupplierName) && !string.IsNullOrEmpty(newSupplier.Website) &&
-           !string.IsNullOrEmpty(newSupplier.ContactPersonEmail) && !string.IsNullOrEmpty(newSupplier.ContactPersonName) &&
-           !string.IsNullOrEmpty(newSupplier.ContactPersonPhone) && !string.IsNullOrEmpty(newSupplier.ContactPersonRole))
+        if (IsDataValid(newSupplier))
         {
             return _suppManRepo.CreateSupplier(new()
             {
-                SupplierName = newSupplier.SupplierName,
-                Email = newSupplier.Email,
-                Address = newSupplier.Address,
+                SupplierName = newSupplier.SupplierName!,
+                Email = newSupplier.Email!,
+                Address = newSupplier.Address!,
                 IsActive = newSupplier.IsActive,
-                Phone = newSupplier.Phone,
+                Phone = newSupplier.Phone!,
                 Website = newSupplier.Website,
                 DateCreated = newSupplier.DateCreated,
-                ContactPersonName = newSupplier.ContactPersonName,
-                ContactPersonEmail = newSupplier.ContactPersonEmail,
-                ContactPersonPhone = newSupplier.ContactPersonPhone,
-                ContactPersonRole = newSupplier.ContactPersonRole,
+                ContactPersonName = newSupplier.ContactPersonName!,
+                ContactPersonEmail = newSupplier.ContactPersonEmail!,
+                ContactPersonPhone = newSupplier.ContactPersonPhone!,
+                ContactPersonRole = newSupplier.ContactPersonRole!,
                 Id = newSupplier.Id,
                 Products = [],
                 PurchaseOrders = []
@@ -97,7 +93,7 @@ public class SupplierManagementService(SupplierManagementRepository suppRepo)
     /// </summary>
     /// <param name="supplier"></param>
     /// <returns></returns>
-    private static bool IsDataValid(Supplier supplier)
+    private static bool IsDataValid(SupplierDto supplier)
     {
         return !string.IsNullOrEmpty(supplier.Address) && !string.IsNullOrEmpty(supplier.Email) &&
                !string.IsNullOrEmpty(supplier.SupplierName) && !string.IsNullOrEmpty(supplier.ContactPersonEmail) &&

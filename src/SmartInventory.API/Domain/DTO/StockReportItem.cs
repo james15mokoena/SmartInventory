@@ -16,17 +16,17 @@ public class StockReportItem
     public string? Code { get; set; }
     
     /// <summary>
-    /// The number of items available currently (in units).
+    /// The stock level of items in the stock room when the report was made out.
     /// </summary>
     public int StockLevel { get; set; }
     
     /// <summary>
-    /// The threshold at which the item must be reordered (in units).
+    /// The re-ordering level , this shows the level at which stock needs to be reordered.
     /// </summary>
     public int ReorderLevel { get; set; }
     
     /// <summary>
-    /// The maximum number of items that can be available (in units).
+    /// The maximum level in units (this is the limit of units that should be held).
     /// </summary>
     public int MaximumLevel { get; set; }
     
