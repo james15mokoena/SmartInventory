@@ -1,5 +1,5 @@
 -- SELECT * FROM Product;
-SELECT * FROM Staff;
+-- SELECT * FROM Staff;
 -- SELECT * FROM RolePermission;
 -- SELECT * from Role;
 -- update Role set Name = "General User" WHERE Name = "Visitor";
@@ -9,3 +9,5 @@ SELECT * FROM Staff;
 -- INNER JOIN RolePermission as rp
 -- ON p.Id = rp.PermissionId
 -- WHERE rp.RoleId = 5;
+SELECT * FROM Product;
+-- update Product set CurrentStock = 2 WHERE SKU = 'kniffe01232';

@@ -33,5 +33,10 @@ public class StockReportItem
     /// <summary>
     /// Classifies the item.
     /// </summary>
-    public string? Category{ get; set; }
+    public string? Category { get; set; }
+
+    /// <summary>
+    /// Indicates whether this stock item needs to be reordered.
+    /// </summary>
+    public string? IsReorder { get; set; }
 }

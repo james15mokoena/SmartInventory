@@ -308,6 +308,8 @@ public class StockManagementRepository(DatabaseContext context, UserManagementRe
                     ReorderLevel = stock.ReorderQuantity
                     ,
                     MaximumLevel = stock.MaximumStockLevel
+                    ,
+                    IsReorder = stock.CurrentStock < stock.MinimumStockLevel ? "Yes" : "No"
                 };
 
                 report.Items.Add(item);

@@ -1,3 +1,4 @@
+using System.Text;
 using SmartInventory.API.Domain.DTO;
 using SmartInventory.API.Domain.Models;
 using SmartInventory.API.Repositories;
@@ -132,10 +133,159 @@ public class StockManagementService(StockManagementRepository stockRepo, UserMan
     /// <param name="company"></param>
     /// <param name="signature"></param>
     /// <returns></returns>
-    public StockReport? GetStockReport(string company, string signature) =>
-        !string.IsNullOrEmpty(company) && !string.IsNullOrEmpty(signature) && _permService.IsAuthorized(signature, "ViewStockReports") &&        
-        _stockRepo.GetStockReport(company, signature) is StockReport stockReport ? stockReport : null;
+    public StockReport? GetStockReport(string company, string signature)
+    {
 
+        if (!string.IsNullOrEmpty(company) && !string.IsNullOrEmpty(signature) && _permService.IsAuthorized(signature, "ViewStockReports"))
+        {
+
+            // the name of the person generating the stock report.
+            string fullName = $"{ _userService.GetStaffMember(signature)!.FirstName} {_userService.GetStaffMember(signature)!.LastName}";
+
+            if (_stockRepo.GetStockReport(company, signature) is StockReport stockReport)
+            {
+                // set signature to the name of the person generating the report.
+                stockReport.Signature = fullName;
+
+                // generate an HTML document with this information.
+                StringBuilder builder = new();
+
+                // used to build the stock report table.
+                StringBuilder tableBuilder = new();
+
+                // build the stock table
+                foreach (StockReportItem item in stockReport.Items)
+                {
+                    tableBuilder.Append(
+                        $@"
+                            <tr>
+                                <td style='border-style:solid;border-width:1px;border-color:black;border-left-style:none;'>
+                                    {item.Name}
+                                </td>
+                                <td style='border-style:solid;border-width:1px;border-color:black;'>
+                                    {item.Code}
+                                </td>
+                                <td style='border-style:solid;border-width:1px;border-color:black;'>
+                                    {item.StockLevel}
+                                </td>
+                                <td style='border-style:solid;border-width:1px;border-color:black;'>
+                                    {item.ReorderLevel}
+                                </td>
+                                <td style='border-style:solid;border-width:1px;border-color:black;'>
+                                    {item.MaximumLevel}
+                                </td>
+                                <td style='border-style:solid;border-width:1px;border-color:black;border-right-style:none;'>
+                                    {item.IsReorder}
+                                </td>
+                            </tr>
+                        "
+                    );
+                }
+
+                // stores the body of the document.
+                string body =
+                    $@"
+                        <div class='container' style='border-style:solid;border-color:black;'>
+
+                            <h1 style='text-align:center;border-style;padding:2px;border-bottom-style:solid;border-color:black;'>
+                                {stockReport.CompanyName}
+                            </h1>
+
+                            <h3 style='text-align:center;border-bottom-style:solid;border-color:black;padding:2px;margin-bottom:0;'>
+                                Stock (Inventory) Report
+                            </h3>
+                            
+                            <div class='stock-table' style='margin-bottom:7px;margin-top:0;padding-top:0;border-top-style:none;font-size:16px;
+                                width:100%;overflow-x:auto;overflow-y:auto;'>
+                                <table style='border-style:solid;border-width:1px;border-color:black;border-collapse:collapse;text-align:center;width:100%;
+                                    border-left-style:none;border-right-style:none;padding-top:0;margin-top:0;'>
+                                    <thead style='font-weight:bold;background-color:#f5f5dc;'>
+                                        <tr>
+                                            <th style='border-style:solid;border-width:1px;border-color:black;border-left-style:none;'> Item </th>
+                                            <th style='border-style:solid;border-width:1px;border-color:black;'> Code </th>
+                                            <th style='border-style:solid;border-width:1px;border-color:black;'> Stock Level <br /> (units) </th>
+                                            <th style='border-style:solid;border-width:1px;border-color:black;'> Reorder Level <br /> (units) </th>
+                                            <th style='border-style:solid;border-width:1px;border-color:black;border-right-style:none;'> Maximum Level <br /> (units) </th>
+                                            <th style='border-style:solid;border-width:1px;border-color:black;'> Reorder? <br > (Yes/No) </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {tableBuilder}
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class='signature-date'>
+                                
+                                <span id='sign' style='font-size:22px;text-align:start;margin-left:5px;margin-right:50%;'>
+                                    <span style='font-weight:bold;margin-right:4px;margin-left:5px;'>
+                                        Signature:
+                                    </span> 
+                                    <span style='font-style:italic;'>
+                                        {stockReport.Signature}
+                                    </span>
+                                </span>
+
+                                <span id='dat' style='font-size:22px;'>
+                                    <span style='font-weight:bold;margin-right:4px;'>
+                                        Date:
+                                    </span> 
+                                    <span style='font-style:italic;'>
+                                        {stockReport.DateGenerated}
+                                    </span>
+                                </span>
+
+                            </div>
+
+                        </div>
+                    ";
+
+                string trHoverStyle = "tbody tr:hover{background-color:#87cefa;}";
+                string respBody =
+                    @"
+                        @media (max-width: 1194px) {
+
+                            #dat{
+                                display: block;
+                                margin-top: 7px;                                
+                                text-align: center;
+                            }
+                        }
+                    ";
+
+                string html =
+                    $@"
+                        <!DOCTYPE html>
+                        <html>
+                            <head>
+                                <title> Stock (Inventory) Report </title>
+                                <style type='text/css'>
+                                    {trHoverStyle}
+                                    {respBody}
+                                </style>
+                            </head>
+
+                            <body>
+                                ${body}
+                            </body>
+                        </html>
+                    ";
+
+                builder.Append(html);
+                builder.Replace('$', ' ');
+
+                // build the destination folder and file
+                string path = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+                string filePath = Path.Combine(path, "Downloads", "StockReport.html");
+
+                using StreamWriter writer = new(filePath, false, Encoding.UTF8);
+                writer.Write(builder.ToString());
+                return stockReport;
+            }
+        }
+        return null;
+    }
+        
     /// <summary>
     /// Converts a StockTransaction object to StockTransactionDto object.
     /// </summary>
