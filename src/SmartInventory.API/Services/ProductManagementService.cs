@@ -4,7 +4,8 @@ using SmartInventory.API.Repositories;
 
 namespace SmartInventory.API.Services;
 
-public class ProductManagementService(ProductManagementRepository productRepo, SupplierManagementService suppService)
+public class ProductManagementService(ProductManagementRepository productRepo, SupplierManagementService suppService,
+    PermissionManagementService permServ)
 {
     /// <summary>
     /// Used to interact with the database.
@@ -15,6 +16,11 @@ public class ProductManagementService(ProductManagementRepository productRepo, S
     /// Used to interact with the supplier management subsystem.
     /// </summary>
     private readonly SupplierManagementService _supplierService = suppService;
+
+    /// <summary>
+    /// Used to interact with the permission management subsystem.
+    /// </summary>
+    private readonly PermissionManagementService _permService = permServ;
 
     /// <summary>
     /// Adds a new product.
@@ -29,7 +35,7 @@ public class ProductManagementService(ProductManagementRepository productRepo, S
             newProduct.CostPrice >= 0.0 && newProduct.UnitPrice >= 0.0 && newProduct.CurrentStock >= 0 &&
             newProduct.DateCreated != default && newProduct.LastUpdated != default && newProduct.MinimumStockLevel >= 0 &&
             newProduct.ReorderQuantity >= 0 && newProduct.UnitMeasurement >= 0.0 && newProduct.SupplierId >= 0 &&
-            !string.IsNullOrEmpty(username))
+            !string.IsNullOrEmpty(username) && newProduct.MaximumStockLevel >= 0 && _permService.IsAuthorized(username,"AddProduct"))
         {
             // get the supplier of this product.
 
@@ -45,6 +51,8 @@ public class ProductManagementService(ProductManagementRepository productRepo, S
                     CurrentStock = newProduct.CurrentStock,
                     IsActive = newProduct.IsActive,
                     MinimumStockLevel = newProduct.MinimumStockLevel,
+                    MaximumStockLevel =  newProduct.MinimumStockLevel <= newProduct.MaximumStockLevel ?
+                                        newProduct.MaximumStockLevel : newProduct.MinimumStockLevel + 5,
                     DateCreated = newProduct.DateCreated,
                     LastUpdated = newProduct.LastUpdated,
                     Description = newProduct.Description,
@@ -55,6 +63,8 @@ public class ProductManagementService(ProductManagementRepository productRepo, S
                     Supplier = supplier,
                     PurchaseOrderItems = [],
                     StockTransactions = []
+                    ,
+                    ImageUrl = newProduct.ImageUrl ?? ""
                 },username);
             }
         }

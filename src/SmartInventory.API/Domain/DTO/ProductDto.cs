@@ -85,4 +85,9 @@ public class ProductDto
     /// A numeric or alphanumeric code printed on the product.
     /// </summary>
     public string? Barcode { get; set; } = "";
+
+    /// <summary>
+    /// An image of the product.
+    /// </summary>
+    public string? ImageUrl { get; set; } = "";
 }

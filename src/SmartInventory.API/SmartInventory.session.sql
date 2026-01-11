@@ -9,5 +9,7 @@
 -- INNER JOIN RolePermission as rp
 -- ON p.Id = rp.PermissionId
 -- WHERE rp.RoleId = 5;
-SELECT * FROM Product;
--- update Product set CurrentStock = 2 WHERE SKU = 'kniffe01232';
+-- SELECT * FROM Product;
+-- update Product set MaximumStockLevel = 20 WHERE SKU = 'PCV-R222G';
+-- delete from Product where SKU = 'PCV-R222G';
+SELECT * FROM StockTransaction;
