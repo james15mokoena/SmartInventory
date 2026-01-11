@@ -2,6 +2,7 @@ using System.Text;
 using SmartInventory.API.Domain.DTO;
 using SmartInventory.API.Domain.Models;
 using SmartInventory.API.Repositories;
+using IronPdf;
 
 namespace SmartInventory.API.Services;
 
@@ -280,6 +281,11 @@ public class StockManagementService(StockManagementRepository stockRepo, UserMan
 
                 using StreamWriter writer = new(filePath, false, Encoding.UTF8);
                 writer.Write(builder.ToString());
+
+                // generate a pdf version of the report.
+                //var pdfRender = new ChromePdfRenderer();
+                //string pdfPath = Path.Combine(path, "Downloads", "StockReport.pdf");
+                //new ChromePdfRenderer().RenderHtmlAsPdf(filePath).SaveAs("StockReport.pdf");
                 return stockReport;
             }
         }

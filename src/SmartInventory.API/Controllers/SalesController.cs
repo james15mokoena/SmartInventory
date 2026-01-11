@@ -24,6 +24,7 @@ public class SalesController(SalesManagementService salesServ) : ControllerBase
     [HttpPost]
     public IActionResult GenerateRequisitionForm(RequisitionFormData formData) =>
         !string.IsNullOrEmpty(formData.Authorized) && !string.IsNullOrEmpty(formData.CompanyName) && !string.IsNullOrEmpty(formData.DocName) &&
-        !string.IsNullOrEmpty(formData.CompanyAddress) && formData.DocNo >= 0 && !string.IsNullOrEmpty(formData.FromDepartment) ?
+        !string.IsNullOrEmpty(formData.CompanyAddress) && formData.DocNo >= 0 && !string.IsNullOrEmpty(formData.FromDepartment) &&
+        formData.RequisitionDataItems.Count > 0 && _salesServ.GenerateRequisitionForm(formData) is RequisitionFormData fd?
         CreatedAtAction(nameof(GenerateRequisitionForm),formData) : BadRequest("Failed to generate Requisition form!");
 }

@@ -89,61 +89,61 @@ public class ProductManagementRepository(DatabaseContext context, StockManagemen
         {
             bool isUpdated = false;
 
-            if (product.Name != updatedProduct.Name)
+            if (product.Name != updatedProduct.Name && updatedProduct.Name != "string")
             {
                 product.Name = updatedProduct.Name!;
                 isUpdated = true;
             }
 
-            if (product.Description != updatedProduct.Description)
+            if (product.Description != updatedProduct.Description && updatedProduct.Description != "string")
             {
                 product.Description = updatedProduct.Description!;
                 isUpdated = true;
             }
 
-            if (product.Category != updatedProduct.Category)
+            if (product.Category != updatedProduct.Category && updatedProduct.Category != "string")
             {
                 product.Category = updatedProduct.Category!;
                 isUpdated = true;
             }
 
-            if (product.CostPrice != updatedProduct.CostPrice)
+            if (product.CostPrice != updatedProduct.CostPrice && updatedProduct.CostPrice > 0)
             {
                 product.CostPrice = updatedProduct.CostPrice;
                 isUpdated = true;
             }
 
-            if (product.UnitPrice != updatedProduct.UnitPrice)
+            if (product.UnitPrice != updatedProduct.UnitPrice && updatedProduct.UnitPrice > 0)
             {
                 product.UnitPrice = updatedProduct.UnitPrice;
                 isUpdated = true;
             }
 
-            if (product.CurrentStock != updatedProduct.CurrentStock)
+            if (product.CurrentStock != updatedProduct.CurrentStock && updatedProduct.CurrentStock > 0)
             {
                 product.CurrentStock = updatedProduct.CurrentStock;
                 isUpdated = true;
             }
 
-            if (product.MinimumStockLevel != updatedProduct.MinimumStockLevel)
+            if (product.MinimumStockLevel != updatedProduct.MinimumStockLevel && updatedProduct.MinimumStockLevel > 0)
             {
                 product.MinimumStockLevel = updatedProduct.MinimumStockLevel;
                 isUpdated = true;
             }
 
-            if(product.MaximumStockLevel != updatedProduct.MaximumStockLevel)
+            if(product.MaximumStockLevel != updatedProduct.MaximumStockLevel && updatedProduct.MaximumStockLevel > 0)
             {
                 product.MaximumStockLevel = updatedProduct.MaximumStockLevel;
                 isUpdated = true;
             }
 
-            if (product.ReorderQuantity != updatedProduct.ReorderQuantity)
+            if (product.ReorderQuantity != updatedProduct.ReorderQuantity && updatedProduct.ReorderQuantity > 0)
             {
                 product.ReorderQuantity = updatedProduct.ReorderQuantity;
                 isUpdated = true;
             }
 
-            if (product.UnitMeasurement != updatedProduct.UnitMeasurement)
+            if (product.UnitMeasurement != updatedProduct.UnitMeasurement && updatedProduct.UnitMeasurement > 0)
             {
                 product.UnitMeasurement = updatedProduct.UnitMeasurement;
                 isUpdated = true;

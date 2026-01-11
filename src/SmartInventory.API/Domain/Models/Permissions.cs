@@ -59,7 +59,7 @@ public static class Permissions
 
     //public const string RefreshForecasts = "RefreshForecasts";
 
-    
+
     // ***** Procument Management permissions ***** //
 
     public const string CreatePurchaseOrder = "CreatePurchaseOrder";
@@ -72,14 +72,18 @@ public static class Permissions
 
     public const string UpdatePurchaseOrderStatus = "UpdatePurchaseOrderStatus";
 
-    
+
     // ***** Reports Management permissions ***** //
 
     public const string ViewReports = "ViewReports";
 
     public const string ExportReports = "ExportReports";
-
     
+
+    // ***** Sales Management permissions ***** //
+    public const string GenerateRequisitionForm = "GenerateRequisitionForm";
+
+
     // ***** Notifications Management permissions ***** //
 
     /*public const string ViewLowStockAlerts = "ViewLowStockAlerts";
