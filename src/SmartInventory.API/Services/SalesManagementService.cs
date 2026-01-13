@@ -1,5 +1,6 @@
 using System.Text;
 using SmartInventory.API.Domain.DTO;
+using SmartInventory.API.Repositories;
 
 namespace SmartInventory.API.Services;
 
@@ -7,8 +8,13 @@ namespace SmartInventory.API.Services;
 /// Defines the functionality for providing services performed by the sales
 /// department.
 /// </summary>
-public class SalesManagementService(PermissionManagementService permServ, UserManagementService userServ)
+public class SalesManagementService(SalesManagementRepository salesRepo,PermissionManagementService permServ, UserManagementService userServ)
 {
+    /// <summary>
+    /// Used to interact with the database.
+    /// </summary>
+    private readonly SalesManagementRepository _salesRepo = salesRepo;
+
     /// <summary>
     /// Used to interact with the user management subsystem.
     /// </summary>
@@ -27,8 +33,11 @@ public class SalesManagementService(PermissionManagementService permServ, UserMa
     public RequisitionFormData? GenerateRequisitionForm(RequisitionFormData formData)
     {
         // some stock needs to be reordered.
-        if (_permService.IsAuthorized(formData.Authorized!, "GenerateRequisitionForm") && IsRequisitionFormDataValid(formData))
+        if (_permService.IsAuthorized(formData.Authorized!, "GenerateRequisitionForm") && IsRequisitionFormDataValid(formData) &&
+            _salesRepo.AddRequisition(formData) is int id && id >= 0)
         {
+            // set the document number to the one stored in the database.
+            formData.DocNo = id;
 
             // the name of the person generating the stock report.
             string fullName = $"{_userService.GetStaffMember(formData.Authorized!)!.FirstName} {_userService.GetStaffMember(formData.Authorized!)!.LastName}";
@@ -167,6 +176,7 @@ public class SalesManagementService(PermissionManagementService permServ, UserMa
 
             using StreamWriter htmlWriter = new(filePath, false, Encoding.UTF8);
             htmlWriter.Write(htmlBuilder);
+
             return formData;
         }
 

@@ -13,4 +13,6 @@
 -- update Product set MaximumStockLevel = 20 WHERE SKU = 'PCV-R222G';
 -- delete from Product where SKU = 'PCV-R222G';
 -- SELECT * FROM StockTransaction;
-SELECT * FROM Permission;
+-- SELECT * FROM Permission;
+-- SELECT * FROM Requisition;
+SELECT * FROM RequisitionItem;

@@ -27,7 +27,11 @@ public class DatabaseContext(DbContextOptions<DatabaseContext> options) : DbCont
     
     public DbSet<PurchaseOrder> PurchaseOrders { get; set; }
     
-    public DbSet<PurchaseOrderItem> PurchaseOrderItems{ get; set; }
+    public DbSet<PurchaseOrderItem> PurchaseOrderItems { get; set; }
+    
+    public DbSet<Requisition> Requisitions { get; set; }
+    
+    public DbSet<RequisitionItem> RequisitionItems{ get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -63,5 +67,11 @@ public class DatabaseContext(DbContextOptions<DatabaseContext> options) : DbCont
             .HasOne(i => i.Product)
             .WithMany(p => p.PurchaseOrderItems)
             .HasForeignKey(i => i.ProductId);
+
+        // setting the foreign key for the RequisitionItem, with the Requisition.
+        modelBuilder.Entity<RequisitionItem>()
+            .HasOne(i => i.Requisition)
+            .WithMany(r => r.RequisitionItems)
+            .HasForeignKey(ri => ri.RequisitionId);
     }
 }

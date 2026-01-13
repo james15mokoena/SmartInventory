@@ -30,6 +30,7 @@ builder.Services.AddScoped<UserManagementRepository>();
 builder.Services.AddScoped<SupplierManagementRepository>();
 builder.Services.AddScoped<ProductManagementRepository>();
 builder.Services.AddScoped<StockManagementRepository>();
+builder.Services.AddScoped<SalesManagementRepository>();
 
 // add services to the DI container
 builder.Services.AddScoped<PasswordService>();

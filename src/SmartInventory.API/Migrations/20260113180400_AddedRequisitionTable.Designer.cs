@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SmartInventory.API.Data;
 
@@ -11,9 +12,11 @@ using SmartInventory.API.Data;
 namespace SmartInventory.API.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20260113180400_AddedRequisitionTable")]
+    partial class AddedRequisitionTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -229,31 +232,6 @@ namespace SmartInventory.API.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Requisition");
-                });
-
-            modelBuilder.Entity("SmartInventory.API.Domain.Models.RequisitionItem", b =>
-                {
-                    b.Property<string>("Code")
-                        .HasColumnType("varchar(255)");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
-
-                    b.Property<int>("RequisitionId")
-                        .HasColumnType("int");
-
-                    b.Property<double>("SellingPrice")
-                        .HasColumnType("double");
-
-                    b.HasKey("Code");
-
-                    b.HasIndex("RequisitionId");
-
-                    b.ToTable("RequisitionItem");
                 });
 
             modelBuilder.Entity("SmartInventory.API.Domain.Models.Role", b =>
@@ -486,17 +464,6 @@ namespace SmartInventory.API.Migrations
                     b.Navigation("PurchaseOrder");
                 });
 
-            modelBuilder.Entity("SmartInventory.API.Domain.Models.RequisitionItem", b =>
-                {
-                    b.HasOne("SmartInventory.API.Domain.Models.Requisition", "Requisition")
-                        .WithMany("RequisitionItems")
-                        .HasForeignKey("RequisitionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Requisition");
-                });
-
             modelBuilder.Entity("SmartInventory.API.Domain.Models.RolePermission", b =>
                 {
                     b.HasOne("SmartInventory.API.Domain.Models.Permission", "Permission")
@@ -537,11 +504,6 @@ namespace SmartInventory.API.Migrations
             modelBuilder.Entity("SmartInventory.API.Domain.Models.PurchaseOrder", b =>
                 {
                     b.Navigation("PurchaseOrderItems");
-                });
-
-            modelBuilder.Entity("SmartInventory.API.Domain.Models.Requisition", b =>
-                {
-                    b.Navigation("RequisitionItems");
                 });
 
             modelBuilder.Entity("SmartInventory.API.Domain.Models.Supplier", b =>

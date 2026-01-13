@@ -1,4 +1,5 @@
 # SmartInventory Tasks
 
-1. Enable user (stock manager) to generate a PDF version of the stock report. __(Issue: IronPdf is hanging!)__
-2. Enable user (sales manager) to generate a Requisition form.
+1. Enable user (stock manager) to generate a PDF version of the stock report. _[Done]_ __(Issue: IronPdf is hanging!)__
+2. Enable user (sales manager) to generate a Requisition form. _[Done]_
+3. Enable user (procurement manager) to generate a Quotation. _[In-Progress]_
