@@ -31,7 +31,11 @@ public class DatabaseContext(DbContextOptions<DatabaseContext> options) : DbCont
     
     public DbSet<Requisition> Requisitions { get; set; }
     
-    public DbSet<RequisitionItem> RequisitionItems{ get; set; }
+    public DbSet<RequisitionItem> RequisitionItems { get; set; }
+    
+    public DbSet<Quotation> Quotations { get; set; }
+    
+    public DbSet<QuotationItem> QuotationItems{ get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -73,5 +77,11 @@ public class DatabaseContext(DbContextOptions<DatabaseContext> options) : DbCont
             .HasOne(i => i.Requisition)
             .WithMany(r => r.RequisitionItems)
             .HasForeignKey(ri => ri.RequisitionId);
+
+        // setting the foreign key for the QuotationItem, with the Quotation.
+        modelBuilder.Entity<QuotationItem>()
+            .HasOne(i => i.Quotation)
+            .WithMany(r => r.QuotationItems)
+            .HasForeignKey(ri => ri.QuotationId);
     }
 }
