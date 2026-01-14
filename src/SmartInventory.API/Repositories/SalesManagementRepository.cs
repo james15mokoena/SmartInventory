@@ -46,7 +46,7 @@ public class SalesManagementRepository(DatabaseContext context, ProductManagemen
                         ,
                         Quantity = dataItem.Quantity
                         ,
-                        RequisitionId = 0
+                        RequisitionId = requisition.Id
                         ,
                         SellingPrice = dataItem.SellingPrice
                         ,

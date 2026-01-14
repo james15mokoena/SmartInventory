@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SmartInventory.API.Data;
 
@@ -11,9 +12,11 @@ using SmartInventory.API.Data;
 namespace SmartInventory.API.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20260114045802_RemovedQuotationTables")]
+    partial class RemovedQuotationTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -185,69 +188,6 @@ namespace SmartInventory.API.Migrations
                     b.HasIndex("PurchaseOrderId");
 
                     b.ToTable("PurchaseOrderItem");
-                });
-
-            modelBuilder.Entity("SmartInventory.API.Domain.Models.Quotation", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("DateGenerated")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("QuotedBy")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Signature")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("SuppliedTo")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Quotation");
-                });
-
-            modelBuilder.Entity("SmartInventory.API.Domain.Models.QuotationItem", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Code")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
-
-                    b.Property<int>("QuotationId")
-                        .HasColumnType("int");
-
-                    b.Property<double>("TotalPrice")
-                        .HasColumnType("double");
-
-                    b.Property<double>("UnitPrice")
-                        .HasColumnType("double");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("QuotationId");
-
-                    b.ToTable("QuotationItem");
                 });
 
             modelBuilder.Entity("SmartInventory.API.Domain.Models.ReasonType", b =>
@@ -549,17 +489,6 @@ namespace SmartInventory.API.Migrations
                     b.Navigation("PurchaseOrder");
                 });
 
-            modelBuilder.Entity("SmartInventory.API.Domain.Models.QuotationItem", b =>
-                {
-                    b.HasOne("SmartInventory.API.Domain.Models.Quotation", "Quotation")
-                        .WithMany("QuotationItems")
-                        .HasForeignKey("QuotationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Quotation");
-                });
-
             modelBuilder.Entity("SmartInventory.API.Domain.Models.RequisitionItem", b =>
                 {
                     b.HasOne("SmartInventory.API.Domain.Models.Requisition", "Requisition")
@@ -611,11 +540,6 @@ namespace SmartInventory.API.Migrations
             modelBuilder.Entity("SmartInventory.API.Domain.Models.PurchaseOrder", b =>
                 {
                     b.Navigation("PurchaseOrderItems");
-                });
-
-            modelBuilder.Entity("SmartInventory.API.Domain.Models.Quotation", b =>
-                {
-                    b.Navigation("QuotationItems");
                 });
 
             modelBuilder.Entity("SmartInventory.API.Domain.Models.Requisition", b =>

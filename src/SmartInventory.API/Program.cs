@@ -31,6 +31,7 @@ builder.Services.AddScoped<SupplierManagementRepository>();
 builder.Services.AddScoped<ProductManagementRepository>();
 builder.Services.AddScoped<StockManagementRepository>();
 builder.Services.AddScoped<SalesManagementRepository>();
+builder.Services.AddScoped<ProcurementManagementRepository>();
 
 // add services to the DI container
 builder.Services.AddScoped<PasswordService>();
@@ -40,6 +41,7 @@ builder.Services.AddScoped<UserManagementService>();
 builder.Services.AddScoped<SupplierManagementService>();
 builder.Services.AddScoped<ProductManagementService>();
 builder.Services.AddScoped<StockManagementService>();
+builder.Services.AddScoped<ProcurementManagementService>();
 
 // add controllers to the DI container.
 builder.Services.AddScoped<PermissionController>();
@@ -47,7 +49,7 @@ builder.Services.AddScoped<SalesController>();
 builder.Services.AddScoped<UserController>();
 builder.Services.AddScoped<SupplierController>();
 builder.Services.AddScoped<ProductController>();
-builder.Services.AddScoped<ProductController>();
+builder.Services.AddScoped<ProcurementController>();
 
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi

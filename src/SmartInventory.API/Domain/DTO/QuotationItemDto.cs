@@ -1,51 +1,37 @@
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
-namespace SmartInventory.API.Domain.Models;
+namespace SmartInventory.API.Domain.DTO;
 
 /// <summary>
 /// An item on a quotation.
 /// </summary>
-[Table("QuotationItem")]
-public class QuotationItem
+public class QuotationItemDto
 {
-    /// <summary>
-    /// A unique ID of the item in the database.
-    /// </summary>
-    [Key]
-    public int Id { get; set; }
-    
     /// <summary>
     /// A unique ID for the item.
     /// </summary>
-    public required string Code { get; set; }
-    
+    public string? Code { get; set; } = "";
+
     /// <summary>
     /// A description or name of the item.
     /// </summary>
-    public required string Description { get; set; }
-    
+    public string? Description { get; set; } = "";
+
     /// <summary>
     /// The number of units requested.
     /// </summary>
     public int Quantity { get; set; }
-    
+
     /// <summary>
     /// The price of a single item.
     /// </summary>
     public double UnitPrice { get; set; }
-    
+
     /// <summary>
     /// The total price of the requested units.
     /// </summary>
     public double TotalPrice { get; set; }
-    
+
     /// <summary>
     /// A foreign key of the quotation on which this item appears.
     /// </summary>
-    public int QuotationId{ get; set; }
-
-    // Navigation property
-
-    public required Quotation Quotation{ get; set; }
+    public int QuotationId { get; set; }
 }

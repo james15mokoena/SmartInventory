@@ -72,6 +72,8 @@ public static class Permissions
 
     public const string UpdatePurchaseOrderStatus = "UpdatePurchaseOrderStatus";
 
+    public const string GenerateQuotation = "GenerateQuotation";
+
 
     // ***** Reports Management permissions ***** //
 
