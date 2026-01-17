@@ -74,6 +74,8 @@ public static class Permissions
 
     public const string GenerateQuotation = "GenerateQuotation";
 
+    public const string GenerateOrder = "GenerateOrder";
+
 
     // ***** Reports Management permissions ***** //
 

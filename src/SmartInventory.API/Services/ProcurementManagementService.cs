@@ -268,4 +268,67 @@ public class ProcurementManagementService(ProcurementManagementRepository procRe
 
         return null;
     }
+
+    /// <summary>
+    /// Generate an order.
+    /// </summary>
+    /// <param name="dto"></param>
+    /// <returns></returns>
+    public OrderDto? GenerateOrder(OrderDto dto)
+    {
+        if(IsStringValid(dto.CompanyName) && IsStringValid(dto.CompanyPoBoxAddress) && IsStringValid(dto.CompanyPoBoxTownAndCode) &&
+            IsStringValid(dto.CompanyStreetNoAndStreetName) && IsStringValid(dto.CompanyTelephoneNo) && IsStringValid(dto.OrderedBy) &&
+            IsStringValid(dto.Signature) && IsStringValid(dto.SupplierHouseNoAndStreetName) && IsStringValid(dto.SupplierName) &&
+            IsStringValid(dto.SupplierTownAndCode) && dto.FaxNo != null && dto.VatRegNo != null && dto.DateGenerated != default &&
+            dto.DeliveryDate != default && dto.RequisitionDate != default && dto.RequisitionNo >= 0 && dto.QuotationNo >= 0 &&
+            dto.OrderItems.Count > 0)
+        {
+            // used to build the HTML UI.
+            StringBuilder htmlBuilder = new();
+
+            // used to build the order table
+            StringBuilder tableBuilder = new();
+
+            string body =
+                $@"
+                    <div style='border-style:solid;border-color:black;border-width:2px;'>
+                        <h1 style='font-weight:bold;'>Order</h1>
+                    </div>
+                ";
+
+            string html =
+                $@"
+                    <!DOCTYPE html>
+                    <html>
+                        <head>
+                            <title>Order</title>
+                            <style type='text/css'></style>
+                        </head>
+                        <body>{body}</body>
+                    </html>
+                ";
+
+            htmlBuilder.Append(html);
+            htmlBuilder.Replace('$', ' ');
+
+            // get the path where the file will be stored in the file system
+            string path = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+            string filePath = Path.Combine(path, "Downloads", $"Order-{DateTime.Now}.html");
+
+            // write the html to a file
+            using StreamWriter writer = new(filePath, false, Encoding.UTF8);
+            writer.Write(htmlBuilder);
+
+            return dto;
+        }
+
+        return null;
+    }
+
+    /// <summary>
+    /// Checks is a string is nor null or empty.
+    /// </summary>
+    /// <param name="str"></param>
+    /// <returns></returns>
+    private static bool IsStringValid(string? str) => !string.IsNullOrEmpty(str);
 }

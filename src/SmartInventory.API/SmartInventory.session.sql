@@ -17,6 +17,11 @@
 -- SELECT * FROM Requisition;
 -- SELECT * FROM RequisitionItem;
 -- SELECT * from Quotation;
-SELECT * FROM QuotationItem;
+-- SELECT * FROM QuotationItem;
 -- delete from Quotation where Id = 2;
 -- delete from Quotation;
+SELECT FirstName, LastName, Username
+FROM Staff as s
+INNER JOIN Role as r
+ON s.RoleId = r.Id
+WHERE r.Name = "Procurement Manager";

@@ -21,4 +21,13 @@ public class ProcurementController(ProcurementManagementService procServ) : Cont
     [HttpPost]
     public IActionResult GenerateQuotation(QuotationDto quote) => _procServ.GenerateQuotation(quote) is QuotationDto dto ?
         Ok(dto) : BadRequest("Failed to generate the quotation!");
+
+    /// <summary>
+    /// Generates an order.
+    /// </summary>
+    /// <param name="order"></param>
+    /// <returns></returns>
+    [HttpPost]
+    public IActionResult GenerateOrder(OrderDto order) => _procServ.GenerateOrder(order) is OrderDto dto ?
+        Ok(dto) : BadRequest("Failed to generate the order!");
 }
