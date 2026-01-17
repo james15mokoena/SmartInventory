@@ -16,7 +16,7 @@
 -- SELECT * FROM Permission;
 -- SELECT * FROM Requisition;
 -- SELECT * FROM RequisitionItem;
-SELECT * from Quotation;
--- SELECT * FROM QuotationItem;
+-- SELECT * from Quotation;
+SELECT * FROM QuotationItem;
 -- delete from Quotation where Id = 2;
 -- delete from Quotation;

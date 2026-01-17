@@ -33,11 +33,11 @@ public class ProcurementManagementService(ProcurementManagementRepository procRe
     /// <returns></returns>
     public QuotationDto? GenerateQuotation(QuotationDto quote)
     {
-        if(!string.IsNullOrEmpty(quote.QuotedBy) && !string.IsNullOrEmpty(quote.SuppliedTo) && quote.DateGenerated != default &&
+        if (!string.IsNullOrEmpty(quote.QuotedBy) && !string.IsNullOrEmpty(quote.SuppliedTo) && quote.DateGenerated != default &&
             quote.QuotationItems.Count > 0 && !string.IsNullOrEmpty(quote.Company) && !string.IsNullOrEmpty(quote.HouseNoAndStreetName) &&
             !string.IsNullOrEmpty(quote.TelephoneNo) && !string.IsNullOrEmpty(quote.TownOrSuburb) && !string.IsNullOrEmpty(quote.PoBoxAddress) &&
             !string.IsNullOrEmpty(quote.PostOfficeLocation) && _procRepo.AddQuotation(quote) is int quoteNo && quoteNo >= 0 &&
-            _permServ.IsAuthorized(quote.QuotedBy,"GenerateQuotation"))
+            _permServ.IsAuthorized(quote.QuotedBy, "GenerateQuotation"))
         {
             // set the name of the person for QuotedBy field
             quote.QuotedBy = $"{_userServ.GetStaffMember(quote.QuotedBy!)!.FirstName}  {_userServ.GetStaffMember(quote.QuotedBy!)!.LastName}";
@@ -56,7 +56,7 @@ public class ProcurementManagementService(ProcurementManagementRepository procRe
 
             // stores the total price
             double totalPrice = 0;
-            
+
 
             foreach (QuotationItemDto item in quote.QuotationItems)
             {

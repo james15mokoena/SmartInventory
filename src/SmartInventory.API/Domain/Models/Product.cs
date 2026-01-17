@@ -113,4 +113,9 @@ public class Product
     /// A product may correspond to one or more purchase order items.
     /// </summary>
     public required List<PurchaseOrderItem> PurchaseOrderItems { get; set; } = [];
+
+    /// <summary>
+    /// A product may appear one or more times in the order.
+    /// </summary>
+    public required List<OrderItem> OrderItems { get; set; } = [];
 }

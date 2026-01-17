@@ -51,7 +51,7 @@ public class ProductManagementService(ProductManagementRepository productRepo, S
                     CurrentStock = newProduct.CurrentStock,
                     IsActive = newProduct.IsActive,
                     MinimumStockLevel = newProduct.MinimumStockLevel,
-                    MaximumStockLevel =  newProduct.MinimumStockLevel <= newProduct.MaximumStockLevel ?
+                    MaximumStockLevel = newProduct.MinimumStockLevel <= newProduct.MaximumStockLevel ?
                                         newProduct.MaximumStockLevel : newProduct.MinimumStockLevel + 5,
                     DateCreated = newProduct.DateCreated,
                     LastUpdated = newProduct.LastUpdated,
@@ -62,10 +62,10 @@ public class ProductManagementService(ProductManagementRepository productRepo, S
                     Barcode = newProduct.Barcode ?? "",
                     Supplier = supplier,
                     PurchaseOrderItems = [],
-                    StockTransactions = []
-                    ,
+                    StockTransactions = [],
+                    OrderItems = [],
                     ImageUrl = newProduct.ImageUrl ?? ""
-                },username);
+                }, username);                
             }
         }
 

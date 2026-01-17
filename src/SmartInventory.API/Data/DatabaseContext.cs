@@ -35,7 +35,11 @@ public class DatabaseContext(DbContextOptions<DatabaseContext> options) : DbCont
     
     public DbSet<Quotation> Quotations { get; set; }
     
-    public DbSet<QuotationItem> QuotationItems{ get; set; }
+    public DbSet<QuotationItem> QuotationItems { get; set; }
+    
+    public DbSet<Order> Orders { get; set; }
+    
+    public DbSet<OrderItem> OrderItems{ get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -83,5 +87,17 @@ public class DatabaseContext(DbContextOptions<DatabaseContext> options) : DbCont
             .HasOne(i => i.Quotation)
             .WithMany(r => r.QuotationItems)
             .HasForeignKey(ri => ri.QuotationId);
+
+        // set the foreign key for the OrderItem with the Order.
+        modelBuilder.Entity<OrderItem>()
+            .HasOne(oi => oi.Order)
+            .WithMany(o => o.OrderItems)
+            .HasForeignKey(oi => oi.OrderNo);
+
+        // set the foreign key for the OrderItem with the Product.
+        modelBuilder.Entity<OrderItem>()
+            .HasOne(oi => oi.Product)
+            .WithMany(o => o.OrderItems)
+            .HasForeignKey(oi => oi.Code);
     }
 }
