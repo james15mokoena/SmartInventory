@@ -64,6 +64,7 @@ public class ProductManagementService(ProductManagementRepository productRepo, S
                     PurchaseOrderItems = [],
                     StockTransactions = [],
                     OrderItems = [],
+                    InvoiceItems = [],
                     ImageUrl = newProduct.ImageUrl ?? ""
                 }, username);                
             }

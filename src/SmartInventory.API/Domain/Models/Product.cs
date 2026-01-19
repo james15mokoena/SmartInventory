@@ -118,4 +118,9 @@ public class Product
     /// A product may appear one or more times in the order.
     /// </summary>
     public required List<OrderItem> OrderItems { get; set; } = [];
+
+    /// <summary>
+    /// A product may appear one or more times in the invoice.
+    /// </summary>
+    public required List<InvoiceItem> InvoiceItems { get; set; } = [];
 }

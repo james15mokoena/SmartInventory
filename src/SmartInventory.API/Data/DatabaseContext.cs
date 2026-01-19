@@ -39,7 +39,11 @@ public class DatabaseContext(DbContextOptions<DatabaseContext> options) : DbCont
     
     public DbSet<Orders> Orders { get; set; }
     
-    public DbSet<OrderItem> OrderItems{ get; set; }
+    public DbSet<OrderItem> OrderItems { get; set; }
+    
+    public DbSet<TaxInvoice> Invoices { get; set; }
+    
+    public DbSet<InvoiceItem> InvoiceItems{ get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -99,5 +103,15 @@ public class DatabaseContext(DbContextOptions<DatabaseContext> options) : DbCont
             .HasOne(oi => oi.Product)
             .WithMany(o => o.OrderItems)
             .HasForeignKey(oi => oi.Code);
+
+        modelBuilder.Entity<InvoiceItem>()
+            .HasOne(i => i.Product)
+            .WithMany(p => p.InvoiceItems)
+            .HasForeignKey(i => i.Code);
+
+        modelBuilder.Entity<InvoiceItem>()
+            .HasOne(i => i.Invoice)
+            .WithMany(t => t.InvoiceItems)
+            .HasForeignKey(i => i.InvoiceId);
     }
 }

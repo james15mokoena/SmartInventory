@@ -82,10 +82,12 @@ public static class Permissions
     public const string ViewReports = "ViewReports";
 
     public const string ExportReports = "ExportReports";
-    
+
 
     // ***** Sales Management permissions ***** //
     public const string GenerateRequisitionForm = "GenerateRequisitionForm";
+
+    public const string GenerateTaxInvoice = "GenerateTaxInvoice";
 
 
     // ***** Notifications Management permissions ***** //

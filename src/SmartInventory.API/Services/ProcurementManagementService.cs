@@ -349,7 +349,7 @@ public class ProcurementManagementService(ProcurementManagementRepository procRe
 
             string body =
                 $@"
-                    <div style='border-style:solid;border-color:black;border-width:2px;'>
+                    <div style='border-style:solid;border-color:black;border-width:2px;overflow-x:auto;overflow-y:auto;'>
                         <h1 style='font-weight:bold;text-align:center;'>Order</h1>
 
                         <div style='text-align:center;border-color:black;border-style:solid;border-width:2px;border-left-style:none;
@@ -362,8 +362,7 @@ public class ProcurementManagementService(ProcurementManagementRepository procRe
                             )}
                         </div>
 
-                        <div style='border-top-style:none;border-right-style:none;border-left-style:none;border-width:2px;border-color:black;
-                            overflow-x:auto;overflow-y:auto;'>
+                        <div style='border-top-style:none;border-right-style:none;border-left-style:none;border-width:2px;border-color:black;'>
 
                             <h2 style='text-align:center;font-weight:bold;font-size:22px;margin-bottom:5px;'>
                                 {dto.CompanyStreetNoAndStreetName}, {dto.CompanyPoBoxTownAndCode!.Split(' ')[0]} - 
