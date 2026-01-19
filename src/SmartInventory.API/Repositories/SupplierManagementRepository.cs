@@ -37,6 +37,13 @@ public class SupplierManagementRepository(DatabaseContext context)
     public Supplier? GetSupplier(int supplierNo) => _context.Suppliers.FirstOrDefault(s => s.Id == supplierNo);
 
     /// <summary>
+    /// Fetches a supplier with the given name and house/building number and street name.
+    /// </summary>
+    /// <param name="name"></param>
+    /// <returns></returns>
+    public Supplier? GetSupplierByName(string name) => _context.Suppliers.FirstOrDefault(s => s.SupplierName == name);
+
+    /// <summary>
     /// Activates or deactivates a supplier's account.
     /// </summary>
     /// <param name="supplierNo"></param>

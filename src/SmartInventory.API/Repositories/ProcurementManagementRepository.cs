@@ -97,7 +97,7 @@ public class ProcurementManagementRepository(DatabaseContext context, ProductMan
             dto.DeliveryDate != default && dto.RequisitionDate != default && dto.RequisitionNo >= 0 && dto.QuotationNo >= 0 &&
             dto.OrderItems.Count > 0)
         {
-            Order order = new()
+            Orders order = new()
             {
                 CompanyName = dto.CompanyName!
                 ,
@@ -153,7 +153,7 @@ public class ProcurementManagementRepository(DatabaseContext context, ProductMan
                         ,
                         UnitPrice = item.UnitPrice
                         ,
-                        TotalAmount = item.TotalAmount
+                        TotalAmount = item.TotalAmount == (item.Quantity * item.UnitPrice) ? item.TotalAmount : (item.Quantity * item.UnitPrice)
                         ,
                         OrderNo = order.Id
                         ,

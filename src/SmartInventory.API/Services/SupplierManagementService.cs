@@ -84,9 +84,16 @@ public class SupplierManagementService(SupplierManagementRepository suppRepo)
            !string.IsNullOrEmpty(updatedSupplier.SupplierName) && !string.IsNullOrEmpty(updatedSupplier.Website) &&
            !string.IsNullOrEmpty(updatedSupplier.ContactPersonEmail) && !string.IsNullOrEmpty(updatedSupplier.ContactPersonName) &&
            !string.IsNullOrEmpty(updatedSupplier.ContactPersonPhone) && !string.IsNullOrEmpty(updatedSupplier.ContactPersonRole))
-            return _suppManRepo.EditSupplier(updatedSupplier) is Supplier supplier? updatedSupplier : null;
+            return _suppManRepo.EditSupplier(updatedSupplier) is Supplier supplier ? updatedSupplier : null;
         return null;
     }
+
+    /// <summary>
+    /// Checks if a supplier with the given name already exists.
+    /// </summary>
+    /// <param name="supplierName"></param>
+    /// <returns></returns>
+    public bool SupplierExists(string supplierName) => _suppManRepo.GetSupplierByName(supplierName) != null;
 
     /// <summary>
     /// Checks if the supplier's data does not violate any constraints.

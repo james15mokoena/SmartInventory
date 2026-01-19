@@ -53,5 +53,5 @@ public class OrderItem
     /// <summary>
     /// The order that contains this item.
     /// </summary>
-    public required Order Order { get; set; }
+    public required Orders Order { get; set; }
 }

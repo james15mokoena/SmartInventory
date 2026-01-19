@@ -6,8 +6,8 @@ namespace SmartInventory.API.Domain.Models;
 /// <summary>
 /// Represents a generated order to purchase some stocks.
 /// </summary>
-[Table("Order")]
-public class Order
+[Table("Orders")]
+public class Orders
 {
     /// <summary>
     /// A unique ID for the order.

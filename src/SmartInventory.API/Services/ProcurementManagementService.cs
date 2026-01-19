@@ -9,7 +9,7 @@ namespace SmartInventory.API.Services;
 /// department.
 /// </summary>
 public class ProcurementManagementService(ProcurementManagementRepository procRepo, PermissionManagementService premServ,
-    UserManagementService userServ)
+    UserManagementService userServ, SupplierManagementService suppServ)
 {
     /// <summary>
     /// Used to interact with the permission subsystem.
@@ -25,6 +25,11 @@ public class ProcurementManagementService(ProcurementManagementRepository procRe
     /// Used to interact with the database.
     /// </summary>
     private readonly ProcurementManagementRepository _procRepo = procRepo;
+
+    /// <summary>
+    /// Used to interact with the supplier subsystem.
+    /// </summary>
+    private readonly SupplierManagementService _suppServ = suppServ;
 
     /// <summary>
     /// Generates a quotation.
@@ -48,7 +53,7 @@ public class ProcurementManagementService(ProcurementManagementRepository procRe
             StringBuilder htmlBuilder = new();
 
             // stores the vat registration number
-            string? vatRegNo = quote.VatRegNo;
+            //string? vatRegNo = quote.VatRegNo;
 
             StringBuilder tableBuilder = new();
 
@@ -56,7 +61,6 @@ public class ProcurementManagementService(ProcurementManagementRepository procRe
 
             // stores the total price
             double totalPrice = 0;
-
 
             foreach (QuotationItemDto item in quote.QuotationItems)
             {
@@ -281,20 +285,199 @@ public class ProcurementManagementService(ProcurementManagementRepository procRe
             IsStringValid(dto.Signature) && IsStringValid(dto.SupplierHouseNoAndStreetName) && IsStringValid(dto.SupplierName) &&
             IsStringValid(dto.SupplierTownAndCode) && dto.FaxNo != null && dto.VatRegNo != null && dto.DateGenerated != default &&
             dto.DeliveryDate != default && dto.RequisitionDate != default && dto.RequisitionNo >= 0 && dto.QuotationNo >= 0 &&
-            dto.OrderItems.Count > 0)
+            dto.OrderItems.Count > 0 && _suppServ.SupplierExists(dto.SupplierName!) && _permServ.IsAuthorized(dto.OrderedBy!, "GenerateOrder") &&
+            _procRepo.AddOrder(dto) is int orderId && orderId >= 0)
         {
+            // update order id, to the generated ID.
+            dto.Id = orderId;
+
+            // update ordered by to the name of the person who placed the order.
+            dto.OrderedBy = $"{_userServ.GetStaffMember(dto.OrderedBy!)!.FirstName} {_userServ.GetStaffMember(dto.OrderedBy!)!.LastName}";
+
             // used to build the HTML UI.
             StringBuilder htmlBuilder = new();
 
             // used to build the order table
             StringBuilder tableBuilder = new();
 
+            // styles for table data.
+            string tdStyles = "border-style:solid;border-width:2px;border-color:black;";
+
+            // stores the total price to be displayed.
+            double totalPrice = 0;
+
+            foreach (OrderItemDto item in dto.OrderItems)
+            {
+                string tr =
+                    $@"
+                        <tr>
+                            <td style='{tdStyles}text-align:center;border-left-style:none;'>
+                                <span style='font-size:22px;'>{item.Code}</span>
+                            </td>
+                            <td style='{tdStyles}text-align:center;'>
+                                <span style='font-size:22px;'>{item.Description}</span>
+                            </td>
+                            <td style='{tdStyles}text-align:center;'>
+                                <span style='font-size:22px;'>{item.Quantity}</span>
+                            </td>
+                            <td style='{tdStyles}text-align:center;'>
+                                <span style='font-size:22px;'>{item.UnitPrice}</span>
+                            </td>
+                            <td style='{tdStyles}text-align:center;border-right-style:none;'>
+                                <span style='font-size:22px;'>{item.TotalAmount}</span>
+                            </td>
+                        </tr>
+                    ";
+
+                totalPrice += item.TotalAmount;
+
+                tableBuilder.Append(tr);
+            }
+
+            tableBuilder.Append(
+                $@"
+                    <tr>
+                        <td colspan='4' style='{tdStyles}text-align:end;border-left-style:none;'>
+                            <span style='font-weight:bold;font-size:25px;padding-right:6px;'> TOTAL INCLUSIVE 14% VAT</span>
+                        </td>
+                        <td colspan='1' style='{tdStyles}text-align:center;border-right-style:none;'>
+                            <span style='font-weight:bold;font-size:25px;text-align:center;'> {totalPrice}</span>
+                        </td>
+                    </tr>
+                "
+            );
+
             string body =
                 $@"
                     <div style='border-style:solid;border-color:black;border-width:2px;'>
-                        <h1 style='font-weight:bold;'>Order</h1>
+                        <h1 style='font-weight:bold;text-align:center;'>Order</h1>
+
+                        <div style='text-align:center;border-color:black;border-style:solid;border-width:2px;border-left-style:none;
+                            border-right-style:none;border-top-style:none;'>
+                            <h1 style='font-weight:bold;font-size:50px;'>{dto.CompanyName} </h1>
+                            {(
+                                !string.IsNullOrEmpty(dto.VatRegNo) ?
+                                "<h2 style='text-align:center;margin-top:7px;'> Vat registration number: " + dto.VatRegNo + "</h2>":
+                                ""
+                            )}
+                        </div>
+
+                        <div style='border-top-style:none;border-right-style:none;border-left-style:none;border-width:2px;border-color:black;
+                            overflow-x:auto;overflow-y:auto;'>
+
+                            <h2 style='text-align:center;font-weight:bold;font-size:22px;margin-bottom:5px;'>
+                                {dto.CompanyStreetNoAndStreetName}, {dto.CompanyPoBoxTownAndCode!.Split(' ')[0]} - 
+                                {dto.CompanyPoBoxAddress}, {dto.CompanyPoBoxTownAndCode}
+                            </h2>
+
+                            <h2 style='text-align:center;font-weight:bold;font-size:22px;'>
+                                Tel: {dto.CompanyTelephoneNo} <span style='margin-right:5px;'></span> Fax: {dto.FaxNo ?? ""}
+                            </h2>
+
+                            <table style='border-collapse:collapse;border-width:2px;border-color:black;width:100%;'>
+                                <tbody>
+                                    <tr'>
+                                        <td style='{tdStyles}border-left-style:none;background-color:#ffe4e1;'>
+                                            <span style='font-weight:bold;font-size:22px;'> Order No:</span>
+                                        </td>
+                                        <td style='{tdStyles}text-align:center;'>
+                                            <span style='font-size:22px;'> {dto.Id} </span>
+                                        </td>
+                                        <td style='{tdStyles}background-color:#ffe4e1;'>
+                                            <span style='font-weight:bold;font-size:22px;'> Date:</span>
+                                        </td>
+                                        <td style='{tdStyles}text-align:center;border-right-style:none;'>
+                                            <span style='font-size:22px;'> {dto.DateGenerated} </span>
+                                        </td>
+                                    </tr>
+                                    <tr style='border-left-style:none;border-right-style:none;'>
+                                        <td style='{tdStyles}border-left-style:none;background-color:#ffe4e1;'>
+                                            <span style='font-weight:bold;font-size:22px;'> Requisition No:</span>
+                                        </td>
+                                        <td style='{tdStyles}text-align:center;'>
+                                            <span style='font-size:22px;'> {dto.RequisitionNo} </span>
+                                        </td>
+                                        <td style='{tdStyles}background-color:#ffe4e1;'>
+                                            <span style='font-weight:bold;font-size:22px;'> Quote No:</span>
+                                        </td>
+                                        <td style='{tdStyles}text-align:center;border-right-style:none;'>
+                                            <span style='font-size:22px;'> {dto.QuotationNo} </span>
+                                        </td>
+                                    </tr>
+                                    <tr style='border-left-style:none;border-right-style:none;'>
+                                        <td style='{tdStyles}border-left-style:none;background-color:#ffe4e1;'>
+                                            <span style='font-weight:bold;font-size:22px;'> Requisition date:</span>
+                                        </td>
+                                        <td style='{tdStyles}text-align:center;'>
+                                            <span style='font-size:22px;'> {dto.RequisitionDate} </span>
+                                        </td>
+                                        <td style='{tdStyles}background-color:#ffe4e1;'>
+                                            <span style='font-weight:bold;font-size:22px;'> Delivery on/before:</span>
+                                        </td>
+                                        <td style='{tdStyles}text-align:center;border-right-style:none;'>
+                                            <span style='font-size:22px;'> {dto.DeliveryDate} </span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <div style='display:flex;flex-direction:row;flex-wrap:wrap;margin-top:18px;margin-bottom:18px;'>
+                                
+                                <span style='font-size:25px;margin-left:6px;margin-right:35px;'>Supplier:</span>
+
+                                <div style='display:flex;flex-direction:column;flex-wrap:wrap;'>
+                                    <span style='font-weight:bold;font-size:25px;font-style:italic;'> {dto.SupplierName} </span>
+                                    <span style='font-weight:bold;font-size:25px;font-style:italic;'> {dto.SupplierHouseNoAndStreetName},</span>
+                                    <span style='font-weight:bold;font-size:25px;font-style:italic;'> {dto.SupplierTownAndCode}</span>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <table id='items' style='border-collapse:collapse;border-width:2px;border-color:black;width:100%;'>
+                            <thead style='background-color:#ffe4e1;'>
+                                <tr>
+                                    <th style='{tdStyles}text-align:center;border-left-style:none;'>
+                                        <span style='font-size:22px;font-weight:bold;'>Code</span>
+                                    </th>
+                                    <th style='{tdStyles}text-align:center;'>
+                                        <span style='font-size:22px;font-weight:bold;'>Description</span>
+                                    </th>
+                                    <th style='{tdStyles}text-align:center;'>
+                                        <span style='font-size:22px;font-weight:bold;'>Quantity</span>
+                                    </th>
+                                    <th style='{tdStyles}text-align:center;'>
+                                        <span style='font-size:22px;font-weight:bold;'>Unit Price (R) <br />Inclusive</span>
+                                    </th>
+                                    <th style='{tdStyles}text-align:center;border-right-style:none;'>
+                                        <span style='font-size:22px;font-weight:bold;'>Total Price (R) </span>
+                                    </th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                {tableBuilder}
+                            </tbody>
+
+                        </table>
+
+                        <div style='display:flex;flex-direction:row;flex-wrap:wrap;justify-content:space-evenly;padding:20px;border-top-style:none;
+                            border-left-style:none;border-right-style:none;margin-top:15px;'>
+                            <div>
+                                <span style='font-size:22px;font-weight:bold;margin-right:6px;'>Ordered by:</span>
+                                <span style='font-size:22px;font-style:italic;text-decoration:underline;'>{dto.OrderedBy}</span>
+                            </div>
+                            <div>
+                                <span style='font-size:22px;font-weight:bold;margin-right:6px;'>Signature:</span>
+                                <span style='font-size:22px;font-style:italic;text-decoration:underline;'>{dto.Signature}</span>
+                            </div>
+                        </div>
+
                     </div>
                 ";
+
+            string trHoverStyle = "#items tbody tr:hover{background-color:#faf0e6;}";
 
             string html =
                 $@"
@@ -302,7 +485,7 @@ public class ProcurementManagementService(ProcurementManagementRepository procRe
                     <html>
                         <head>
                             <title>Order</title>
-                            <style type='text/css'></style>
+                            <style type='text/css'>{trHoverStyle}</style>
                         </head>
                         <body>{body}</body>
                     </html>
@@ -313,7 +496,7 @@ public class ProcurementManagementService(ProcurementManagementRepository procRe
 
             // get the path where the file will be stored in the file system
             string path = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
-            string filePath = Path.Combine(path, "Downloads", $"Order-{DateTime.Now}.html");
+            string filePath = Path.Combine(path, "Downloads", $"Order-{dto.Id}.html");
 
             // write the html to a file
             using StreamWriter writer = new(filePath, false, Encoding.UTF8);
