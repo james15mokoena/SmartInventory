@@ -143,7 +143,7 @@ public class ProcurementManagementRepository(DatabaseContext context, ProductMan
                 // check if item/product exists
                 if (_prodRepo.GetProductBySku(item.Code!) is Product product)
                 {
-                    order.OrderItems.Add(new()
+                    OrderItem orderItem = new()
                     {
                         Code = product.SKU
                         ,
@@ -162,7 +162,11 @@ public class ProcurementManagementRepository(DatabaseContext context, ProductMan
                         Product = product
                         ,
                         Id = 0
-                    });
+                    };
+
+                    item.TotalAmount = orderItem.TotalAmount;
+
+                    order.OrderItems.Add(orderItem);
                 }
             }
             

@@ -1,24 +1,19 @@
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
-namespace SmartInventory.API.Domain.Models;
+namespace SmartInventory.API.Domain.DTO;
 
 /// <summary>
 /// Represents a tax invoice issued upon sale/purchase.
 /// </summary>
-[Table("TaxInvoice")]
-public class TaxInvoice
+public class TaxInvoiceDto
 {
     /// <summary>
     /// A unique identifier for the invoice.
     /// </summary>
-    [Key]
     public int Id { get; set; }
 
     /// <summary>
-    /// The name of the company.
+    /// The username of the person who generated the tax invoice.
     /// </summary>
-    public required string CompanyName { get; set; }
+    public string GeneratedBy { get; set; } = "";
 
     /// <summary>
     /// The account number.
@@ -28,17 +23,17 @@ public class TaxInvoice
     /// <summary>
     /// The date on which the invoice was generated.
     /// </summary>
-    public required DateTime DateGenerated { get; set; }
+    public DateTime DateGenerated { get; set; } = DateTime.Today;
 
     /// <summary>
     /// The house/building number and street name of the customer.
     /// </summary>
-    public required string CustomerHouseNoAndStreetName { get; set; }
+    public string CustomerHouseNoAndStreetName { get; set; } = "";
 
     /// <summary>
     /// The town/suburb and code of where the customer is located.
     /// </summary>
-    public required string CustomerTownAndCode { get; set; }
+    public string CustomerTownAndCode { get; set; } = "";
 
     /// <summary>
     /// The customer's VAT registration number (if any).
@@ -48,22 +43,22 @@ public class TaxInvoice
     /// <summary>
     /// The method of payment can be one of: Cheque, Cash, Credit Card or Account.
     /// </summary>
-    public required string MethodOfPayment { get; set; }
+    public string MethodOfPayment { get; set; } = "";
 
     /// <summary>
     /// The builing number and street name of the company.
     /// </summary>
-    public required string CompanyBuldingNoAndStreetName { get; set; }
+    public string CompanyBuldingNoAndStreetName { get; set; } = "";
 
     /// <summary>
     /// The company's town and code.
     /// </summary>
-    public required string CompanyTownAndCode { get; set; }
+    public string CompanyTownAndCode { get; set; } = "";
 
     /// <summary>
     /// The company's telephone/cellphone.
     /// </summary>
-    public required string CompanyTelephoneNo { get; set; }
+    public string CompanyTelephoneNo { get; set; } = "";
 
     /// <summary>
     /// The company's Fax number.
@@ -73,12 +68,12 @@ public class TaxInvoice
     /// <summary>
     /// The post office box address of the company.
     /// </summary>
-    public required string CompanyPoBoxAddress { get; set; }
+    public string CompanyPoBoxAddress { get; set; } = "";
 
     /// <summary>
     /// The town/suburb where the post office is located.
     /// </summary>
-    public required string CompanyPoBoxTownAndCode { get; set; }
+    public string CompanyPoBoxTownAndCode { get; set; } = "";
 
     /// <summary>
     /// The VAT registration number of the company (if any).
@@ -86,12 +81,17 @@ public class TaxInvoice
     public string VatRegNo { get; set; } = "";
 
     /// <summary>
+    /// The name of the company.
+    /// </summary>
+    public string CompanyName { get; set; } = "";
+
+    /// <summary>
     /// The name of the customer.
     /// </summary>
-    public required string CustomerName { get; set; }
+    public string CustomerName { get; set; } = "";
 
     /// <summary>
     /// The items sold.
     /// </summary>
-    public required List<InvoiceItem> InvoiceItems { get; set; }
+    public List<TaxInvoiceItemDto> InvoiceItems { get; set; } = [];
 }

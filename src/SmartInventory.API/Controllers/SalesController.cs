@@ -25,6 +25,15 @@ public class SalesController(SalesManagementService salesServ) : ControllerBase
     public IActionResult GenerateRequisitionForm(RequisitionFormData formData) =>
         !string.IsNullOrEmpty(formData.Authorized) && !string.IsNullOrEmpty(formData.CompanyName) && !string.IsNullOrEmpty(formData.DocName) &&
         !string.IsNullOrEmpty(formData.CompanyAddress) && formData.DocNo >= 0 && !string.IsNullOrEmpty(formData.FromDepartment) &&
-        formData.RequisitionDataItems.Count > 0 && _salesServ.GenerateRequisitionForm(formData) is RequisitionFormData fd?
-        CreatedAtAction(nameof(GenerateRequisitionForm),formData) : BadRequest("Failed to generate Requisition form!");
+        formData.RequisitionDataItems.Count > 0 && _salesServ.GenerateRequisitionForm(formData) is RequisitionFormData fd ?
+        CreatedAtAction(nameof(GenerateRequisitionForm), formData) : BadRequest("Failed to generate Requisition form!");
+
+    /// <summary>
+    /// Generates a Tax Invoice after a sale and purchase.
+    /// </summary>
+    /// <param name="dto"></param>
+    /// <returns></returns>
+    [HttpPost]
+    public IActionResult GenerateTaxInvoice(TaxInvoiceDto dto) => _salesServ.GenerateTaxInvoice(dto) is TaxInvoiceDto invoice ?
+        Ok(invoice) : BadRequest("Failed to generate tax invoice!");
 }
