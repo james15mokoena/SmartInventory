@@ -40,10 +40,10 @@ public class UserManagementService(UserManagementRepository userManagementReposi
     /// <param name="username"></param>
     /// <param name="password"></param>
     /// <returns></returns>
-    public bool CheckUserExistsByUsernameAndPassword(string username, string password) =>
-                !string.IsNullOrEmpty(username) && !string.IsNullOrEmpty(password) &&
-                _userManRepo.GetUserByUsername(username) is Staff staff &&
-                _passwordService.VerifyPassword(password, staff.PasswordHash);
+    public bool CheckUserExistsByUsernameAndPassword(LoginDto login) =>
+                !string.IsNullOrEmpty(login.Username) && !string.IsNullOrEmpty(login.Password) &&
+                _userManRepo.GetUserByUsername(login.Username) is Staff staff &&
+                _passwordService.VerifyPassword(login.Password, staff.PasswordHash);
     
     /// <summary>
     /// Activates or deactivates a user (admin/staff).

@@ -26,4 +26,5 @@
 -- ON s.RoleId = r.Id
 -- WHERE r.Name = "Sales Manager";
 -- SELECT * FROM Supplier;
-SELECT * from InvoiceItem;
+-- SELECT * from InvoiceItem;
+SELECT * from Staff;
