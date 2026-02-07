@@ -1,0 +1,31 @@
+@page
+@model SmartInventory.Web.Pages.Login.LoginModel
+@{
+    ViewData["Title"] = "Login";
+}
+
+@*
+    Components:
+        - Heading
+        - Username (label & input)
+        - Password (label & input)
+        - Login button
+        - Background image
+*@
+
+<link rel="stylesheet" href="~/css/login.css" />
+
+<div class="lg-container">
+
+    <form>
+
+        <h1>Login</h1>
+
+        <label class="u-lbl">Username:</label>
+        <input class="u-inp " type="text" />
+        <label class="p-lbl">Password:</label>
+        <input class="p-inp" type="password"/>
+        <button class="s-btn" type="submit">Login</button>
+    </form>
+
+</div>
