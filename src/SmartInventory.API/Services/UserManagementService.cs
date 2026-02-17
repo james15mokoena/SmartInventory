@@ -7,7 +7,8 @@ namespace SmartInventory.API.Services;
 /// <summary>
 /// Defines the functionality that enforces the business rules/constraints.
 /// </summary>
-public class UserManagementService(UserManagementRepository userManagementRepository, PasswordService passwordService)
+public class UserManagementService(UserManagementRepository userManagementRepository, PasswordService passwordService,
+    PermissionManagementService permServ)
 {
     /// <summary>
     /// Will be used to interact with the database.
@@ -15,6 +16,8 @@ public class UserManagementService(UserManagementRepository userManagementReposi
     private readonly UserManagementRepository _userManRepo = userManagementRepository;
 
     private readonly PasswordService _passwordService = passwordService;
+
+    private readonly PermissionManagementService _permService = permServ;
 
     /// <summary>
     /// Creates a new user.
@@ -40,10 +43,10 @@ public class UserManagementService(UserManagementRepository userManagementReposi
     /// <param name="username"></param>
     /// <param name="password"></param>
     /// <returns></returns>
-    public bool CheckUserExistsByUsernameAndPassword(LoginDto login) =>
+    public RoleDto? CheckUserExistsByUsernameAndPassword(LoginDto login) =>
                 !string.IsNullOrEmpty(login.Username) && !string.IsNullOrEmpty(login.Password) &&
                 _userManRepo.GetUserByUsername(login.Username) is Staff staff &&
-                _passwordService.VerifyPassword(login.Password, staff.PasswordHash);
+                _passwordService.VerifyPassword(login.Password, staff.PasswordHash) ? _permService.GetRole(staff.RoleId) : null;
     
     /// <summary>
     /// Activates or deactivates a user (admin/staff).

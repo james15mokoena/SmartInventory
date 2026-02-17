@@ -36,8 +36,9 @@ public class UserController(UserManagementService uService) : ControllerBase
     /// <param name="password"></param>
     /// <returns></returns>
     [HttpPost]
-    public IActionResult Login(LoginDto login) => _userService.CheckUserExistsByUsernameAndPassword(login) ?
-                                                  Ok("Logged in!") : BadRequest("Failed to loggin!");
+    public IActionResult Login(LoginDto login) => _userService.CheckUserExistsByUsernameAndPassword(login) is RoleDto role ?
+                                                  Ok(role) :
+                                                  BadRequest("Failed to loggin!");
 
     /// <summary>
     /// Activates or deactivates user (admin/staff).

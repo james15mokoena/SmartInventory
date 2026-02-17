@@ -93,13 +93,20 @@ public class PermissionManagementService(PermissionManagementRepository permMan)
     {
         if (GetAssignedPermissionsByUsername(username) is List<PermissionDto> permissions)
         {
-            foreach(PermissionDto permission in permissions)
+            foreach (PermissionDto permission in permissions)
             {
                 if (permission.Name == permissionName)
                     return true;
             }
         }
-        
+
         return false;
     }
+
+    /// <summary>
+    /// Returns a role with the given ID.
+    /// </summary>
+    /// <param name="roleId"></param>
+    /// <returns></returns>
+    public RoleDto? GetRole(int roleId) => _permRepo.GetRoleById(roleId) ?? null;
 }
