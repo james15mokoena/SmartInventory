@@ -1,7 +1,8 @@
 body{
     margin: 0;
     padding: 0;
-    background-image: url("../images/login-background-img2.png");
+    /*background-image: url("../images/login-background-img2.png");*/
+    background-color: wheat;
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -18,7 +19,6 @@ body{
 }
 
 .lg-container{
-    background-color: wheat;
     border-radius: 30px;
     /* 
        Ensures that the form content does not overflow the width of this
@@ -27,6 +27,7 @@ body{
     padding: 0;
     width: 100%;
     max-width: 100%;
+    /*box-shadow: 0px 0px 0 5px grey;*/
 }
 
 h1{
@@ -54,10 +55,6 @@ form{
     margin: 15px;
     max-width: 100%;
 }
-
-/*.u-lbl, .p-lbl, h1{
-    color: white;
-}*/
 
 .u-inp, .p-inp{
     width: 500px;
@@ -102,9 +99,15 @@ form{
     }
 }
 
-@media (max-width: 545px){
+@media (min-width:400px) and (max-width: 545px){
 
     .p-inp, .u-inp{
+        width: 300px;
+    }
+}
+
+@media (max-width:412px) {
+    .lg-container{
         width: 300px;
     }
 }

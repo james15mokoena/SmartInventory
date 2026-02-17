@@ -40,17 +40,25 @@ public class LoginModel(HttpClient client) : PageModel
             return;
         }
 
+        // prepare the request content
         StringContent content = new(JsonSerializer.Serialize(Details), Encoding.UTF8, "application/json");
 
         HttpResponseMessage resp = await _client.PostAsync("http://192.168.43.172:5196/api/User/Login", content);
 
         if (resp.IsSuccessStatusCode)
+        {
+            // read the response content
+            RoleDto? role = JsonSerializer.Deserialize<RoleDto>(
+                await resp.Content.ReadAsStringAsync(), new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                });
+
+            HttpContext.Session.SetString("RoleName", role!.Name!);
             IsLoggedIn = "True";
+        }
         else
             IsLoggedIn = "False";
-
-        Details.Username = "";
-        Details.Password = "";
 
     }
 
