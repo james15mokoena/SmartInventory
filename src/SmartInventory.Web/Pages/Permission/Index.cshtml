@@ -1,11 +1,11 @@
 @page
-@model SmartInventory.Web.Pages.Product.IndexModel
+@model SmartInventory.Web.Pages.Permission.IndexModel;
 
 @{
-    ViewData["Title"] = "Product Home";
+    ViewData["Title"] = "Permission Home";
 }
 
-<link href="~/css/supplier_index.css" rel="stylesheet"/>
+<link href="~/css/permission_index.css" rel="stylesheet"/>
 
 <div class="container">
 
@@ -28,18 +28,28 @@
 
      <div class="content">
         
-        <h1>Product Management</h1>
+        <h1>Permission Management</h1>
 
         <div class="row">
-            <a href="#"><span>Add Product</span></a>
-            <a href="#"><span>View Product Details</span></a>
-            <a href="#"><span>View Active Products</span></a>
+            <a href="#"><span>View Active Permissions</span></a>
+            <a href="#"><span>View Deactivated Permissions</span></a>
+            <a href="#"><span>View Active Roles</span></a>
         </div>
 
         <div class="row">
-            <a href="#">View Deactivated Products</a>
-            <a href="#">Activate / Deactivate Product</a>
-            <a href="#">Edit Product</a>
+            <a href="#">View Deactivated Roles</a>
+            <a href="#">Activate / Deactivate Role</a>
+            <a href="#">Activate / Deactivate Permission</a>
+        </div>
+
+        <div class="row">
+            <a href="#">Add Role</a>
+            <a href="#">Add Permission</a>
+            <a href="#">Assign Permission</a>
+        </div>
+
+        <div class="row">
+            <a href="#">View Assigned Permissions</a>
         </div>
 
     </div>
