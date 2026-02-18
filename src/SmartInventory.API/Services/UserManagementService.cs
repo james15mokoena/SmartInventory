@@ -66,13 +66,69 @@ public class UserManagementService(UserManagementRepository userManagementReposi
     /// Gets all active staff members.
     /// </summary>
     /// <returns></returns>
-    public List<Staff>? GetActivatedStaff() => _userManRepo.GetActivatedStaff();
+    public List<UserDto>? GetActivatedStaff()
+    {
+
+        if(_userManRepo.GetActivatedStaff() is List<Staff> staff && staff.Count> 0)
+        {
+            List<UserDto> activatedStaff = [];
+
+            foreach (Staff s in staff)
+            {
+                activatedStaff.Add(new()
+                {
+                    Username = s.Username
+                    ,
+                    FirstName = s.FirstName
+                    ,
+                    LastName = s.LastName
+                    ,
+                    Email = s.Email
+                    ,
+                    RoleId = s.RoleId
+                    ,
+                    Id = s.Id
+                });
+            }
+
+            return activatedStaff;
+        }
+        return null;
+    }
 
     /// <summary>
-    /// Gets all deactivated staff members.
+    /// Gets all deactived staff members.
     /// </summary>
     /// <returns></returns>
-    public List<Staff>? GetDeactivatedStaff() => _userManRepo.GetDeactivatedStaff();
+    public List<UserDto>? GetDeactivatedStaff()
+    {
+
+        if(_userManRepo.GetDeactivatedStaff() is List<Staff> staff && staff.Count> 0)
+        {
+            List<UserDto> deactivatedStaff = [];
+
+            foreach (Staff s in staff)
+            {
+                deactivatedStaff.Add(new()
+                {
+                    Username = s.Username
+                    ,
+                    FirstName = s.FirstName
+                    ,
+                    LastName = s.LastName
+                    ,
+                    Email = s.Email
+                    ,
+                    RoleId = s.RoleId
+                    ,
+                    Id = s.Id
+                });
+            }
+
+            return deactivatedStaff;
+        }
+        return null;
+    }
 
     /// <summary>
     /// Edits a staff member's data.

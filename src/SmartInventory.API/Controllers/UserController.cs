@@ -65,7 +65,7 @@ public class UserController(UserManagementService uService) : ControllerBase
     /// </summary>
     /// <returns></returns>
     [HttpGet]
-    public IActionResult ViewActivatedStaff() => _userService.GetActivatedStaff() is List<Staff> staff ?
+    public IActionResult ViewActivatedStaff() => _userService.GetActivatedStaff() is List<UserDto> staff ?
                                                  Ok(staff) :
                                                  BadRequest("Failed to get activated staff members!");
 
@@ -74,7 +74,7 @@ public class UserController(UserManagementService uService) : ControllerBase
     /// </summary>
     /// <returns></returns>
     [HttpGet]
-    public IActionResult ViewDeactivatedStaff() => _userService.GetDeactivatedStaff() is List<Staff> staff ?
+    public IActionResult ViewDeactivatedStaff() => _userService.GetDeactivatedStaff() is List<UserDto> staff ?
                                                  Ok(staff) :
                                                  BadRequest("Failed to get deactivated staff members!");
 
