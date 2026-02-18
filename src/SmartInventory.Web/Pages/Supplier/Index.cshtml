@@ -1,20 +1,20 @@
-﻿@page
-@model SmartInventory.Web.Pages.IndexModel
+@page
+@model SmartInventory.Web.Pages.Supplier.IndexModel
 
 @{
-    ViewData["Title"] = "Home page";
+    ViewData["Title"] = "Supplier Home";
 }
 
-<link href="~/css/index.css" rel="stylesheet"/>
+<link href="~/css/supplier_index.css" rel="stylesheet"/>
 
 <div class="container">
 
-    <header>
+     <header>
         <h1 class="app-name">SmartInventory</h1>
 
         <!-- The navigation of the web page-->
         <ul class="admin-nav">
-            <li><a class="nav-item active" href="~/Home/Index">Home</a></li>
+            <li><a class="nav-item active" href="~/Index">Home</a></li>
             <li><a class="nav-item" href="~/User/Index">User</a></li>
             <li><a class="nav-item" href="~/Supplier/Index">Supplier</a></li>
             <li><a class="nav-item" href="#">Stock</a></li>
@@ -26,8 +26,22 @@
         </ul>
     </header>
 
-    <div class="content">
-        Landing Home Page Content
+     <div class="content">
+        
+        <h1>Supplier Management</h1>
+
+        <div class="row">
+            <a href="#"><span>Create Supplier</span></a>
+            <a href="#"><span>Activate/Deactivate Supplier</span></a>
+            <a href="#"><span>View Supplier</span></a>
+        </div>
+
+        <div class="row">
+            <a href="#">View Activated Suppliers</a>
+            <a href="#">View Deactivated Suppliers</a>
+            <a href="#">Edit Staff Supplier</a>
+        </div>
+
     </div>
 
     <footer>

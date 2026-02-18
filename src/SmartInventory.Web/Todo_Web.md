@@ -2,7 +2,7 @@
 
 - A. Login Page [Done]
 - B. Navigation (Admin) [Done]
-- C. Create Staff Member Page [In-progress]
+- C. Create Staff Member Page [Done]
     - Create staff member
     - Activate or deactivate user
     - View staff member
