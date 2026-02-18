@@ -1,23 +1,11 @@
 # Inventory Web Application UI
 
-## A. Login Page [Done]
-
-- Username (label & input)
-- Password (label & input)
-- Login button
-
-## B. Navigation (Admin) [Done]
-
-- Home
-- User
-- Supplier
-- Stock
-- Sales
-- Product
-- Procurement
-- Permission
-- Login/Logout
-
-### C. Create Staff Member Page
-
-- 
+- A. Login Page [Done]
+- B. Navigation (Admin) [Done]
+- C. Create Staff Member Page [In-progress]
+    - Create staff member
+    - Activate or deactivate user
+    - View staff member
+    - View activated staff
+    - View deactivated staff
+    - Edit staff member

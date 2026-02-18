@@ -1,5 +1,6 @@
 ﻿@page
-@model IndexModel
+@model SmartInventory.Web.Pages.IndexModel
+
 @{
     ViewData["Title"] = "Home page";
 }
@@ -13,8 +14,8 @@
 
         <!-- The navigation of the web page-->
         <ul class="admin-nav">
-            <li><a class="nav-item active" href="#">Home</a></li>
-            <li><a class="nav-item" href="#">User</a></li>
+            <li><a class="nav-item active" href="~/Home/Index">Home</a></li>
+            <li><a class="nav-item" href="~/User/Index">User</a></li>
             <li><a class="nav-item" href="#">Supplier</a></li>
             <li><a class="nav-item" href="#">Stock</a></li>
             <li><a class="nav-item" href="#">Sales</a></li>
@@ -26,7 +27,7 @@
     </header>
 
     <div class="content">
-        Content
+        Landing Home Page Content
     </div>
 
     <footer>

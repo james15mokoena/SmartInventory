@@ -1,0 +1,51 @@
+@page
+@model SmartInventory.Web.Pages.User.IndexModel;
+
+@{
+    ViewData["Title"] = "User Home";
+}
+
+<link href="~/css/user_index.css" rel="stylesheet"/>
+
+<div class="container">
+
+     <header>
+        <h1 class="app-name">SmartInventory</h1>
+
+        <!-- The navigation of the web page-->
+        <ul class="admin-nav">
+            <li><a class="nav-item active" href="~/Index">Home</a></li>
+            <li><a class="nav-item" href="~/User/Index">User</a></li>
+            <li><a class="nav-item" href="#">Supplier</a></li>
+            <li><a class="nav-item" href="#">Stock</a></li>
+            <li><a class="nav-item" href="#">Sales</a></li>
+            <li><a class="nav-item" href="#">Product</a></li>
+            <li><a class="nav-item" href="#">Procurement</a></li>
+            <li><a class="nav-item" href="#">Permission</a></li>
+            <li><a class="nav-item" href="~/Login/Login">Login</a></li>
+        </ul>
+    </header>
+
+     <div class="content">
+        
+        <h1>User Management</h1>
+
+        <div class="row">
+            <a href="#"><span>Create Staff Member</span></a>
+            <a href="#"><span>Activate/Deactivate Staff Member</span></a>
+            <a href="#"><span>View Staff Member</span></a>
+        </div>
+
+        <div class="row">
+            <a href="#">View Activated Staff</a>
+            <a href="#">View Deactivated Staff</a>
+            <a href="#">Edit Staff Member</a>
+        </div>
+
+    </div>
+
+    <footer>
+        Footer
+    </footer>
+
+</div>
