@@ -23,7 +23,7 @@ public class ProductController(ProductManagementService productService) : Contro
     /// <param name="newProduct"></param>
     /// <param name="username"></param>
     /// <returns></returns>
-    [HttpPost]
+    [HttpPost("{username}")]
     public IActionResult AddProduct(ProductDto newProduct, string username) => _productService.AddProduct(newProduct,username) ?
                                                            CreatedAtAction(nameof(AddProduct), newProduct) :
                                                            BadRequest("Failed to add the product!");

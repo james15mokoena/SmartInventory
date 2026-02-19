@@ -27,4 +27,4 @@
 -- WHERE r.Name = "Sales Manager";
 -- SELECT * FROM Supplier;
 -- SELECT * from InvoiceItem;
-SELECT * from Staff;
+SELECT * from Product;

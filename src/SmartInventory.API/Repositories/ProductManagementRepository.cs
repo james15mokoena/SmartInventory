@@ -33,13 +33,17 @@ public class ProductManagementRepository(DatabaseContext context, StockManagemen
     /// <returns></returns>
     public bool CreateProduct(Product newProduct, string username)
     {
-        _context.Products.Add(newProduct);
-
-        if (_context.SaveChanges() > 0)
+        if (GetProductBySku(newProduct.SKU) is null)
         {
-            if (_userRepo.GetUserByUsername(username) is Staff staff)
-                return _stockRepo.RecordIncomingStock(newProduct.SKU, newProduct.CurrentStock, staff.Id, "Received",true);
+            _context.Products.Add(newProduct);
+
+            if (_context.SaveChanges() > 0)
+            {
+                if (_userRepo.GetUserByUsername(username) is Staff staff)
+                    return _stockRepo.RecordIncomingStock(newProduct.SKU, newProduct.CurrentStock, staff.Id, "Received",true);
+            }
         }
+        
         return false;
     }
 
