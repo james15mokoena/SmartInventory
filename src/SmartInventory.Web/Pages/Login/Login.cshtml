@@ -8,6 +8,8 @@
 
 <div class="lg-container">
 
+    <h1 class="app-name">SmartInventory</h1>
+
     <form method="post">
 
         <h1>Login</h1>
@@ -20,13 +22,13 @@
     </form>
 </div>
 
-@if(Model.IsLoggedIn == "False"){
+@if(Model.IsLoggedIn == "false"){
 
     <div class="status" style="display:block;background-color: red;">
         Failed!!!
     </div>
 }
-else if(Model.IsLoggedIn == "True"){
+else if(Model.IsLoggedIn == "true"){
     <div class="status" style="display:block;background-color: green;">
         Success!!!
     </div>

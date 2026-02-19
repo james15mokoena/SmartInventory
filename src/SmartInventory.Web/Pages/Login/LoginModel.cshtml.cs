@@ -29,15 +29,13 @@ public class LoginModel(HttpClient client) : PageModel
     /// <summary>
     /// Verifies the login details.
     /// </summary>
-    public async Task OnPostLogin()
+    public async Task<IActionResult> OnPostLogin()
     {
 
         if (string.IsNullOrEmpty(Details.Username) || string.IsNullOrEmpty(Details.Password))
         {
-            IsLoggedIn = "False";
-            Details.Username = "";
-            Details.Password = "";
-            return;
+            IsLoggedIn = "false";
+            return Page();
         }
 
         // prepare the request content
@@ -55,11 +53,16 @@ public class LoginModel(HttpClient client) : PageModel
                 });
 
             HttpContext.Session.SetString("RoleName", role!.Name!);
-            IsLoggedIn = "True";
+            HttpContext.Session.SetString("Username", Details.Username);
+            IsLoggedIn = "true";
+
+            // go to the home page
+            return RedirectToPage("../Index");
         }
         else
-            IsLoggedIn = "False";
+            IsLoggedIn = "false";
 
+        return Page();
     }
 
 }

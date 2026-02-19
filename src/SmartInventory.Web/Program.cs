@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Hosting.StaticWebAssets;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -27,6 +29,8 @@ app.UseRouting();
 
 app.UseAuthorization();
 app.UseSession();
+// Enables the use of static web assets in the hosting environment.
+StaticWebAssetsLoader.UseStaticWebAssets(builder.Environment, builder.Configuration);
 
 app.MapStaticAssets();
 app.MapRazorPages()
