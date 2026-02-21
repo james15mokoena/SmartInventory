@@ -33,27 +33,28 @@ public class ProductController(ProductManagementService productService) : Contro
     /// </summary>
     /// <param name="sku"></param>
     /// <returns></returns>
-    [HttpGet("{sku}")]
-    public IActionResult ViewProductDetailsBySku(string sku) => _productService.GetProductBySku(sku) is ProductDto dto ?
-                                                           Ok(dto) :
-                                                           BadRequest("Failed to fetch product details!");
+    [HttpGet("{sku}/{username}")]
+    public IActionResult ViewProductDetailsBySku(string sku, string username) =>
+        _productService.GetProductBySku(sku, username) is ProductDto dto ? Ok(dto) :
+        BadRequest("Failed to fetch product details!");
 
     /// <summary>
     /// Fetches a product's details by name.
     /// </summary>
     /// <param name="sku"></param>
     /// <returns></returns>
-    [HttpGet("{name}")]
-    public IActionResult ViewProductDetailsByName(string name) => _productService.GetProductByName(name) is ProductDto dto ?
-                                                           Ok(dto) :
-                                                           BadRequest("Failed to fetch product details!");
+    [HttpGet("{name}/{username}")]
+    public IActionResult ViewProductDetailsByName(string name, string username) =>
+        _productService.GetProductByName(name, username) is ProductDto dto ?
+        Ok(dto) :
+        BadRequest("Failed to fetch product details!");
 
     /// <summary>
     /// Fetches all active products.
     /// </summary>
     /// <returns></returns>
     [HttpGet]
-    public IActionResult ViewActiveProducts() => _productService.GetActiveProducts() is List<ProductDto> dtos ?
+    public IActionResult ViewActiveProducts(string username) => _productService.GetActiveProducts(username) is List<ProductDto> dtos ?
                                                            Ok(dtos) :
                                                            BadRequest("Failed to fetch active products!");
 
@@ -62,9 +63,10 @@ public class ProductController(ProductManagementService productService) : Contro
     /// </summary>
     /// <returns></returns>
     [HttpGet]
-    public IActionResult ViewDeactivatedProducts() => _productService.GetDeactivatedProducts() is List<ProductDto> dtos ?
-                                                           Ok(dtos) :
-                                                           BadRequest("Failed to fetch deactivated products!");
+    public IActionResult ViewDeactivatedProducts(string username) =>
+        _productService.GetDeactivatedProducts(username) is List<ProductDto> dtos ?
+        Ok(dtos) :
+        BadRequest("Failed to fetch deactivated products!");
 
     /// <summary>
     /// Activates or deactivates a product.
@@ -72,9 +74,10 @@ public class ProductController(ProductManagementService productService) : Contro
     /// <param name="sku"></param>
     /// <returns></returns>
     [HttpPut("{sku}")]
-    public IActionResult ActivateOrDeactivateProduct(string sku) => _productService.ToggleProductActiveStatus(sku) ?
-                                                                    Ok("Product status changed!") :
-                                                                    BadRequest("Failed to change product's status!");
+    public IActionResult ActivateOrDeactivateProduct(string sku, string username) =>
+        _productService.ToggleProductActiveStatus(sku, username) ?
+        Ok("Product status changed!") :
+        BadRequest("Failed to change product's status!");
 
     /// <summary>
     /// Edits a product's data.

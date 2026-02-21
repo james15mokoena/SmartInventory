@@ -78,9 +78,9 @@ public class ProductManagementService(ProductManagementRepository productRepo, S
     /// </summary>
     /// <param name="sku"></param>
     /// <returns></returns>
-    public ProductDto? GetProductBySku(string sku)
+    public ProductDto? GetProductBySku(string sku, string username)
     {
-        if (!string.IsNullOrEmpty(sku))
+        if (!string.IsNullOrEmpty(sku) && _permService.IsAuthorized(username,"ViewProductDetails"))
         {
             if (_productRepo.GetProductBySku(sku) is Product product)
             {
@@ -130,9 +130,9 @@ public class ProductManagementService(ProductManagementRepository productRepo, S
     /// </summary>
     /// <param name="name"></param>
     /// <returns></returns>
-    public ProductDto? GetProductByName(string name)
+    public ProductDto? GetProductByName(string name, string username)
     {
-        if (!string.IsNullOrEmpty(name))
+        if (!string.IsNullOrEmpty(name) && _permService.IsAuthorized(username,"ViewProductDetails"))
         {
             if (_productRepo.GetProductByName(name) is Product product)
             {
@@ -181,10 +181,10 @@ public class ProductManagementService(ProductManagementRepository productRepo, S
     /// Fetches all active products.
     /// </summary>
     /// <returns></returns>
-    public List<ProductDto>? GetActiveProducts()
+    public List<ProductDto>? GetActiveProducts(string username)
     {
 
-        if (_productRepo.GetActiveProducts() is List<Product> products && products.Count > 0)
+        if (_permService.IsAuthorized(username,"ViewProducts") && _productRepo.GetActiveProducts() is List<Product> products && products.Count > 0)
         {
             List<ProductDto> productDtos = [];
 
@@ -237,10 +237,10 @@ public class ProductManagementService(ProductManagementRepository productRepo, S
     /// Fetches all deactivated products.
     /// </summary>
     /// <returns></returns>
-    public List<ProductDto>? GetDeactivatedProducts()
+    public List<ProductDto>? GetDeactivatedProducts(string username)
     {
 
-        if (_productRepo.GetDeactivatedProducts() is List<Product> products && products.Count > 0)
+        if(_permService.IsAuthorized(username,"ViewProducts")  && _productRepo.GetDeactivatedProducts() is List<Product> products && products.Count > 0)
         {
             List<ProductDto> productDtos = [];
 
@@ -294,7 +294,8 @@ public class ProductManagementService(ProductManagementRepository productRepo, S
     /// </summary>
     /// <param name="sku"></param>
     /// <returns></returns>
-    public bool ToggleProductActiveStatus(string sku) => !string.IsNullOrEmpty(sku) && _productRepo.ToggleProductActiveStatus(sku);
+    public bool ToggleProductActiveStatus(string sku, string username) =>
+        !string.IsNullOrEmpty(sku) && _permService.IsAuthorized(username,"ActivateProduct") && _productRepo.ToggleProductActiveStatus(sku);
 
     /// <summary>
     /// Edits a product's data.

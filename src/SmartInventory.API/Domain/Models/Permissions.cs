@@ -24,9 +24,13 @@ public static class Permissions
 
     public const string DeactivateProduct = "DeactivateProduct";
 
+    public const string ActivateProduct = "ActivateProduct";
+
     public const string ViewProductDetails = "ViewProductDetails";
 
     public const string ViewProductHistory = "ViewProductHistory";
+
+    public const string ViewProducts = "ViewProducts";
 
 
     // ***** Supplier Management permissions. ***** //
