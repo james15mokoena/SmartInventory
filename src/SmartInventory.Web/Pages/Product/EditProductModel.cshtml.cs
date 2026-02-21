@@ -1,3 +1,4 @@
+using System.Text;
 using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -63,9 +64,30 @@ public class EditProductModel(HttpClient client) : PageModel
     /// Used to send a HTTP Put request to update a product's data.
     /// </summary>
     /// <returns></returns>
-    public async Task OnPutEditProduct()
+    public async Task OnPostEditProduct()
     {
+        Product!.ImageUrl = Product.ImageUrl ?? "";
+        Product!.Barcode = Product.Barcode ?? "";
+        
+        if (IsValid(Product!.SKU!) && IsValid(Product.Name) && IsValid(Product.Description!) &&
+            IsValid(Product.Category!) && Product.UnitPrice >= 0 && Product.CostPrice >= 0 &&
+            Product.CurrentStock >= 0 && Product.MinimumStockLevel >= 0 && Product.MaximumStockLevel >= 0 &&
+            Product.ReorderQuantity >= 0 && Product.UnitMeasurement >= 0 && Product.SupplierId >= 0 &&
+            Product.Barcode != null && Product.ImageUrl != null)
+        {
+            // convert the model to the json.
+            StringContent content = new(JsonSerializer.Serialize(Product), Encoding.UTF8, "application/json");
 
+            string? username = HttpContext.Session.GetString("Username");
+
+            // send the request
+            HttpResponseMessage resp = await _client.PutAsync($"http://192.168.43.172:5196/api/Product/EditProduct/{username}", content);
+
+            if (resp.IsSuccessStatusCode)
+                IsEdited = "true";
+            else
+                IsEdited = "false";
+        }
     }
     
     /// <summary>
