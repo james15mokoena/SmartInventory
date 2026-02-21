@@ -40,10 +40,10 @@ public class EditProductModel(HttpClient client) : PageModel
 
         // send the request to fetch the data using the sku of the product.
         if (IsValid(Product!.SKU!))
-            resp = await _client.GetAsync($"http://192.168.43.172:5196/api/Product/ViewProductDetailsBySku/{Product.SKU}");
+            resp = await _client.GetAsync($"http://192.168.43.172:5196/api/Product/ViewProductDetailsBySku/{Product.SKU}/{HttpContext.Session.GetString("Username")}");
         else if (IsValid(Product!.Name))
             // send the request to fetch the data using the name of the product
-            resp = await _client.GetAsync($"http://192.168.43.172:5196/api/Product/ViewProductDetailsByName/{Product.Name}");
+            resp = await _client.GetAsync($"http://192.168.43.172:5196/api/Product/ViewProductDetailsByName/{Product.Name}/{HttpContext.Session.GetString("Username")}");
 
         if (resp != null && resp.IsSuccessStatusCode)
         {
@@ -58,6 +58,8 @@ public class EditProductModel(HttpClient client) : PageModel
                 IsFetched = "false";
             }
         }
+        else if(resp != null)
+            IsFetched = "unauthorised";
     }
 
     /// <summary>
