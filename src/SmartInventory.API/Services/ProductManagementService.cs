@@ -106,6 +106,8 @@ public class ProductManagementService(ProductManagementRepository productRepo, S
                     ,
                     MinimumStockLevel = product.MinimumStockLevel
                     ,
+                    MaximumStockLevel = product.MaximumStockLevel
+                    ,
                     Name = product.Name
                     ,
                     ReorderQuantity = product.ReorderQuantity
@@ -115,6 +117,8 @@ public class ProductManagementService(ProductManagementRepository productRepo, S
                     UnitMeasurement = product.UnitMeasurement
                     ,
                     UnitPrice = product.UnitPrice
+                    ,
+                    ImageUrl = product.ImageUrl
                 };
             }
         }
@@ -154,6 +158,8 @@ public class ProductManagementService(ProductManagementRepository productRepo, S
                     ,
                     MinimumStockLevel = product.MinimumStockLevel
                     ,
+                    MaximumStockLevel = product.MaximumStockLevel
+                    ,
                     Name = product.Name
                     ,
                     ReorderQuantity = product.ReorderQuantity
@@ -163,6 +169,8 @@ public class ProductManagementService(ProductManagementRepository productRepo, S
                     UnitMeasurement = product.UnitMeasurement
                     ,
                     UnitPrice = product.UnitPrice
+                    ,
+                    ImageUrl = product.ImageUrl
                 };
             }
         }
@@ -296,12 +304,11 @@ public class ProductManagementService(ProductManagementRepository productRepo, S
     public ProductDto? EditProduct(ProductDto updatedProduct, string username)
     {
         if (!string.IsNullOrEmpty(updatedProduct.SKU) && !string.IsNullOrEmpty(updatedProduct.Name) &&
-           !string.IsNullOrEmpty(updatedProduct.Barcode) && !string.IsNullOrEmpty(updatedProduct.Category) &&
+           updatedProduct.Barcode != null && !string.IsNullOrEmpty(updatedProduct.Category) && updatedProduct.ImageUrl != null &&
            !string.IsNullOrEmpty(updatedProduct.Description) && updatedProduct.CostPrice >= 0.0 &&
            updatedProduct.CurrentStock >= 0.0 && updatedProduct.MinimumStockLevel >= 0.0 && updatedProduct.ReorderQuantity >= 0 &&
            updatedProduct.UnitPrice >= 0.0 && updatedProduct.UnitMeasurement >= 0.0 && updatedProduct.SupplierId >= 0 &&
-           updatedProduct.LastUpdated != default && updatedProduct.DateCreated != default && updatedProduct.MaximumStockLevel >= 0 &&
-           _permService.IsAuthorized(username,"EditProduct"))
+           updatedProduct.MaximumStockLevel >= 0 && _permService.IsAuthorized(username,"EditProduct"))
             return _productRepo.EditProduct(updatedProduct) is Product p ? updatedProduct : null;
         return null;
     }
