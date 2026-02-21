@@ -26,6 +26,7 @@ form{
     background-color: darkgreen;
     color: white;
     border-radius: 10px;
+    border-style: none;
 }
 
 .add-btn:hover{

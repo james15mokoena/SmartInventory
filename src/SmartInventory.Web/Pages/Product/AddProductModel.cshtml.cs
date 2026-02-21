@@ -18,7 +18,7 @@ public class AddProductModel(HttpClient client) : PageModel
     /// The product to be added.
     /// </summary>
     [BindProperty]
-    public ProductDto? Product { get; set; }
+    public ProductDto Product { get; set; } = new();
 
     /// <summary>
     /// Stores a status indicating whether the product was added or not.
@@ -40,8 +40,8 @@ public class AddProductModel(HttpClient client) : PageModel
         Product.LastUpdated = DateTime.UtcNow.Date;
         Product.ImageUrl = Product.ImageUrl ?? "";
 
-        if (IsValid(Product!.SKU) && IsValid(Product.Name) && IsValid(Product.Description) &&
-            IsValid(Product.Category) && Product.UnitPrice >= 0 && Product.CostPrice >= 0 &&
+        if (IsValid(Product.SKU!) && IsValid(Product.Name) && IsValid(Product.Description!) &&
+            IsValid(Product.Category!) && Product.UnitPrice >= 0 && Product.CostPrice >= 0 &&
             Product.CurrentStock >= 0 && Product.MinimumStockLevel >= 0 && Product.MaximumStockLevel >= 0 &&
             Product.ReorderQuantity >= 0 && Product.UnitMeasurement >= 0 && Product.SupplierId >= 0 &&
             Product.Barcode != null && Product.ImageUrl != null)

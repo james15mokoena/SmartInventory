@@ -1,0 +1,158 @@
+@page
+@model SmartInventory.Web.Pages.Product.EditProductModel
+
+@{
+    ViewData["Title"] = "Edit Product";
+}
+
+<link href="~/css/common.css" rel="stylesheet"/>
+<link href="~/css/addproduct.css" rel="stylesheet"/>
+<link href="~/css/editproduct.css" rel="stylesheet"/>
+
+<div class="container">
+
+     <header>
+        <h1 class="app-name">SmartInventory</h1>
+
+        <!-- The navigation of the web page-->
+        <ul class="admin-nav">
+            <li><a class="nav-item active" href="~/Index">Home</a></li>
+            <li><a class="nav-item" href="~/User/Index">User</a></li>
+            <li><a class="nav-item" href="~/Supplier/Index">Supplier</a></li>
+            <li><a class="nav-item" href="~/Stock/Index">Stock</a></li>
+            <li><a class="nav-item" href="~/Sales/Index">Sales</a></li>
+            <li><a class="nav-item" href="~/Product/Index">Product</a></li>
+            <li><a class="nav-item" href="~/Procurement/Index">Procurement</a></li>
+            <li><a class="nav-item" href="~/Permission/Index">Permission</a></li>
+            <li><a class="nav-item" href="~/Login/Login">Login</a></li>
+        </ul>
+    </header>
+
+     <div class="content">
+        
+        <h1> Edit Product</h1>
+
+        <form method="post">
+
+            <div class="row">
+                <div class="col">
+                    <label class="lbl">Stock Keeping Unit (SKU):</label>
+                    <input class="inp" type="text" value="@Model.Product!.SKU" placeholder="enter to get data" asp-for="Product.SKU"/>
+                </div>
+                <div class="col">
+                    <label class="lbl">Name:</label>
+                    <input class="inp" type="text" value="@Model.Product.Name" asp-for="Product.Name" placeholder="or enter this to get data"/>
+                </div>
+                <div class="col">
+                    <label class="lbl">Description:</label>
+                    <input class="inp" type="text" multiple value="@Model.Product.Description" asp-for="Product.Description"/>
+                    @*@if(!string.IsNullOrEmpty(@Model.Product.Description)){
+                        <textarea class="inp" asp-for="Product.Description">
+                            @Model.Product.Description
+                        </textarea>
+                    }else{
+                        <textarea class="inp" asp-for="Product.Description"></textarea>
+                        
+                    }*@
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col">
+                    <label class="lbl">Category:</label>
+                    <input class="inp" value="@Model.Product.Category" type="text" asp-for="Product.Category"/>
+                </div>
+                <div class="col">
+                    <label class="lbl">Unit Price (R):</label>
+                    <input class="inp" value="@Model.Product.UnitPrice" type="number" min="0" asp-for="Product.UnitPrice"/>
+                </div>
+                <div class="col">
+                    <label class="lbl">Cost Price (R):</label>
+                    <input class="inp" value="@Model.Product.CostPrice" type="number" min="0" asp-for="Product.CostPrice"/>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col">
+                    <label class="lbl">Current Stock:</label>
+                    <input class="inp" value="@Model.Product.CurrentStock" type="number" min="0" asp-for="Product.CurrentStock"/>
+                </div>
+                <div class="col">
+                    <label class="lbl">Minimum Stock Level:</label>
+                    <input class="inp" value="@Model.Product.MinimumStockLevel" type="number" min="0" asp-for="Product.MinimumStockLevel"/>
+                </div>
+                <div class="col">
+                    <label class="lbl">Maximum Stock Level:</label>
+                    <input class="inp" value="@Model.Product.MaximumStockLevel" type="number" min="0" asp-for="Product.MaximumStockLevel"/>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col">
+                    <label class="lbl">Reorder Quantity:</label>
+                    <input class="inp" value="@Model.Product.ReorderQuantity" type="number" min="0" asp-for="Product.ReorderQuantity"/>
+                </div>
+                <div class="col">
+                    <label class="lbl">Barcode:</label>
+                    <input class="inp" value="@Model.Product.Barcode" type="text" asp-for="Product.Barcode"/>
+                </div>
+                <div class="col">
+                    <label class="lbl">Unit Measurement:</label>
+                    <input class="inp" value="@Model.Product.UnitMeasurement" type="number" min="0" asp-for="Product.UnitMeasurement"/>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col">
+                    <label class="lbl">Image Url:</label>
+                    <input class="inp" value="@Model.Product.ImageUrl" type="text" asp-for="Product.ImageUrl"/>
+                </div>
+                <div class="col">
+                    <label class="lbl">Activate:</label>
+                    @if(Model.Product.IsActive){
+                        <input class="inp" type="checkbox" asp-for="Product.IsActive" checked />
+                    }
+                    else{
+                        <input class="inp" type="checkbox" asp-for="Product.IsActive" />
+                    }
+                </div>
+                <div class="col">
+                    <label class="lbl">Supplier Id:</label>
+                    <input class="inp" value="@Model.Product.SupplierId" type="number" min="0" asp-for="Product.SupplierId"/>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col">
+                    <button class="get-data-btn" type="submit" asp-page-handler="FetchData">Get Data</button>
+                </div>
+                <div class="col">
+                    <button class="edit-btn" type="submit" asp-page-handler="EditProduct">Edit</button>
+                </div>
+            </div>
+        </form>
+
+        @if(Model.IsEdited == "false"){
+
+            <div class="status" style="display:block;background-color: red;">
+                Failed!!!
+            </div>
+        }
+        else if(Model.IsEdited == "true"){
+            <div class="status" style="display:block;background-color: green;">
+                Edited!!!
+            </div>
+        }
+        else if(Model.IsFetched == "false"){
+            <div class="status" style="display:block;background-color: red;">
+                Failed to fetch data!!!
+            </div>
+        }
+       
+    </div>
+
+    <footer>
+        Footer
+    </footer>
+
+</div>

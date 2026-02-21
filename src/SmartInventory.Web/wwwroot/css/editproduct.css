@@ -1,0 +1,29 @@
+.edit-btn{
+    width: 150px;
+    height: 40px;
+    margin: 15px;
+    font-size: 20px;
+    background-color: yellow;
+    color: black;
+    border-radius: 10px;
+    border-color: yellow;
+    border-style: none;
+}
+
+.edit-btn:hover{
+    background-color: lightseagreen;
+    border-style: none;
+    color: black;
+}
+
+.get-data-btn{
+    width: 150px;
+    height: 40px;
+    margin: 15px;
+    font-size: 20px;
+    background-color: coral;
+    color: black;
+    border-radius: 10px;
+    border-color: yellow;
+    border-style: none;   
+}
