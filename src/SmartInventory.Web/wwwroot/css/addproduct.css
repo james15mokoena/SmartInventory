@@ -51,6 +51,7 @@ form{
     justify-content: center;
     align-items: center;
     margin: 2px;
+    /*border: 2px solid green;*/
 }
 
 .status{
@@ -60,4 +61,37 @@ form{
     color: white;
     text-align: center;
     font-size: 30px;
+}
+
+@media (min-width:613px) and (max-width:1219px){
+
+    .btn-row{
+        display: flex;
+        flex-direction: row;
+        align-items: start;
+        height: 90px;
+    }
+
+    .inp{
+        width: 600px;
+    }
+}
+
+@media (min-width:413px) and (max-width:612px){
+    .btn-row{
+        display: flex;
+        flex-direction: row;
+        align-items: start;
+        height: 90px;
+    }
+
+    .inp{
+        width: 400px;
+    }
+}
+
+@media (max-width:413px){
+    .inp{
+        width: 300px;
+    }
 }

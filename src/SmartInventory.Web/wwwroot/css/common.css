@@ -33,11 +33,30 @@
     text-align: center;
 }
 
-@media (min-width:577px) and (max-width:613px){
+@media (min-width:613px) and (max-width:1219px){
 
     .row{
         flex-direction: column;
-        height: 400px;
+        height: 280px;
+        margin: 5px;
+        padding: 5px;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .row a{
+        width: 500px;
+        margin: 7px;
+        text-align: center;
+        align-content: center;
+    }
+}
+
+@media (min-width:577px) and (max-width:612px){
+
+    .row{
+        flex-direction: column;
+        height: 280px;
         margin: 5px;
         padding: 5px;
         align-items: center;
@@ -56,7 +75,7 @@
 
     .row{
         flex-direction: column;
-        height: 400px;
+        height: 280px;
         margin: 5px;
         padding: 5px;
         align-items: center;
