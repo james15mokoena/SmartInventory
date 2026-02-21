@@ -55,6 +55,13 @@ public class ProductManagementRepository(DatabaseContext context, StockManagemen
     public Product? GetProductBySku(string sku) => _context.Products.FirstOrDefault(p => p.SKU == sku);
 
     /// <summary>
+    /// Fetches a product by its name.
+    /// </summary>
+    /// <param name="name"></param>
+    /// <returns></returns>
+    public Product? GetProductByName(string name) => _context.Products.FirstOrDefault(p => p.Name == name);
+
+    /// <summary>
     /// Used to fetch all active products.
     /// </summary>
     /// <returns></returns>

@@ -29,12 +29,22 @@ public class ProductController(ProductManagementService productService) : Contro
                                                            BadRequest("Failed to add the product!");
 
     /// <summary>
-    /// Fetches a product's details.
+    /// Fetches a product's details by SKU.
     /// </summary>
     /// <param name="sku"></param>
     /// <returns></returns>
     [HttpGet("{sku}")]
-    public IActionResult ViewProductDetails(string sku) => _productService.GetProductBySku(sku) is ProductDto dto ?
+    public IActionResult ViewProductDetailsBySku(string sku) => _productService.GetProductBySku(sku) is ProductDto dto ?
+                                                           Ok(dto) :
+                                                           BadRequest("Failed to fetch product details!");
+
+    /// <summary>
+    /// Fetches a product's details by name.
+    /// </summary>
+    /// <param name="sku"></param>
+    /// <returns></returns>
+    [HttpGet("{name}")]
+    public IActionResult ViewProductDetailsByName(string name) => _productService.GetProductByName(name) is ProductDto dto ?
                                                            Ok(dto) :
                                                            BadRequest("Failed to fetch product details!");
 
@@ -71,8 +81,8 @@ public class ProductController(ProductManagementService productService) : Contro
     /// </summary>
     /// <param name="updatedProduct"></param>
     /// <returns></returns>
-    [HttpPut]
-    public IActionResult EditProduct(ProductDto updatedProduct) => _productService.EditProduct(updatedProduct) is ProductDto d ?
-                                                                   Ok(d) :
-                                                                   BadRequest("Failed to edit the product!");
+    [HttpPut("{username}")]
+    public IActionResult EditProduct(ProductDto updatedProduct, string username) =>
+        _productService.EditProduct(updatedProduct, username) is ProductDto d ?
+        Ok(d) : BadRequest("Failed to edit the product!");
 }
