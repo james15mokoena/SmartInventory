@@ -53,7 +53,7 @@ public class ProductController(ProductManagementService productService) : Contro
     /// Fetches all active products.
     /// </summary>
     /// <returns></returns>
-    [HttpGet]
+    [HttpGet("{username}")]
     public IActionResult ViewActiveProducts(string username) => _productService.GetActiveProducts(username) is List<ProductDto> dtos ?
                                                            Ok(dtos) :
                                                            BadRequest("Failed to fetch active products!");
@@ -62,7 +62,7 @@ public class ProductController(ProductManagementService productService) : Contro
     /// Fetches all deactivated products.
     /// </summary>
     /// <returns></returns>
-    [HttpGet]
+    [HttpGet("{username}")]
     public IActionResult ViewDeactivatedProducts(string username) =>
         _productService.GetDeactivatedProducts(username) is List<ProductDto> dtos ?
         Ok(dtos) :
@@ -73,7 +73,7 @@ public class ProductController(ProductManagementService productService) : Contro
     /// </summary>
     /// <param name="sku"></param>
     /// <returns></returns>
-    [HttpPut("{sku}")]
+    [HttpPut("{sku}/{username}")]
     public IActionResult ActivateOrDeactivateProduct(string sku, string username) =>
         _productService.ToggleProductActiveStatus(sku, username) ?
         Ok("Product status changed!") :

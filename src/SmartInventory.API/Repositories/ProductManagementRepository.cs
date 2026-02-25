@@ -172,6 +172,12 @@ public class ProductManagementRepository(DatabaseContext context, StockManagemen
                 isUpdated = true;
             }
 
+            if(product.IsActive != updatedProduct.IsActive)
+            {
+                product.IsActive = updatedProduct.IsActive;
+                isUpdated = true;
+            }
+
             if (isUpdated)
             {
                 _context.Update(product);
