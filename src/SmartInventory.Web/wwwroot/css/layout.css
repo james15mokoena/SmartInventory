@@ -94,7 +94,6 @@ header{
 }
 
 .content{
-/*    background-color: silver;*/
     grid-area: content;
 }
 

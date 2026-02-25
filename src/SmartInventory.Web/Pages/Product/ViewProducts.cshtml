@@ -1,12 +1,12 @@
 @page
-@model SmartInventory.Web.Pages.Product.IndexModel
-
+@using SmartInventory.Web.Models
+@model SmartInventory.Web.Pages.Product.ViewProductsModel
 @{
-    ViewData["Title"] = "Product Home";
+    ViewData["Title"] = "View Products";
 }
 
 <link href="~/css/common.css" rel="stylesheet"/>
-<link href="~/css/product_index.css" rel="stylesheet"/>
+<link href="~/css/viewproducts.css" rel="stylesheet"/>
 
 <div class="container">
 
@@ -29,12 +29,31 @@
 
      <div class="content">
         
-        <h1>Product Management</h1>
+        <h1>View Products</h1>
 
-        <div class="row">
-            <a href="~/Product/ViewProducts"><span>View Products</span></a>
-            <a href="~/Product/AddProduct"><span>Add Product</span></a>
-            <a href="~/Product/EditProduct">Edit Product</a>
+        <ul class="options">
+            <li><a href="~/Product/ViewProducts?type=active">View Active Products</a></li>
+            <li><a href="~/Product/ViewProducts?type=deactivated">View Deactivated Products</a></li>
+        </ul>
+
+        <div class="products">
+
+            @{
+                List<ProductDto>? products = Model.Products;
+                
+                if(products != null && products.Count > 0){
+
+                    foreach(ProductDto product in products){
+
+                        <a href="~/Product/ProductDetails?sku=@product.SKU" class="product">
+                            <span>@product.Name</span>
+                        </a>
+                    }
+                }
+                else{
+                    <p class="status">No products have been fetched!</p>
+                }
+            }
         </div>
 
     </div>

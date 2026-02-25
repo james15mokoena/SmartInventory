@@ -1,13 +1,13 @@
 @page
-@model SmartInventory.Web.Pages.Product.EditProductModel
-
+@model SmartInventory.Web.Pages.Product.ProductDetailsModel
 @{
-    ViewData["Title"] = "Edit Product";
+    ViewData["Title"] = "Product Details";
 }
 
 <link href="~/css/common.css" rel="stylesheet"/>
 <link href="~/css/addproduct.css" rel="stylesheet"/>
 <link href="~/css/editproduct.css" rel="stylesheet"/>
+<link href="~/css/productdetails.css" rel="stylesheet"/>
 
 <div class="container">
 
@@ -30,22 +30,22 @@
 
      <div class="content">
         
-        <h1> Edit Product</h1>
+        <h1>View Product Details</h1>
 
         <form method="post">
 
             <div class="row">
                 <div class="col">
                     <label class="lbl">Stock Keeping Unit (SKU):</label>
-                    <input class="inp" type="text" value="@Model.Product!.SKU" placeholder="enter to get data" asp-for="Product.SKU"/>
+                    <input class="inp" readonly type="text" value="@Model.Product!.SKU" asp-for="Product.SKU" />
                 </div>
                 <div class="col">
                     <label class="lbl">Name:</label>
-                    <input class="inp" type="text" value="@Model.Product.Name" asp-for="Product.Name" placeholder="or enter this to get data"/>
+                    <input class="inp" readonly type="text" value="@Model.Product.Name" asp-for="Product.Name" />
                 </div>
                 <div class="col">
                     <label class="lbl">Description:</label>
-                    <input class="inp" type="text" multiple value="@Model.Product.Description" asp-for="Product.Description"/>
+                    <input class="inp" readonly type="text" multiple value="@Model.Product.Description" asp-for="Product.Description"/>
                     @*@if(!string.IsNullOrEmpty(@Model.Product.Description)){
                         <textarea class="inp" asp-for="Product.Description">
                             @Model.Product.Description
@@ -60,74 +60,81 @@
             <div class="row">
                 <div class="col">
                     <label class="lbl">Category:</label>
-                    <input class="inp" value="@Model.Product.Category" type="text" asp-for="Product.Category"/>
+                    <input class="inp" readonly value="@Model.Product.Category" type="text" asp-for="Product.Category"/>
                 </div>
                 <div class="col">
                     <label class="lbl">Unit Price (R):</label>
-                    <input class="inp" value="@Model.Product.UnitPrice" type="number" min="0" asp-for="Product.UnitPrice"/>
+                    <input class="inp" readonly value="@Model.Product.UnitPrice" type="number" min="0" asp-for="Product.UnitPrice"/>
                 </div>
                 <div class="col">
                     <label class="lbl">Cost Price (R):</label>
-                    <input class="inp" value="@Model.Product.CostPrice" type="number" min="0" asp-for="Product.CostPrice"/>
+                    <input class="inp" readonly value="@Model.Product.CostPrice" type="number" min="0" asp-for="Product.CostPrice"/>
                 </div>
             </div>
 
             <div class="row">
                 <div class="col">
                     <label class="lbl">Current Stock:</label>
-                    <input class="inp" value="@Model.Product.CurrentStock" type="number" min="0" asp-for="Product.CurrentStock"/>
+                    <input class="inp" readonly value="@Model.Product.CurrentStock" type="number" min="0" asp-for="Product.CurrentStock"/>
                 </div>
                 <div class="col">
                     <label class="lbl">Minimum Stock Level:</label>
-                    <input class="inp" value="@Model.Product.MinimumStockLevel" type="number" min="0" asp-for="Product.MinimumStockLevel"/>
+                    <input class="inp" readonly value="@Model.Product.MinimumStockLevel" type="number" min="0" asp-for="Product.MinimumStockLevel"/>
                 </div>
                 <div class="col">
                     <label class="lbl">Maximum Stock Level:</label>
-                    <input class="inp" value="@Model.Product.MaximumStockLevel" type="number" min="0" asp-for="Product.MaximumStockLevel"/>
+                    <input class="inp" readonly value="@Model.Product.MaximumStockLevel" type="number" min="0" asp-for="Product.MaximumStockLevel"/>
                 </div>
             </div>
 
             <div class="row">
                 <div class="col">
                     <label class="lbl">Reorder Quantity:</label>
-                    <input class="inp" value="@Model.Product.ReorderQuantity" type="number" min="0" asp-for="Product.ReorderQuantity"/>
+                    <input class="inp" readonly value="@Model.Product.ReorderQuantity" type="number" min="0" asp-for="Product.ReorderQuantity"/>
                 </div>
                 <div class="col">
                     <label class="lbl">Barcode:</label>
-                    <input class="inp" value="@Model.Product.Barcode" type="text" asp-for="Product.Barcode"/>
+                    <input class="inp" readonly value="@Model.Product.Barcode" type="text" asp-for="Product.Barcode"/>
                 </div>
                 <div class="col">
                     <label class="lbl">Unit Measurement:</label>
-                    <input class="inp" value="@Model.Product.UnitMeasurement" type="number" min="0" asp-for="Product.UnitMeasurement"/>
+                    <input class="inp" readonly value="@Model.Product.UnitMeasurement" type="number" min="0" asp-for="Product.UnitMeasurement"/>
                 </div>
             </div>
 
             <div class="row">
                 <div class="col">
                     <label class="lbl">Image Url:</label>
-                    <input class="inp" value="@Model.Product.ImageUrl" type="text" asp-for="Product.ImageUrl"/>
+                    <input class="inp" readonly value="@Model.Product.ImageUrl" type="text" asp-for="Product.ImageUrl"/>
                 </div>
                 <div class="col">
                     <label class="lbl">Is Active:</label>
                     @if(Model.Product.IsActive){
-                        <input class="inp" type="checkbox" asp-for="Product.IsActive" checked />
+                        <input class="inp" readonly type="checkbox" asp-for="Product.IsActive" checked />
                     }
                     else{
-                        <input class="inp" type="checkbox" asp-for="Product.IsActive" />
+                        <input class="inp" readonly type="checkbox" asp-for="Product.IsActive" />
                     }
                 </div>
                 <div class="col">
                     <label class="lbl">Supplier Id:</label>
-                    <input class="inp" value="@Model.Product.SupplierId" type="number" min="0" asp-for="Product.SupplierId"/>
+                    <input class="inp" readonly value="@Model.Product.SupplierId" type="number" min="0" asp-for="Product.SupplierId"/>
                 </div>
             </div>
 
             <div class="row btn-row">
-                <div class="col btn-col">
-                    <button class="get-data-btn" type="submit" asp-page-handler="FetchData">Get Data</button>
-                </div>
                 <div class="col">
-                    <button class="edit-btn" type="submit" asp-page-handler="EditProduct">Edit</button>
+                    @if(Model.Product.IsActive == true){
+                        <button class="edit-btn" type="submit" style="background-color: red;color:white;" asp-page-handler="ToggleActivation">
+                            Deactivate
+                        </button>
+                    }
+                    else{
+                        <button class="edit-btn" type="submit" style="background-color: green;color:white 
+                        "asp-page-handler="ToggleActivation">
+                            Activate
+                        </button>
+                    }
                 </div>
             </div>
         </form>
@@ -138,22 +145,16 @@
                 Failed!!!
             </div>
         }
-        else if(Model.IsEdited == "true"){
+        else if(Model.IsEdited == "true" && Model.Product!.IsActive){
             <div class="status" style="display:block;background-color: green;">
-                Edited!!!
+                Deactivated
             </div>
         }
-        else if(Model.IsFetched == "false"){
-            <div class="status" style="display:block;background-color: red;">
-                Failed to fetch data!!!
+        else if(Model.IsEdited == "true" && !Model.Product!.IsActive){
+            <div class="status" style="display:block;background-color: green;">
+                Activated
             </div>
         }
-        else if(Model.IsFetched == "unauthorised"){
-            <div class="status" style="display:block;background-color: red;">
-                Unauthorised Action!!!
-            </div>
-        }
-       
     </div>
 
     <footer>
