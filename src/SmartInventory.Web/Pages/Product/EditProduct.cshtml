@@ -117,8 +117,8 @@
                     }
                 </div>
                 <div class="col">
-                    <label class="lbl">Supplier Id:</label>
-                    <input class="inp" value="@Model.Product.SupplierId" type="number" min="0" asp-for="Product.SupplierId"/>
+                    <label class="lbl">Supplier:</label>
+                    <input class="inp" readonly value="@Model.Product.SupplierName" type="text" asp-for="Product.SupplierName"/>
                 </div>
             </div>
 
@@ -134,22 +134,22 @@
 
         @if(Model.IsEdited == "false"){
 
-            <div class="status" style="display:block;background-color: red;">
+            <div class="status" style="display:block;color: red;">
                 Failed!!!
             </div>
         }
         else if(Model.IsEdited == "true"){
-            <div class="status" style="display:block;background-color: green;">
+            <div class="status" style="display:block;color: green;">
                 Edited!!!
             </div>
         }
         else if(Model.IsFetched == "false"){
-            <div class="status" style="display:block;background-color: red;">
+            <div class="status" style="display:block;color: red;">
                 Failed to fetch data!!!
             </div>
         }
         else if(Model.IsFetched == "unauthorised"){
-            <div class="status" style="display:block;background-color: red;">
+            <div class="status" style="display:block;color: red;">
                 Unauthorised Action!!!
             </div>
         }

@@ -27,6 +27,11 @@ public class ProductDto
     public int SupplierId { get; set; }
 
     /// <summary>
+    /// The name of the supplier of the product.
+    /// </summary>
+    public string? SupplierName { get; set; } = "";
+
+    /// <summary>
     /// The selling price of the product.
     /// </summary>
     public double UnitPrice { get; set; }
