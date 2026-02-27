@@ -88,4 +88,14 @@ public class ProductController(ProductManagementService productService) : Contro
     public IActionResult EditProduct(ProductDto updatedProduct, string username) =>
         _productService.EditProduct(updatedProduct, username) is ProductDto d ?
         Ok(d) : BadRequest("Failed to edit the product!");
+
+    /// <summary>
+    /// Fetches products that belong to the specified category.
+    /// </summary>
+    /// <param name="category"></param>
+    /// <param name="username"></param>
+    /// <returns></returns>
+    [HttpGet("{category}/{username}")]
+    public IActionResult ViewProductsByCategory(string category, string username) => !string.IsNullOrEmpty(category) && !string.IsNullOrEmpty(username) &&
+        _productService.GetProductsByCategory(category, username) is List<ProductDto> products ? Ok(products) : BadRequest("Failed to fetch products!");
 }

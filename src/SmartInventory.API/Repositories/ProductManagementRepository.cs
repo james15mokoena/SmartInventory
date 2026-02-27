@@ -62,6 +62,12 @@ public class ProductManagementRepository(DatabaseContext context, StockManagemen
     public Product? GetProductByName(string name) => _context.Products.FirstOrDefault(p => p.Name == name);
 
     /// <summary>
+    /// Fetches all the products that belong to the specified category.
+    /// </summary>
+    /// <returns></returns>
+    public List<Product>? GetProductsByCategory(string category) => [.. _context.Products.Where(p => p.Category == category)];
+
+    /// <summary>
     /// Used to fetch all active products.
     /// </summary>
     /// <returns></returns>

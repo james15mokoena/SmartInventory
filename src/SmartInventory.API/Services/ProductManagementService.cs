@@ -132,7 +132,7 @@ public class ProductManagementService(ProductManagementRepository productRepo, S
     /// <returns></returns>
     public ProductDto? GetProductByName(string name, string username)
     {
-        if (!string.IsNullOrEmpty(name) && _permService.IsAuthorized(username,"ViewProductDetails"))
+        if (!string.IsNullOrEmpty(name) && _permService.IsAuthorized(username, "ViewProductDetails"))
         {
             if (_productRepo.GetProductByName(name) is Product product)
             {
@@ -172,6 +172,66 @@ public class ProductManagementService(ProductManagementRepository productRepo, S
                     ,
                     ImageUrl = product.ImageUrl
                 };
+            }
+        }
+        return null;
+    }
+    
+    /// <summary>
+    /// Fetches all the products that belong to the specified category.
+    /// </summary>
+    /// <returns></returns>
+    public List<ProductDto>? GetProductsByCategory(string category, string username)
+    {
+        if(!string.IsNullOrEmpty(category) && !string.IsNullOrEmpty(username) && _permService.IsAuthorized(username, "ViewProducts"))
+        {
+            List<Product>? products = _productRepo.GetProductsByCategory(category);
+
+            if (products != null && products.Count > 0)
+            {
+                List<ProductDto>? dtos = [];
+
+                foreach (Product product in products)
+                {
+                    dtos.Add(new()
+                    {
+                        Barcode = product.Barcode
+                        ,
+                        Category = product.Category
+                        ,
+                        CostPrice = product.CostPrice
+                        ,
+                        CurrentStock = product.CurrentStock
+                        ,
+                        DateCreated = product.DateCreated
+                        ,
+                        Description = product.Description
+                        ,
+                        ImageUrl = product.ImageUrl
+                        ,
+                        IsActive = product.IsActive
+                        ,
+                        LastUpdated = product.LastUpdated
+                        ,
+                        MaximumStockLevel = product.MaximumStockLevel
+                        ,
+                        MinimumStockLevel = product.MinimumStockLevel
+                        ,
+                        Name = product.Name
+                        ,
+                        ReorderQuantity = product.ReorderQuantity
+                        ,
+                        SKU = product.SKU
+                        ,
+                        SupplierId = product.SupplierId
+                        ,
+                        UnitMeasurement = product.UnitMeasurement
+                        ,
+                        UnitPrice = product.UnitPrice
+                    });
+
+                    return dtos;
+                }
             }
         }
         return null;
