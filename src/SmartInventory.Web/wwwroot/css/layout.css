@@ -55,28 +55,6 @@ header{
     flex-wrap: wrap;
 }
 
-/* On tablets and mobile phones, the header must be collapsed.*/
-@media (max-width: 546px) {
-
-    header{
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-    }
-
-    .app-name{
-        display: block;
-    }
-
-    .admin-nav{
-        display: none;
-    }
-
-    .nav-item{
-        display: none;
-    }
-}
-
 .active{
     background-color: darkcyan;
 }
@@ -93,6 +71,33 @@ header{
     color: white;
 }
 
+
+.dropdown{
+    display: none;
+}
+
+.dropdown .dropdown-content{
+    display: none;
+    position: absolute;
+    min-width: 160px;
+    box-shadow: 5px 8px 10px 0px black;
+    background-color: tan;
+}
+
+.dropdown-content .nav-item{
+    display: block;
+    padding: 12px 16px;
+    text-decoration: none;
+    color: black;
+    float: none;
+    text-align: left;
+    border-bottom: 1px solid black;
+}
+
+.dropdown:hover .dropdown-content{
+    display: block;
+}
+
 .content{
     grid-area: content;
 }
@@ -102,4 +107,28 @@ footer{
     grid-area: footer;
     background-color: tan;
     padding: 25px;
+}
+
+/* On tablets and mobile phones, the header must be collapsed.*/
+@media (max-width: 546px) {
+
+    header{
+        flex-direction: row;
+        justify-content: space-between;
+        padding: 15px;
+    }
+
+    .app-name{
+        display: block;
+        order: 1;
+    }
+
+    .dropdown{
+        display: block;
+    }
+
+    .admin-nav, .nav-item{
+        display: none;
+    }
+
 }
