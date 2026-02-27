@@ -9,22 +9,27 @@ public class ProductDto
     /// A unique identifier for the product.<br/>
     /// SKU stands for "Stock Keeping Unit".
     /// </summary>
-    public string? SKU { get; set; }
+    public string? SKU { get; set; } = "";
 
     /// <summary>
     /// The name of the product.
     /// </summary>
-    public string? Name { get; set; }
+    public string? Name { get; set; } = "";
 
     /// <summary>
     /// A text describing the product.
     /// </summary>
-    public string? Description { get; set; }
+    public string? Description { get; set; } = "";
 
     /// <summary>
     /// Links the product to its default supplier.
     /// </summary>
     public int SupplierId { get; set; }
+
+    /// <summary>
+    /// The name of the supplier of the product.
+    /// </summary>
+    public string? SupplierName { get; set; } = "";
 
     /// <summary>
     /// The selling price of the product.
@@ -59,7 +64,7 @@ public class ProductDto
     /// <summary>
     /// The group under which the product is classified.
     /// </summary>
-    public string? Category { get; set; }
+    public string? Category { get; set; } = "";
 
     /// <summary>
     /// The size of the product.

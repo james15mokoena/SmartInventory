@@ -86,6 +86,8 @@ public class ProductManagementService(ProductManagementRepository productRepo, S
             {
                 return new ProductDto()
                 {
+                    SupplierName = _supplierService.GetSupplier(product.SupplierId)!.SupplierName
+                    ,
                     SKU = product.SKU
                     ,
                     Barcode = product.Barcode
@@ -138,6 +140,8 @@ public class ProductManagementService(ProductManagementRepository productRepo, S
             {
                 return new ProductDto()
                 {
+                    SupplierName = _supplierService.GetSupplier(product.SupplierId)!.SupplierName
+                    ,
                     SKU = product.SKU
                     ,
                     Barcode = product.Barcode
@@ -195,6 +199,8 @@ public class ProductManagementService(ProductManagementRepository productRepo, S
                 {
                     dtos.Add(new()
                     {
+                        SupplierName = _supplierService.GetSupplier(product.SupplierId)!.SupplierName
+                        ,
                         Barcode = product.Barcode
                         ,
                         Category = product.Category
@@ -229,9 +235,9 @@ public class ProductManagementService(ProductManagementRepository productRepo, S
                         ,
                         UnitPrice = product.UnitPrice
                     });
-
-                    return dtos;
                 }
+
+                return dtos;
             }
         }
         return null;
