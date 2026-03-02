@@ -54,6 +54,8 @@ public static class Permissions
 
     public const string ViewStockLevels = "ViewStockReports";
 
+    public const string AddTransactionReason = "AddTransactionReason";
+
 
     // ***** Forecast Management permissions ***** //
 
@@ -93,12 +95,17 @@ public static class Permissions
 
     public const string GenerateTaxInvoice = "GenerateTaxInvoice";
 
+    // ***** Permissions Management permissions ***** //
 
-    // ***** Notifications Management permissions ***** //
+    public const string AssignPermission = "AssignPermission";
 
-    /*public const string ViewLowStockAlerts = "ViewLowStockAlerts";
+    public const string UnassignPermission = "UnassignPermission";
 
-    public const string ViewStockoutPredictionAlerts = "ViewStockoutPredictionAlerts";
+    public const string All = "All";
 
-    public const string ViewSlowMovingAlerts = "ViewSlowMovingAlerts";*/
+    public const string AddRole = "AddRole";
+
+    public const string UpdateRole = "UpdateRole";
+
+    public const string UpdatePermission = "UpdatePermission";
 }

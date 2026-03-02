@@ -320,14 +320,4 @@ public class StockManagementRepository(DatabaseContext context, UserManagementRe
         
         return null;
     }
-
-    public string? GetStockMovementSummary(string sku)
-    {
-        if (_context.Products.FirstOrDefault(s => s.SKU == sku) is Product stock)
-        {
-            //GetT
-        }
-
-        return null;
-    }
 }

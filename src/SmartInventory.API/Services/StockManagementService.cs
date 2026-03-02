@@ -59,7 +59,9 @@ public class StockManagementService(StockManagementRepository stockRepo, UserMan
     /// </summary>
     /// <param name="reasonType"></param>
     /// <returns></returns>
-    public bool AddTransactionReason(ReasonType reasonType) => !string.IsNullOrEmpty(reasonType.Reason) && _stockRepo.AddTransactionReason(reasonType);
+    public bool AddTransactionReason(ReasonType reasonType, string username) =>
+        !string.IsNullOrEmpty(reasonType.Reason) && _permService.IsAuthorized(username, "AddTransactionReason") &&
+        _stockRepo.AddTransactionReason(reasonType);
 
     /// <summary>
     /// Used to delete a transaction reason.

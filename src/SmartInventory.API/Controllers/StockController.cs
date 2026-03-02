@@ -22,10 +22,11 @@ public class StockController(StockManagementService stockService) : ControllerBa
     /// </summary>
     /// <param name="reasonType"></param>
     /// <returns></returns>
-    [HttpPost]
-    public IActionResult AddTransactionReason(ReasonType reasonType) => _stockService.AddTransactionReason(reasonType) ?
-                                                                        CreatedAtAction(nameof(AddTransactionReason), reasonType) :
-                                                                        BadRequest("Failed to add a new transaction reason!");
+    [HttpPost("{username}")]
+    public IActionResult AddTransactionReason(ReasonType reasonType, string username) =>
+        _stockService.AddTransactionReason(reasonType,username) ?
+        CreatedAtAction(nameof(AddTransactionReason), reasonType) :
+        BadRequest("Failed to add a new transaction reason!");
 
     /// <summary>
     /// Activates or deactivate a transaction reason.

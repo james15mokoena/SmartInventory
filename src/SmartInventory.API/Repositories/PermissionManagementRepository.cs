@@ -51,7 +51,7 @@ public class PermissionManagementRepository(DatabaseContext context)
                 ,
                 Name = role.Name
                 ,
-                IsActive = role.IsActive                
+                IsActive = role.IsActive
             };
         }
         return null;
@@ -134,12 +134,12 @@ public class PermissionManagementRepository(DatabaseContext context)
         }
         return null;
     }
-    
+
     /// <summary>
     /// Purpose: Fetches all inactive permissions.
     /// </summary>
     /// <returns></returns>
-    public List<PermissionDto>? GetInActivePermissions()
+    public List<PermissionDto>? GetDeactivatedPermissions()
     {
         List<Permission> permissions = [.. from permission in _context.Permissions
                                         where permission.IsActive == false
@@ -201,7 +201,7 @@ public class PermissionManagementRepository(DatabaseContext context)
     /// Purpose: Fetches all inactive roles.
     /// </summary>
     /// <returns></returns>
-    public List<RoleDto>? GetInActiveRoles()
+    public List<RoleDto>? GetDeactivatedRoles()
     {
         List<Role> roles = [.. from role in _context.Roles
                             where role.IsActive == false
@@ -275,7 +275,8 @@ public class PermissionManagementRepository(DatabaseContext context)
                 Name = newRole.Name
                 ,
                 IsActive = true
-                , Permissions = []
+                ,
+                Permissions = []
             });
 
             return _context.SaveChanges() > 0;
@@ -338,7 +339,27 @@ public class PermissionManagementRepository(DatabaseContext context)
         }
         return false;
     }
-    
+
+    /// <summary>
+    /// Used to unassign a permission from a role.
+    /// </summary>
+    /// <param name="permission"></param>
+    /// <param name="role"></param>
+    /// <returns></returns>
+    public bool UnassignPermission(string permission, string role)
+    {
+        if (!string.IsNullOrEmpty(permission) && !string.IsNullOrEmpty(role) &&
+           GetPermission(permission) is Permission perm &&
+           GetRole(role) is Role r &&
+           _context.RolePermissions.FirstOrDefault(rp => rp.PermissionId == perm.Id && rp.RoleId == r.Id) is RolePermission rp)
+        {
+            _context.RolePermissions.Remove(rp);
+            return _context.SaveChanges() > 0;
+        }
+
+        return false;
+    }
+
     /// <summary>
     /// Fetches all permissions assigned to a user.
     /// </summary>
@@ -372,4 +393,52 @@ public class PermissionManagementRepository(DatabaseContext context)
         }
         return null;
     }
+
+    /// <summary>
+    /// Fetches all permissions assigned to a role.
+    /// </summary>
+    /// <param name="role"></param>
+    /// <returns></returns>
+    public List<PermissionDto>? GetAssignedPermissionsByRole(string role)
+    {
+        if (!string.IsNullOrEmpty(role) && _context.Roles.FirstOrDefault(r => r.Name == role) is Role r)
+        {
+            List<RolePermission> rolePerms = [.. from rp in _context.RolePermissions
+                                              where rp.RoleId == r.Id
+                                              select rp];
+
+            List<PermissionDto> perms = [];
+
+            foreach (RolePermission rolePerm in rolePerms)
+            {
+                PermissionDto perm = GetPermissionById(rolePerm.PermissionId)!;
+                perms.Add(new()
+                {
+                    Id = perm.Id
+                    ,
+                    Name = perm.Name
+                    ,
+                    IsActive = perm.IsActive
+                    ,
+                    Description = perm.Description
+                });
+            }
+            return perms;
+        }
+        return null;
+    }
+
+    /// <summary>
+    /// Fetches a role with the given name.
+    /// </summary>
+    /// <param name="name"></param>
+    /// <returns></returns>
+    public Role? GetRole(string name) => _context.Roles.FirstOrDefault(r => r.Name == name);
+
+    /// <summary>
+    /// Fetches a permission with the given name.
+    /// </summary>
+    /// <param name="name"></param>
+    /// <returns></returns>
+    public Permission? GetPermission(string name) => _context.Permissions.FirstOrDefault(p => p.Name == name);
 }
