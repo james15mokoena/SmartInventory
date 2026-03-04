@@ -18,55 +18,61 @@ public class PermissionController(PermissionManagementService perm) : Controller
     /// Fetches all active permissions.
     /// </summary>
     /// <returns></returns>
-    [HttpGet]
-    public IActionResult GetActivePermissions() => _permService.GetActivePermissions() is List<PermissionDto> perms ?
-                                                   Ok(perms) :
-                                                   BadRequest("Failed to fetch permissions!");
+    [HttpGet("{username}")]
+    public IActionResult GetActivePermissions(string username) =>
+        _permService.GetActivePermissions(username) is List<PermissionDto> perms ?
+        Ok(perms) :
+        BadRequest("Failed to fetch permissions!");
 
     /// <summary>
     /// Fetches all deactivated permissions.
     /// </summary>
     /// <returns></returns>
-    [HttpGet]
-    public IActionResult GetDeactivatedPermissions() => _permService.GetDeactivatedPermissions() is List<PermissionDto> perms ?
-                                                   Ok(perms) :
-                                                   BadRequest("Failed to fetch deactivated permissions!");
+    [HttpGet("{username}")]
+    public IActionResult GetDeactivatedPermissions(string username) =>
+        _permService.GetDeactivatedPermissions(username) is List<PermissionDto> perms ?
+        Ok(perms) :
+        BadRequest("Failed to fetch deactivated permissions!");
 
     /// <summary>
     /// Fetches all active roles.
     /// </summary>
     /// <returns></returns>
-    [HttpGet]
-    public IActionResult GetActiveRoles() => _permService.GetActiveRoles() is List<RoleDto> roles ?
-                                                   Ok(roles) :
-                                                   BadRequest("Failed to fetch roles!");
+    [HttpGet("{username}")]
+    public IActionResult GetActiveRoles(string username) =>
+        _permService.GetActiveRoles(username) is List<RoleDto> roles ?
+        Ok(roles) :
+        BadRequest("Failed to fetch roles!");
 
     /// Fetches all deactivated roles.
     /// </summary>
     /// <returns></returns>
-    [HttpGet]
-    public IActionResult GetDeactivatedRoles() => _permService.GetDeactivatedRoles() is List<RoleDto> roles ?
-                                                   Ok(roles) :
-                                                   BadRequest("Failed to fetch deactivated roles!");
+    [HttpGet("{username}")]
+    public IActionResult GetDeactivatedRoles(string username) =>
+        _permService.GetDeactivatedRoles(username) is List<RoleDto> roles ?
+        Ok(roles) :
+        BadRequest("Failed to fetch deactivated roles!");
 
     /// <summary>
     /// Updates the active status of a role option.
     /// </summary>
-    /// <param name="roleId"></param>
+    /// <param name="role"></param>
     /// <returns></returns>
-    [HttpPut("{roleId}")]
-    public IActionResult ToggleRoleStatus(int roleId) => roleId >= 0 && _permService.ToggleRoleStatus(roleId) ?
-                                                        Ok("Role status is updated successfully!") :
-                                                        BadRequest("Failed to update role status!");
+    [HttpPut("{role}/{username}")]
+    public IActionResult ToggleRoleStatus(string role, string username) =>
+        !string.IsNullOrEmpty(role) && !string.IsNullOrEmpty(username) &&
+        _permService.ToggleRoleStatus(role, username) ?
+        Ok("Role status is updated successfully!") :
+        BadRequest("Failed to update role status!");
 
     /// <summary>
     /// Updates the active status of a permission option.
     /// </summary>
-    /// <param name="permId"></param>
+    /// <param name="permission"></param>
     /// <returns></returns>
-    [HttpPut("{permId}")]
-    public IActionResult TogglePermissionStatus(int permId) =>
-        permId >= 0 && _permService.TogglePermissionStatus(permId) ?
+    [HttpPut("{permission}/{username}")]
+    public IActionResult TogglePermissionStatus(string permission, string username) =>
+        !string.IsNullOrEmpty(permission) && _permService.TogglePermissionStatus(permission,username) ?
         Ok("Permission status is updated successfully!") :
         BadRequest("Failed to update permission status!");
 
@@ -132,9 +138,9 @@ public class PermissionController(PermissionManagementService perm) : Controller
     /// </summary>
     /// <param name="role"></param>
     /// <returns></returns>
-    [HttpGet("{role}")]
-    public IActionResult GetAssignedPermissionsByRole(string role) =>
-        !string.IsNullOrEmpty(role) && _permService.GetAssignedPermissionsByRole(role) is List<PermissionDto> perms ?
+    [HttpGet("{role}/{username}")]
+    public IActionResult GetAssignedPermissionsByRole(string role,string username) =>
+        !string.IsNullOrEmpty(role) && _permService.GetAssignedPermissionsByRole(role, username) is List<PermissionDto> perms ?
         Ok(perms) : BadRequest("Failed to fetched the permissions assigned to this role!");
 
     /// <summary>
@@ -142,9 +148,9 @@ public class PermissionController(PermissionManagementService perm) : Controller
     /// </summary>
     /// <param name="name"></param>
     /// <returns></returns>
-    [HttpGet("{name}")]
-    public IActionResult GetRole(string name) =>
-        !string.IsNullOrEmpty(name) && _permService.GetRole(name) is RoleDto role ?
+    [HttpGet("{name}/{username}")]
+    public IActionResult GetRole(string name, string username) =>
+        !string.IsNullOrEmpty(name) && _permService.GetRole(name,username) is RoleDto role ?
         Ok(role) : BadRequest("Failed to fetch the role with the given name!");
 
     /// <summary>
@@ -152,8 +158,8 @@ public class PermissionController(PermissionManagementService perm) : Controller
     /// </summary>
     /// <param name="name"></param>
     /// <returns></returns>
-    [HttpGet("{name}")]
-    public IActionResult GetPermission(string name) =>
-        !string.IsNullOrEmpty(name) && _permService.GetPermission(name) is PermissionDto perm ?
+    [HttpGet("{name}/{username}")]
+    public IActionResult GetPermission(string name,string username) =>
+        !string.IsNullOrEmpty(name) && _permService.GetPermission(name,username) is PermissionDto perm ?
         Ok(perm) : BadRequest("Failed to fetch the permission with the given name!");
 }

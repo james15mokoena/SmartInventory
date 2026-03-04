@@ -230,14 +230,14 @@ public class PermissionManagementRepository(DatabaseContext context)
     /// <summary>
     /// Purpose: Activates or deactivates a role.
     /// </summary>
-    /// <param name="roleId"></param>
+    /// <param name="role"></param>
     /// <returns></returns>
-    public bool ToggleRoleStatus(int roleId)
+    public bool ToggleRoleStatus(string role)
     {
-        if (_context.Roles.FirstOrDefault(r => r.Id == roleId) is Role role)
+        if (_context.Roles.FirstOrDefault(r => r.Name == role) is Role r)
         {
-            role.IsActive = !role.IsActive;
-            _context.Update(role);
+            r.IsActive = !r.IsActive;
+            _context.Update(r);
             return _context.SaveChanges() > 0;
         }
         return false;
@@ -246,14 +246,14 @@ public class PermissionManagementRepository(DatabaseContext context)
     /// <summary>
     /// Purpose: Activates or deactivates a permission.
     /// </summary>
-    /// <param name="permId"></param>
+    /// <param name="permission"></param>
     /// <returns></returns>
-    public bool TogglePermissionStatus(int permId)
+    public bool TogglePermissionStatus(string permission)
     {
-        if (_context.Permissions.FirstOrDefault(p => p.Id == permId) is Permission permission)
+        if (_context.Permissions.FirstOrDefault(p => p.Name == permission) is Permission perm)
         {
-            permission.IsActive = !permission.IsActive;
-            _context.Update(permission);
+            perm.IsActive = !perm.IsActive;
+            _context.Update(perm);
             return _context.SaveChanges() > 0;
         }
         return false;

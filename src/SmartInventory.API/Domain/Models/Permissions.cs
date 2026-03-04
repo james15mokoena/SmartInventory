@@ -108,4 +108,8 @@ public static class Permissions
     public const string UpdateRole = "UpdateRole";
 
     public const string UpdatePermission = "UpdatePermission";
+
+    public const string ViewPermission = "ViewPermissions";
+
+    public const string ViewRoles = "ViewRoles";
 }

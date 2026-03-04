@@ -16,39 +16,47 @@ public class PermissionManagementService(PermissionManagementRepository permMan)
     /// Purpose: Fetches all active permissions.
     /// </summary>
     /// <returns></returns>
-    public List<PermissionDto>? GetActivePermissions() => _permRepo.GetActivePermissions();
+    public List<PermissionDto>? GetActivePermissions(string username) =>
+        IsAuthorized(username, "ViewPermissions") &&
+        _permRepo.GetActivePermissions() is List<PermissionDto> perms ? perms : null;
 
     /// <summary>
     /// Purpose: Fetches all inactive permissions.
     /// </summary>
     /// <returns></returns>
-    public List<PermissionDto>? GetDeactivatedPermissions() => _permRepo.GetDeactivatedPermissions();
+    public List<PermissionDto>? GetDeactivatedPermissions(string username) =>
+        IsAuthorized(username, "ViewPermissions") &&
+        _permRepo.GetDeactivatedPermissions() is List<PermissionDto> perms ? perms : null;
 
     /// <summary>
     /// Purpose: Fetches all active roles.
     /// </summary>
     /// <returns></returns>
-    public List<RoleDto>? GetActiveRoles() => _permRepo.GetActiveRoles();
+    public List<RoleDto>? GetActiveRoles(string username) =>
+        IsAuthorized(username, "ViewRoles") && _permRepo.GetActiveRoles() is List<RoleDto> roles ? roles : null;
 
     /// <summary>
     /// Purpose: Fetches all inactive roles.
     /// </summary>
     /// <returns></returns>
-    public List<RoleDto>? GetDeactivatedRoles() => _permRepo.GetDeactivatedRoles();
+    public List<RoleDto>? GetDeactivatedRoles(string username) =>
+        IsAuthorized(username, "ViewRoles") && _permRepo.GetDeactivatedRoles() is List<RoleDto> roles ? roles : null;
 
     /// <summary>
     /// Updates the active status of a Role options.
     /// </summary>
-    /// <param name="roleId"></param>
+    /// <param name="role"></param>
     /// <returns></returns>
-    public bool ToggleRoleStatus(int roleId) => roleId >= 0 && _permRepo.ToggleRoleStatus(roleId);
+    public bool ToggleRoleStatus(string role, string username) =>
+        !string.IsNullOrEmpty(role) && IsAuthorized(username, "UpdateRole") && _permRepo.ToggleRoleStatus(role);
 
     /// <summary>
     /// Updates the active status of a Permission options.
     /// </summary>
-    /// <param name="permId"></param>
+    /// <param name="permission"></param>
     /// <returns></returns>
-    public bool TogglePermissionStatus(int permId) => permId >= 0 && _permRepo.TogglePermissionStatus(permId);
+    public bool TogglePermissionStatus(string permission,string username) =>
+        !string.IsNullOrEmpty(permission) && IsAuthorized(username, "UpdatePermission") && _permRepo.TogglePermissionStatus(permission);
 
     /// <summary>
     /// Adds a new role.
@@ -96,16 +104,18 @@ public class PermissionManagementService(PermissionManagementRepository permMan)
     /// <param name="username"></param>
     /// <returns></returns>
     public List<PermissionDto>? GetAssignedPermissionsByUsername(string username) =>
-        !string.IsNullOrEmpty(username) && _permRepo.GetAssignedPermissionsByUsername(username) is List<PermissionDto> perms ? perms : null;
+        !string.IsNullOrEmpty(username) &&
+        _permRepo.GetAssignedPermissionsByUsername(username) is List<PermissionDto> perms ? perms : null;
 
     /// <summary>
     /// Fetches all permissions assigned to a role.
     /// </summary>
     /// <param name="role"></param>
     /// <returns></returns>
-    public List<PermissionDto>? GetAssignedPermissionsByRole(string role) =>
-        !string.IsNullOrEmpty(role) && _permRepo.GetAssignedPermissionsByRole(role) is List<PermissionDto> perms
-        ? perms : null;
+    public List<PermissionDto>? GetAssignedPermissionsByRole(string role, string username) =>
+        !string.IsNullOrEmpty(role) && IsAuthorized(username,"ViewPermissions") &&
+        _permRepo.GetAssignedPermissionsByRole(role) is List<PermissionDto> perms ?
+        perms : null;
 
     /// <summary>
     /// Checks if a user is authorized to perform the requested function.
@@ -115,7 +125,8 @@ public class PermissionManagementService(PermissionManagementRepository permMan)
     /// <returns></returns>
     public bool IsAuthorized(string username, string permissionName)
     {
-        if (GetAssignedPermissionsByUsername(username) is List<PermissionDto> permissions)
+        if (!string.IsNullOrEmpty(username) && !string.IsNullOrEmpty(permissionName) &&
+            GetAssignedPermissionsByUsername(username) is List<PermissionDto> permissions)
         {
             foreach (PermissionDto permission in permissions)
             {
@@ -139,9 +150,9 @@ public class PermissionManagementService(PermissionManagementRepository permMan)
     /// </summary>
     /// <param name="name"></param>
     /// <returns></returns>
-    public RoleDto? GetRole(string name)
+    public RoleDto? GetRole(string name, string username)
     {
-        if (!string.IsNullOrEmpty(name) && _permRepo.GetRole(name) is Role role)
+        if (!string.IsNullOrEmpty(name) && IsAuthorized(username,"All") && _permRepo.GetRole(name) is Role role)
         {
             return new()
             {
@@ -160,9 +171,9 @@ public class PermissionManagementService(PermissionManagementRepository permMan)
     /// </summary>
     /// <param name="name"></param>
     /// <returns></returns>
-    public PermissionDto? GetPermission(string name)
+    public PermissionDto? GetPermission(string name, string username)
     {
-        if (!string.IsNullOrEmpty(name) && _permRepo.GetPermission(name) is Permission perm)
+        if (!string.IsNullOrEmpty(name) && IsAuthorized(username,"All") && _permRepo.GetPermission(name) is Permission perm)
         {
             return new()
             {
