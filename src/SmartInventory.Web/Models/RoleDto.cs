@@ -10,7 +10,7 @@ public class RoleDto
     /// <summary>
     /// The name of the role, for example, Admin, Staff, Senior Staff, etc.
     /// </summary>
-    public string? Name { get; set; }
+    public string? Name { get; set; } = "";
 
     /// <summary>
     /// Indicates if this role is still being used.

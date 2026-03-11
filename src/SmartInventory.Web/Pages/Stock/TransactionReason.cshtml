@@ -1,12 +1,11 @@
 @page
-@model SmartInventory.Web.Pages.Stock.IndexModel
-
+@model SmartInventory.Web.Pages.Stock.TransactionReasonModel
 @{
-    ViewData["Title"] = "Stock Home";
+    ViewData["Title"] = "Transaction Reason Page";
 }
 
 <link href="~/css/common.css" rel="stylesheet"/>
-<link href="~/css/stock_index.css" rel="stylesheet"/>
+<link href="~/css/transaction_reasons.css" rel="stylesheet"/>
 
 <div class="container">
 
@@ -45,25 +44,59 @@
 
      <div class="content">
         
-        <h1>Stock Management</h1>
+        <h1>Transaction Reasons Management</h1>
 
-        <div class="row">
-            <a href="~/Stock/TransactionReason"><span>Transaction Reasons Home</span></a>
-            <a href="#"><span>Activate / Deactivate Transaction Reason</span></a>
-            <a href="#"><span>Record Incoming Stock</span></a>
+        <ul class="options">
+            <li class="update-reason"><a href="">Add Transaction Reason</a></li>
+            <li class="view-reasons"><a href="">View Transaction Reasons</a></li>
+        </ul>
+
+        <!-- A tab for adding a transaction reason.-->
+        <div class="add-reason-tab">
+
+            <h2 id="add-heading">Add Transaction Reason</h2>
+
+            <form method="post">
+                
+                <div class="row">
+                    <div class="col">
+                        <label class="lbl">Reason:</label>
+                        <input class="inp" type="text" required asp-for="@Model.TransactionReason!.Reason"/>
+                    </div>
+                </div>
+
+                <!--<div class="row">
+                    <div class="col">
+                        <label class="lbl">Activate:</label>
+                        <input class="inp" type="checkbox" required/>
+                    </div>
+                </div>-->
+
+                 <div class="row btn-row">
+                    <div class="col btn-col">
+                        <button class="add-btn" type="submit" asp-page-handler="AddReason">Add</button>
+                    </div>
+                </div>    
+            </form>
+
+            @if(Model.IsAdded == "false"){
+
+                <div class="status" style="display:block;color: red;">
+                    Failed!!!
+                </div>
+            }
+            else if(Model.IsAdded == "true"){
+                <div class="status" style="display:block;color: green;">
+                    Added!!!
+                </div>
+            }
+
         </div>
 
-        <div class="row">            
-            <a href="#"><span>Record Outgoing Stock</span></a>
-            <a href="#"><span>Record Stock Adjustment</span></a>
-            <a href="#"><span>View Transaction Reasons</span></a>
+        <div class="view-reasons-tab">
+            View transaction reasons
         </div>
-
-        <div class="row">            
-            <a href="#"><span>View Stock Transactions</span></a>
-            <a href="#"><span>View Stock Report</span></a>
-        </div>
-
+        
     </div>
 
     <footer>
