@@ -27,3 +27,5 @@
 -- WHERE r.Name = "Sales Manager";
 -- SELECT * FROM Supplier;
 -- SELECT * from InvoiceItem;
+-- SELECT * FROM ReasonType;
+delete from ReasonType where Id >= 8;

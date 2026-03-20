@@ -68,30 +68,35 @@ public class StockManagementService(StockManagementRepository stockRepo, UserMan
     /// </summary>
     /// <param name="reasonTypeId"></param>
     /// <returns></returns>
-    public bool ToggleTransactionReasonStatus(int reasonTypeId) => reasonTypeId >= 0 && _stockRepo.ToggleTransactionReasonStatus(reasonTypeId);
+    public bool ToggleTransactionReasonStatus(int reasonTypeId, string username) =>
+        !string.IsNullOrEmpty(username) && _permService.IsAuthorized(username,"UpdateTransactionReason") && reasonTypeId >= 0 && _stockRepo.ToggleTransactionReasonStatus(reasonTypeId);
 
     /// <summary>
     /// Used to get all transaction reasons.
     /// </summary>
     /// <returns></returns>
-    public List<ReasonType?>? GetTransactionReasons() => _stockRepo.GetTransactionReasons();
+    public List<ReasonType?>? GetTransactionReasons(string username) =>
+        !string.IsNullOrEmpty(username) && _permService.IsAuthorized(username, "ViewTransactionReasons") ?
+        _stockRepo.GetTransactionReasons() : null;
 
     /// <summary>
     /// Used to fetch all stock transactions.
     /// </summary>
     /// <returns></returns>
-    public List<StockTransactionDto>? GetStockTransactions()
+    public List<StockTransactionDto>? GetStockTransactions(string username)
     {
-        List<StockTransaction>? stockTransactions = _stockRepo.GetStockTransactions();
-
-        if (stockTransactions != null && stockTransactions.Count > 0)
+        if (!string.IsNullOrEmpty(username) && _permService.IsAuthorized(username,"ViewStockTransactions") && _stockRepo.GetStockTransactions() is List<StockTransaction> stockTransactions)
         {
-            List<StockTransactionDto> stockTransactionDtos = [];
-            foreach (StockTransaction stockTransaction in stockTransactions)
-                stockTransactionDtos.Add(ToStockTransactionDto(stockTransaction));
+            if (stockTransactions != null && stockTransactions.Count > 0)
+            {
+                List<StockTransactionDto> stockTransactionDtos = [];
+                foreach (StockTransaction stockTransaction in stockTransactions)
+                    stockTransactionDtos.Add(ToStockTransactionDto(stockTransaction));
 
-            return stockTransactionDtos;
+                return stockTransactionDtos;
+            }            
         }
+
         return null;
     }
 
@@ -99,18 +104,20 @@ public class StockManagementService(StockManagementRepository stockRepo, UserMan
     /// Used to fetch a product's stock transactions.
     /// </summary>
     /// <returns></returns>
-    public List<StockTransactionDto>? GetStockTransactionsBySku(string sku)
+    public List<StockTransactionDto>? GetStockTransactionsBySku(string sku, string username)
     {
-        List<StockTransaction>? stockTransactions = _stockRepo.GetStockTransactionsBySku(sku);
-
-        if (stockTransactions != null && stockTransactions.Count > 0)
+        if (!string.IsNullOrEmpty(username) && _permService.IsAuthorized(username,"ViewStockTransactions") && _stockRepo.GetStockTransactionsBySku(sku) is List<StockTransaction> stockTransactions)
         {
-            List<StockTransactionDto> stockTransactionDtos = [];
-            foreach (StockTransaction stockTransaction in stockTransactions)
-                stockTransactionDtos.Add(ToStockTransactionDto(stockTransaction));
+            if (stockTransactions != null && stockTransactions.Count > 0)
+            {
+                List<StockTransactionDto> stockTransactionDtos = [];
+                foreach (StockTransaction stockTransaction in stockTransactions)
+                    stockTransactionDtos.Add(ToStockTransactionDto(stockTransaction));
 
-            return stockTransactionDtos;
+                return stockTransactionDtos;
+            }   
         }
+
         return null;
     }
 
@@ -122,13 +129,10 @@ public class StockManagementService(StockManagementRepository stockRepo, UserMan
     /// <param name="username"></param>
     /// <param name="reason"></param>
     /// <returns></returns>
-    public bool RecordStockAdjustment(string sku, int quantity, string username, string reason)
-    {
-        // FIX: Username must be used
-        if (!string.IsNullOrEmpty(sku) && quantity > 0 && !string.IsNullOrEmpty(username) && !string.IsNullOrEmpty(reason))
-            return _stockRepo.RecordStockAdjustment(sku, quantity, 0, reason);
-        return false;
-    }
+    public bool RecordStockAdjustment(string sku, int quantity, string username, string reason) =>
+        !string.IsNullOrEmpty(sku) && quantity > 0 && !string.IsNullOrEmpty(username) &&
+        _permService.IsAuthorized(username, "RecordAdjustment") && !string.IsNullOrEmpty(reason) &&
+        _stockRepo.RecordStockAdjustment(sku, quantity, 0, reason);
 
     /// <summary>
     /// Generates the stock report.

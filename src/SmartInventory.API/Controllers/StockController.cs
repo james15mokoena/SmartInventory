@@ -33,19 +33,21 @@ public class StockController(StockManagementService stockService) : ControllerBa
     /// </summary>
     /// <param name="reasonType"></param>
     /// <returns></returns>
-    [HttpPut("{reasonTypeId}")]
-    public IActionResult ToggleTransactionReasonStatus(int reasonTypeId) => _stockService.ToggleTransactionReasonStatus(reasonTypeId) ?
-                                                                        Ok("Transaction reason status updated successfully!") :
-                                                                        BadRequest("Failed to update the transaction reason's status!");
+    [HttpPut("{reasonTypeId}/{username}")]
+    public IActionResult ToggleTransactionReasonStatus(int reasonTypeId, string username) =>
+        _stockService.ToggleTransactionReasonStatus(reasonTypeId, username) ?
+        Ok("Transaction reason status updated successfully!") :
+        BadRequest("Failed to update the transaction reason's status!");
 
     /// <summary>
     /// Fetches transaction reasons.
     /// </summary>
     /// <returns></returns>
-    [HttpGet]
-    public IActionResult ViewTransactionReasons() => _stockService.GetTransactionReasons() is List<ReasonType?> reasonTypes ?
-                                                     Ok(reasonTypes) :
-                                                     BadRequest("Failed to fetch transaction reasons!");
+    [HttpGet("{username}")]
+    public IActionResult ViewTransactionReasons(string username) =>
+        _stockService.GetTransactionReasons(username) is List<ReasonType?> reasonTypes ?
+        Ok(reasonTypes) :
+        BadRequest("Failed to fetch transaction reasons!");
 
     /// <summary>
     /// Records a new stock transaction.
@@ -66,20 +68,21 @@ public class StockController(StockManagementService stockService) : ControllerBa
     /// Fetches stock transactions.
     /// </summary>
     /// <returns></returns>
-    [HttpGet]
-    public IActionResult ViewStockTransactions() => _stockService.GetStockTransactions() is List<StockTransactionDto> dtos ?
-                                                    Ok(dtos) :
-                                                    BadRequest("Failed to fetch stock transactions!");
+    [HttpGet("{username}")]
+    public IActionResult ViewStockTransactions(string username) =>
+        _stockService.GetStockTransactions(username) is List<StockTransactionDto> dtos ?
+        Ok(dtos) :
+        BadRequest("Failed to fetch stock transactions!");
 
     /// <summary>
     /// Fetches a stock's transactions.
     /// </summary>
     /// <returns></returns>
-    [HttpGet("{sku}")]
-    public IActionResult ViewStockTransactionsBySku(string sku) =>
-                                            _stockService.GetStockTransactionsBySku(sku) is List<StockTransactionDto> dtos ?
-                                            Ok(dtos) :
-                                            BadRequest("Failed to fetch stock transactions!");
+    [HttpGet("{sku}/{username}")]
+    public IActionResult ViewStockTransactionsBySku(string sku, string username) =>
+        _stockService.GetStockTransactionsBySku(sku, username) is List<StockTransactionDto> dtos ?
+        Ok(dtos) :
+        BadRequest("Failed to fetch stock transactions!");
 
     /// <summary>
     /// Records an outgoing stock transaction.
@@ -91,9 +94,9 @@ public class StockController(StockManagementService stockService) : ControllerBa
     /// <returns></returns>
     [HttpPost]
     public IActionResult RecordOutgoingStock(string sku, int quantity, string username, string reason) =>
-                                            _stockService.RecordOutgoingStock(sku, quantity, username, reason) ?
-                                            Ok("Stock transaction recorded successfully!") :
-                                            BadRequest("Failed to record stock transaction!");
+        _stockService.RecordOutgoingStock(sku, quantity, username, reason) ?
+        Ok("Stock transaction recorded successfully!") :
+        BadRequest("Failed to record stock transaction!");
 
         /// <summary>
         /// Adjusts a stock's quantity.
@@ -105,9 +108,9 @@ public class StockController(StockManagementService stockService) : ControllerBa
         /// <returns></returns>
         [HttpPost]
         public IActionResult RecordStockAdjustment(string sku, int quantity, string username, string reason) =>
-                                                _stockService.RecordStockAdjustment(sku, quantity, username, reason) ?
-                                                Ok("Stock adjusted successfully!") :
-                                                BadRequest("Failed to adjust stock!");
+            _stockService.RecordStockAdjustment(sku, quantity, username, reason) ?
+            Ok("Stock adjusted successfully!") :
+            BadRequest("Failed to adjust stock!");
 
         /// <summary>
         /// Generates a stock report showing all the stocks and their quantities among other information.

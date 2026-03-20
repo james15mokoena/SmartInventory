@@ -56,6 +56,11 @@ public static class Permissions
 
     public const string AddTransactionReason = "AddTransactionReason";
 
+    public const string ViewTransactionReasons = "ViewTransactionReasons";
+
+    public const string ViewStockTransactions = "ViewStockTransactions";
+
+    public const string UpdateTransactionReason = "UpdateTransactionReason";
 
     // ***** Forecast Management permissions ***** //
 
