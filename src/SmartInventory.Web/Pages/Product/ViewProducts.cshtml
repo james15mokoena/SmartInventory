@@ -48,8 +48,8 @@
         <h1>View Products</h1>
 
         <ul class="options">
-            <li><a href="~/Product/ViewProducts?type=active">Active Products</a></li>
-            <li><a href="~/Product/ViewProducts?type=deactivated">Deactivated Products</a></li>
+            <li><a id="active-products" href="~/Product/ViewProducts?type=active">Active Products</a></li>
+            <li><a id="deactivated-products" href="~/Product/ViewProducts?type=deactivated">Deactivated Products</a></li>
             <li class="dropdown-prod">
                 <span class="dropbtn-prod">Categories</span>
                 <div class="dropdown-content-prod">
@@ -93,3 +93,5 @@
     </footer>
 
 </div>
+
+<script type="text/javascript" src="~/js/view_products.js"></script>

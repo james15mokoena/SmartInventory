@@ -17,12 +17,55 @@ public class TransactionReasonModel(HttpClient client) : PageModel
     public string IsAdded { get; set; } = "";
 
     /// <summary>
+    /// Stores a status indicating that the transaction reasons were fetched or not.
+    /// </summary>
+    [BindProperty]
+    public string IsFetched { get; set; } = "";
+
+    /// <summary>
+    /// Stores a status indicating that the transaction reason has been activated / deactivated.
+    /// </summary>
+    [BindProperty]
+    public string IsUpdated { get; set; } = "";
+
+    /// <summary>
     /// Stores the transaction reason's data.
     /// </summary>
     [BindProperty]
     public TransactionReasonDto? TransactionReason { get; set; } = new();
 
-    public void OnGet() { }
+    /// <summary>
+    /// Stores reasons.
+    /// </summary>
+    [BindProperty]
+    public List<TransactionReasonDto>? TransactionReasons { get; set; } = [];
+
+    public async Task OnGet(string? isUpdated)
+    {
+        // is used in the case where the user change the active status of a transaction reason.
+        if (!string.IsNullOrEmpty(isUpdated) && isUpdated == "true")
+        {
+            IsUpdated = "true";
+        }
+
+        string? username = HttpContext.Session.GetString("Username");
+
+        // get transaction reasons
+        HttpResponseMessage resp = await _client.GetAsync($"http://localhost:5196/api/Stock/ViewTransactionReasons/{username}");
+
+        if (resp.IsSuccessStatusCode)
+        {
+            TransactionReasons = JsonSerializer.Deserialize<List<TransactionReasonDto>>(await resp.Content.ReadAsStringAsync(), new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            });
+
+            if (TransactionReasons == null || TransactionReasons.Count <= 0)
+                IsFetched = "false";
+            else
+                IsFetched = "true";
+        }
+    }
     
     public async Task OnPostAddReason()
     {

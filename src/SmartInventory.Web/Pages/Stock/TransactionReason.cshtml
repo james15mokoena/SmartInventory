@@ -1,4 +1,5 @@
 @page
+@using SmartInventory.Web.Models
 @model SmartInventory.Web.Pages.Stock.TransactionReasonModel
 @{
     ViewData["Title"] = "Transaction Reason Page";
@@ -47,12 +48,12 @@
         <h1>Transaction Reasons Management</h1>
 
         <ul class="options">
-            <li class="update-reason"><a href="">Add Transaction Reason</a></li>
-            <li class="view-reasons"><a href="">View Transaction Reasons</a></li>
+            <li class="add-reason"><button id="add-btn" href="">Add Transaction Reason</button></li>
+            <li class="view-reasons"><button id="view-btn" href="">View Transaction Reasons</button></li>
         </ul>
 
         <!-- A tab for adding a transaction reason.-->
-        <div class="add-reason-tab">
+        <div class="add-reason-tab show">
 
             <h2 id="add-heading">Add Transaction Reason</h2>
 
@@ -64,13 +65,6 @@
                         <input class="inp" type="text" required asp-for="@Model.TransactionReason!.Reason"/>
                     </div>
                 </div>
-
-                <!--<div class="row">
-                    <div class="col">
-                        <label class="lbl">Activate:</label>
-                        <input class="inp" type="checkbox" required/>
-                    </div>
-                </div>-->
 
                  <div class="row btn-row">
                     <div class="col btn-col">
@@ -93,8 +87,61 @@
 
         </div>
 
+        <!-- A tab for viewing transaction reasons -->
         <div class="view-reasons-tab">
-            View transaction reasons
+            
+            <h2 id="view-heading">View Transaction Reasons</h2>
+
+            @{
+                if(!string.IsNullOrEmpty(Model.IsFetched) && Model.IsFetched == "false"){
+
+                    <div class="status" style="display: block;color:red;">
+                        No transaction reasons!!
+                    </div>
+                }
+                else if(!string.IsNullOrEmpty(Model.IsFetched) && Model.IsFetched == "true"){
+
+                    <table class="tbl-reasons">
+                        <thead>
+                            <tr>
+                                <th>Reason Id</th>
+                                <th>Reason</th>
+                                <th>Is Active</th>
+                                <th>Edit Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                List<TransactionReasonDto> reasons = Model.TransactionReasons!;
+                                
+                                foreach(TransactionReasonDto reason in reasons){
+                                    <tr>
+                                        <td>@reason.Id</td>
+                                        <td>@reason.Reason</td>
+                                        <td>@reason.IsActive</td>
+                                        <td>
+                                            @if(reason.IsActive){
+                                                <a class="lnk-activation" href="~/Stock/UpdateTransactionReason?reasonId=@reason.Id">Deactivate</a>
+                                            }
+                                            else{
+                                                <a class="lnk-activation" href="~/Stock/UpdateTransactionReason?reasonId=@reason.Id">Activate</a>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                }
+            }
+
+             @if(Model.IsUpdated == "false"){
+
+                <div class="status" style="display:block;color: red;">
+                    Failed to update the activation status.
+                </div>
+            }
+
         </div>
         
     </div>
@@ -104,3 +151,5 @@
     </footer>
 
 </div>
+
+<script src="~/js/transaction_reasons.js" type="text/javascript"></script>

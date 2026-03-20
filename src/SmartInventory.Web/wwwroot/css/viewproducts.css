@@ -30,6 +30,15 @@
     background-color: peru;
 }
 
+/* select by default*/
+.select{
+    background-color: lightseagreen;
+}
+
+.deselect{
+    background-color: peru;
+}
+
 .options li a:hover{
     background-color: darkgray;
 }

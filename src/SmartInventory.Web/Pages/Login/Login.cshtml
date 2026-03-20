@@ -8,28 +8,50 @@
 
 <div class="lg-container">
 
-    <h1 class="app-name">SmartInventory</h1>
+    <div class="app-name-container">
+        <h1 class="app-name">SmartInventory</h1>
+    </div>
 
     <form method="post">
 
-        <h1>Login</h1>
+        <div class="row">
+            <div class="col">
+                <h1 class="lg-heading">Login</h1>
+            </div>
+        </div>
 
-        <label class="u-lbl">Username:</label>
-        <input class="u-inp " type="text" asp-for="@Model.Details.Username" required/>
-        <label class="p-lbl">Password:</label>
-        <input class="p-inp" type="password" asp-for="@Model.Details.Password" required/>
-        <button class="s-btn" type="submit" asp-page-handler="Login">Login</button>
+        <div class="row">
+            <div class="col">
+                <label class="u-lbl">Username:</label>
+                <input class="u-inp" type="text" asp-for="@Model.Details.Username" required/>
+            </div>
+
+            <div class="col">
+                <label class="p-lbl">Password:</label>
+                <input class="p-inp" type="password" asp-for="@Model.Details.Password" required/>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col">
+                <button class="s-btn" type="submit" asp-page-handler="Login">Login</button>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                @if(Model.IsLoggedIn == "false"){
+
+                    <div class="status" style="display:block;color: red;">
+                        Failed!!!
+                    </div>
+                }
+                else if(Model.IsLoggedIn == "true"){
+                    <div class="status" style="display:block;color: green;">
+                        Success!!!
+                    </div>
+                }
+            </div>
+        </div>
     </form>
 </div>
-
-@if(Model.IsLoggedIn == "false"){
-
-    <div class="status" style="display:block;background-color: red;">
-        Failed!!!
-    </div>
-}
-else if(Model.IsLoggedIn == "true"){
-    <div class="status" style="display:block;background-color: green;">
-        Success!!!
-    </div>
-}
