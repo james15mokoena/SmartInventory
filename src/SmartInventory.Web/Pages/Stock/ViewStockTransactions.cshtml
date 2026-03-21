@@ -1,12 +1,12 @@
 @page
-@model SmartInventory.Web.Pages.Stock.IndexModel
-
+@using SmartInventory.Web.Models
+@model SmartInventory.Web.Pages.Stock.ViewStockTransactionsModel;
 @{
-    ViewData["Title"] = "Stock Home";
+    ViewData["Title"] = "Stock Transactions";
 }
 
 <link href="~/css/common.css" rel="stylesheet"/>
-<link href="~/css/stock_index.css" rel="stylesheet"/>
+<link href="~/css/viewstocktransactions.css" rel="stylesheet"/>
 
 <div class="container">
 
@@ -45,17 +45,43 @@
 
      <div class="content">
         
-        <h1>Stock Management</h1>
+        <h1>View Stock Transactions</h1>
 
-        <div class="row">
-            <a href="~/Stock/TransactionReason"><span>Transaction Reasons</span></a>
-            <a href="~/Stock/RecordStock"><span>Record Stock</span></a>
-        </div>
+        <table class="tbl-stock">
+            <thead>
+                <tr>
+                    <th>Transaction Id</th>
+                    <th>Product</th>
+                    <th>Date</th>
+                    <th>Previous Stock</th>
+                    <th>New Stock</th>
+                    <th>Reason</th>
+                    <th>Initiator</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if(Model.StockTransactions != null && Model.StockTransactions.Count > 0){
 
-        <div class="row">            
-            <a href="~/Stock/ViewStockTransactions"><span>View Stock Transactions</span></a>
-            <a href="#"><span>View Stock Report</span></a>
-        </div>
+                    List<StockTransactionDto> transactions = Model.StockTransactions;
+                    
+                    foreach(StockTransactionDto transaction in transactions){
+                        <tr>
+                            <td>@transaction.TransactionId</td>
+                            <td>@transaction.ProductName</td>
+                            <td>@transaction.Date</td>
+                            <td>@transaction.PreviousStock</td>
+                            <td>@transaction.NewStock</td>
+                            <td>@transaction.Reason</td>
+                            <td>@transaction.UserName</td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+        
+        @if(Model.IsFetched == "false"){
+            <h3 style="color: red;">No transactions</h3>
+        }
 
     </div>
 

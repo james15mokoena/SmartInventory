@@ -1,0 +1,22 @@
+.content{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.tbl-stock{
+    border-collapse: collapse;
+    width: 70%;
+}
+
+.tbl-stock th, .tbl-stock td{
+    border: 2px solid black;
+}
+
+.tbl-stock th{
+    background-color: peru;
+}
+
+.tbl-stock tbody tr:hover{
+    background-color: lightskyblue;
+}
