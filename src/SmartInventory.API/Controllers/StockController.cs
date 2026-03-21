@@ -59,8 +59,8 @@ public class StockController(StockManagementService stockService) : ControllerBa
     /// <param name="isNewProduct">Indicates whether a new product is added.</param>
     /// <returns></returns>
     [HttpPost]
-    public IActionResult RecordIncomingStock(string sku, int quantity, string username, string reason, bool isNewProduct) =>
-            _stockService.RecordIncomingStock(sku, quantity, username, reason, isNewProduct) ?
+    public IActionResult RecordIncomingStock(RecordStockDto incomingStock) =>
+            _stockService.RecordIncomingStock(incomingStock.SKU!,incomingStock.Quantity,incomingStock.Username!,incomingStock.TransactionReason!) ?
             Ok("Stock transaction recorded successfully!") :
             BadRequest("Failed to record stock transaction!");
 
@@ -93,8 +93,8 @@ public class StockController(StockManagementService stockService) : ControllerBa
     /// <param name="reason"></param>
     /// <returns></returns>
     [HttpPost]
-    public IActionResult RecordOutgoingStock(string sku, int quantity, string username, string reason) =>
-        _stockService.RecordOutgoingStock(sku, quantity, username, reason) ?
+    public IActionResult RecordOutgoingStock(RecordStockDto outgoingStock) =>
+        _stockService.RecordOutgoingStock(outgoingStock.SKU!, outgoingStock.Quantity, outgoingStock.Username!, outgoingStock.TransactionReason!) ?
         Ok("Stock transaction recorded successfully!") :
         BadRequest("Failed to record stock transaction!");
 
@@ -107,8 +107,8 @@ public class StockController(StockManagementService stockService) : ControllerBa
         /// <param name="reason"></param>
         /// <returns></returns>
         [HttpPost]
-        public IActionResult RecordStockAdjustment(string sku, int quantity, string username, string reason) =>
-            _stockService.RecordStockAdjustment(sku, quantity, username, reason) ?
+        public IActionResult RecordStockAdjustment(RecordStockDto stockAdjustment) =>
+            _stockService.RecordStockAdjustment(stockAdjustment.SKU!,stockAdjustment.Quantity, stockAdjustment.Username!, stockAdjustment.TransactionReason!) ?
             Ok("Stock adjusted successfully!") :
             BadRequest("Failed to adjust stock!");
 

@@ -13,12 +13,22 @@ public class StockTransactionDto
     /// <summary>
     /// Identifies which product the stock change applies to.
     /// </summary>
-    public string? ProductId { get; set; }
+    public string? ProductId { get; set; } = "";
+
+     /// <summary>
+    /// The name of the product.
+    /// </summary>
+    public string? ProductName { get; set; } = "";
 
     /// <summary>
     /// Identifies the admin or staff who performed the action.
     /// </summary>
     public int UserId { get; set; }
+
+    /// <summary>
+    /// The name of the user of initiated the transaction.
+    /// </summary>
+    public string? UserName { get; set; } = "";
 
     /// <summary>
     /// The date on which the transaction occurred.

@@ -10,7 +10,7 @@ namespace SmartInventory.API.Services;
 /// 
 /// </summary>
 /// <param name="stockRepo"></param>
-public class StockManagementService(StockManagementRepository stockRepo, UserManagementService userService, PermissionManagementService permServ)
+public class StockManagementService(StockManagementRepository stockRepo, UserManagementService userService, PermissionManagementService permServ, ProductManagementService prodService)
 {
     /// <summary>
     /// Used to interact with the database.
@@ -28,6 +28,11 @@ public class StockManagementService(StockManagementRepository stockRepo, UserMan
     private readonly PermissionManagementService _permService = permServ;
 
     /// <summary>
+    /// Used to interact with the product management service.
+    /// </summary>
+    private readonly ProductManagementService _prodService = prodService;
+
+    /// <summary>
     /// Used to record a stock transaction that adds stocks.
     /// </summary>
     /// <param name="sku">A product's stock-keeping unit number.</param>
@@ -36,10 +41,10 @@ public class StockManagementService(StockManagementRepository stockRepo, UserMan
     /// <param name="reason">The reason for which the transaction was initiated.</param>
     /// <param name="isNewProduct">Indicates whether a new product is added.</param>
     /// <returns></returns>
-    public bool RecordIncomingStock(string sku, int quantity, string username, string reason, bool isNewProduct) =>
+    public bool RecordIncomingStock(string sku, int quantity, string username, string reason) =>
         !string.IsNullOrEmpty(sku) && quantity > 0 && !string.IsNullOrEmpty(username) && !string.IsNullOrEmpty(reason) &&
         _permService.IsAuthorized(username, "RecordIncomingStock") && _userService.GetStaffMember(username) is Staff staff &&
-        _stockRepo.RecordIncomingStock(sku, quantity, staff.Id, reason, isNewProduct);
+        _stockRepo.RecordIncomingStock(sku, quantity, staff.Id, reason);
 
     /// <summary>
     /// Used to deduct the specified quantity from the stock quantity.
@@ -85,7 +90,8 @@ public class StockManagementService(StockManagementRepository stockRepo, UserMan
     /// <returns></returns>
     public List<StockTransactionDto>? GetStockTransactions(string username)
     {
-        if (!string.IsNullOrEmpty(username) && _permService.IsAuthorized(username,"ViewStockTransactions") && _stockRepo.GetStockTransactions() is List<StockTransaction> stockTransactions)
+        if (!string.IsNullOrEmpty(username) && _permService.IsAuthorized(username, "ViewStockTransactions") &&
+            _stockRepo.GetStockTransactions() is List<StockTransaction> stockTransactions)
         {
             if (stockTransactions != null && stockTransactions.Count > 0)
             {
@@ -305,6 +311,9 @@ public class StockManagementService(StockManagementRepository stockRepo, UserMan
     /// <returns></returns>
     private StockTransactionDto ToStockTransactionDto(StockTransaction stockTransaction)
     {
+        Staff? staff = _userService.GetStaffMember(stockTransaction.UserId);
+        ProductDto? product = _prodService.GetProductBySku(stockTransaction.ProductId,staff!.Username);
+
         return new StockTransactionDto
         {
             TransactionId = stockTransaction.TransactionId
@@ -324,6 +333,10 @@ public class StockManagementService(StockManagementRepository stockRepo, UserMan
             ReasonTypeId = stockTransaction.ReasonTypeId
             ,
             Reason = _stockRepo.GetTransactionReason(stockTransaction.ReasonTypeId)
+            ,
+            UserName = $"{staff!.FirstName} {staff.LastName}"
+            ,
+            ProductName = product!.Name
         };
     }
 }

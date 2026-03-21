@@ -63,6 +63,13 @@ public class UserManagementService(UserManagementRepository userManagementReposi
     public Staff? GetStaffMember(string username) => _userManRepo.GetStaffMember(username);
 
     /// <summary>
+    /// Gets a staff member with the given user ID.
+    /// </summary>
+    /// <param name="userId"></param>
+    /// <returns></returns>
+    public Staff? GetStaffMember(int userId) => _userManRepo.GetStaffMember(userId);
+
+    /// <summary>
     /// Gets all active staff members.
     /// </summary>
     /// <returns></returns>

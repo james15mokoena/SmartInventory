@@ -28,7 +28,7 @@ public class StockManagementRepository(DatabaseContext context, UserManagementRe
     /// <param name="reason">The reason for which the transaction was initiated.</param>
     /// <param name="isNewProduct">Indicates whether a new product is added.</param>
     /// <returns></returns>
-    public bool RecordIncomingStock(string sku, int quantity, int userId, string reason, bool isNewProduct)
+    public bool RecordIncomingStock(string sku, int quantity, int userId, string reason)
     {
         if (_context.Products.FirstOrDefault(s => s.SKU == sku) is Product stock && !string.IsNullOrEmpty(reason) &&
             _context.ReasonTypes.FirstOrDefault(r => r.Reason == reason) is ReasonType reasonType)
@@ -44,9 +44,9 @@ public class StockManagementRepository(DatabaseContext context, UserManagementRe
                 ,
                 Product = stock
                 ,
-                PreviousStock = isNewProduct ? 0 : stock.CurrentStock
+                PreviousStock = stock.CurrentStock
                 ,
-                NewStock = isNewProduct ? quantity : stock.CurrentStock + quantity
+                NewStock = 0
                 ,
                 QuantityChange = quantity
                 ,
@@ -55,17 +55,33 @@ public class StockManagementRepository(DatabaseContext context, UserManagementRe
                 TransactionId = 0
             };
 
-            // add more stocks, if the product already exists.
-            if (!isNewProduct)
+            int newQuantity = -1;
+
+            if (reasonType.Reason == "Issued" || reasonType.Reason == "Damaged" || reasonType.Reason == "Returned")
+                newQuantity = stock.CurrentStock - quantity;
+
+            // stock is sold/damaged/returned
+            if (newQuantity != -1)
             {
+                transaction.NewStock = newQuantity;
+                stock.CurrentStock -= quantity;
+            }
+            // stock is received
+            else if (newQuantity == -1)
+            {
+                transaction.NewStock = stock.CurrentStock + quantity;
                 stock.CurrentStock += quantity;
-                _context.Update(stock);
-                _context.SaveChanges();
             }
 
+            // save the change made to product's quantity.
+            _context.Update(stock);
+            _context.SaveChanges();
+
+            // save the transaction
             _context.StockTransactions.Add(transaction);
             return _context.SaveChanges() > 0;
         }
+        
         return false;
     }
 

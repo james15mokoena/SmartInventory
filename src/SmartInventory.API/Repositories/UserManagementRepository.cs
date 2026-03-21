@@ -68,6 +68,13 @@ public class UserManagementRepository(DatabaseContext context, PermissionManagem
     public Staff? GetStaffMember(string username) => _context.Staff.FirstOrDefault(s => s.Username == username) ?? null;
 
     /// <summary>
+    /// Fetches a staff member using their user ID.
+    /// </summary>
+    /// <param name="userId"></param>
+    /// <returns></returns>
+    public Staff? GetStaffMember(int userId) => _context.Staff.FirstOrDefault(u => u.Id == userId) ?? null;
+
+    /// <summary>
     /// Fetches all activated staff members.
     /// </summary>
     /// <returns></returns>

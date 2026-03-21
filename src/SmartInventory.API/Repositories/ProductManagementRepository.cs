@@ -40,7 +40,39 @@ public class ProductManagementRepository(DatabaseContext context, StockManagemen
             if (_context.SaveChanges() > 0)
             {
                 if (_userRepo.GetUserByUsername(username) is Staff staff)
-                    return _stockRepo.RecordIncomingStock(newProduct.SKU, newProduct.CurrentStock, staff.Id, "Received",true);
+                {
+                    // create a transaction
+                    StockTransaction transaction = new()
+                    {
+                        ProductId = newProduct.SKU
+                        ,
+                        NewStock = newProduct.CurrentStock
+                        ,
+                        PreviousStock = 0
+                        ,
+                        QuantityChange = 0
+                        ,
+                        TransactionId = 0
+                        ,
+                        Product = newProduct
+                        ,
+                        Date = DateTime.Now
+                        ,
+                        ReasonTypeId = _stockRepo.GetTransactionReasonId("New Product")
+                        ,
+                        UserId = staff.Id
+                    };
+
+                    _context.StockTransactions.Add(transaction);
+
+                    if (_context.SaveChanges() > 0)
+                        return true;
+                    else
+                    {
+                        _context.Products.Remove(newProduct);
+                        return _context.SaveChanges() > 0;
+                    }
+                }
             }
         }
         
