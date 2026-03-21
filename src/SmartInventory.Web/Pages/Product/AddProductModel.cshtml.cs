@@ -39,6 +39,7 @@ public class AddProductModel(HttpClient client) : PageModel
         Product!.DateCreated = DateTime.UtcNow.Date;
         Product.LastUpdated = DateTime.UtcNow.Date;
         Product.ImageUrl = Product.ImageUrl ?? "";
+        Product.Barcode = Product.Barcode ?? "";
 
         if (IsValid(Product.SKU!) && IsValid(Product.Name) && IsValid(Product.Description!) &&
             IsValid(Product.Category!) && Product.UnitPrice >= 0 && Product.CostPrice >= 0 &&

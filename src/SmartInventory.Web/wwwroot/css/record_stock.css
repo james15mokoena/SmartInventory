@@ -1,0 +1,40 @@
+.content{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.col{
+    margin: 10px;
+}
+
+.inp{
+    width: 500px;
+}
+
+footer{
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+}
+
+@media (max-width: 1219px) {
+
+    .row{
+        height: 90px;
+    }
+}
+
+@media (min-width: 414px) and (max-width: 513px){
+    .inp{
+        width: 400px;
+    }
+}
+
+@media (max-width: 413px){
+    .inp{
+        width: 300px;
+    }
+}
+
