@@ -3,10 +3,11 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    overflow-x: auto;
 }
 .tbl-stock{
     border-collapse: collapse;
-    width: 70%;
+    width: 90%;
 }
 
 .tbl-stock th, .tbl-stock td{
