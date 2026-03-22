@@ -128,19 +128,6 @@ public class StockManagementService(StockManagementRepository stockRepo, UserMan
     }
 
     /// <summary>
-    /// Used to adjust a product's stock.
-    /// </summary>
-    /// <param name="sku"></param>
-    /// <param name="quantity"></param>
-    /// <param name="username"></param>
-    /// <param name="reason"></param>
-    /// <returns></returns>
-    public bool RecordStockAdjustment(string sku, int quantity, string username, string reason) =>
-        !string.IsNullOrEmpty(sku) && quantity > 0 && !string.IsNullOrEmpty(username) &&
-        _permService.IsAuthorized(username, "RecordAdjustment") && !string.IsNullOrEmpty(reason) &&
-        _stockRepo.RecordStockAdjustment(sku, quantity, 0, reason);
-
-    /// <summary>
     /// Generates the stock report.
     /// </summary>
     /// <param name="company"></param>
