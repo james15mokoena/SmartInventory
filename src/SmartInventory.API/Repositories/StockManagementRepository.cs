@@ -151,10 +151,13 @@ public class StockManagementRepository(DatabaseContext context, UserManagementRe
 
     /// <summary>
     /// Used to fetch all stock transactions.
+    /// <param name="start">Indicates where to start reading.</param>
+    /// <param name="count">The number of records to fetch at a time.</param>
     /// </summary>
     /// <returns></returns>
-    public List<StockTransaction>? GetStockTransactions() => [.. from stockTransaction in _context.StockTransactions
-                                                                 select stockTransaction];
+    public List<StockTransaction>? GetStockTransactions(int start = 0, int count = 15) =>
+            [.. from transaction in _context.StockTransactions.Skip(start).Take(count)
+            select transaction];
 
     /// <summary>
     /// Used to fetch a product's stock transactions.
@@ -164,6 +167,16 @@ public class StockManagementRepository(DatabaseContext context, UserManagementRe
                                                                  [.. from stockTransaction in _context.StockTransactions
                                                                  where stockTransaction.ProductId == sku
                                                                  select stockTransaction];
+
+    /// <summary>
+    /// Fetches transaction classified by the specified "reason".
+    /// </summary>
+    /// <param name="reason"></param>
+    /// <returns></returns>
+    public List<StockTransaction>? GetStockTransactionsByReason(int start, int count, string reason) =>
+        [.. from transaction in _context.StockTransactions.Skip(start).Take(count)
+        where transaction.ReasonTypeId == GetTransactionReasonId(reason)
+        select transaction];
 
     /// <summary>
     /// Used to deduct the specified quantity from the stock quantity.

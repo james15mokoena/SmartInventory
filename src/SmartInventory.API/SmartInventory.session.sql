@@ -29,8 +29,9 @@
 -- SELECT * from InvoiceItem;
 -- SELECT * FROM ReasonType;
 -- delete from ReasonType where Id >= 8;
-SELECT * from StockTransaction;
+-- SELECT * from StockTransaction;
 -- SELECT * from Staff where Id = 3;
 -- SELECT * FROM Product;
 -- SELECT * FROM Staff;
 -- delete from StockTransaction where UserId = 3;7
+SELECT count(*) from StockTransaction;

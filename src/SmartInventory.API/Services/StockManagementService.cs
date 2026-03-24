@@ -88,10 +88,32 @@ public class StockManagementService(StockManagementRepository stockRepo, UserMan
     /// Used to fetch all stock transactions.
     /// </summary>
     /// <returns></returns>
-    public List<StockTransactionDto>? GetStockTransactions(string username)
+    public List<StockTransactionDto>? GetStockTransactions(string username, int start, int count)
     {
         if (!string.IsNullOrEmpty(username) && _permService.IsAuthorized(username, "ViewStockTransactions") &&
-            _stockRepo.GetStockTransactions() is List<StockTransaction> stockTransactions)
+            _stockRepo.GetStockTransactions(start, count) is List<StockTransaction> stockTransactions)
+        {
+            if (stockTransactions != null && stockTransactions.Count > 0)
+            {
+                List<StockTransactionDto> stockTransactionDtos = [];
+                foreach (StockTransaction stockTransaction in stockTransactions)
+                    stockTransactionDtos.Add(ToStockTransactionDto(stockTransaction));
+
+                return stockTransactionDtos;
+            }
+        }
+
+        return null;
+    }
+    
+    /// <summary>
+    /// Used to fetch stock transactions by reason.
+    /// </summary>
+    /// <returns></returns>
+    public List<StockTransactionDto>? GetStockTransactionsByReason(string username, int start, int count, string reason)
+    {
+        if (!string.IsNullOrEmpty(username) && _permService.IsAuthorized(username, "ViewStockTransactions") &&
+            _stockRepo.GetStockTransactionsByReason(start,count,reason) is List<StockTransaction> stockTransactions)
         {
             if (stockTransactions != null && stockTransactions.Count > 0)
             {
