@@ -10,58 +10,33 @@
 
 <div class="container">
 
-     <header>
-        <h1 class="app-name">SmartInventory</h1>
-
-        <!-- The navigation of the web page-->
-        <ul class="admin-nav">
-            <li><a class="nav-item active" href="~/Index">Home</a></li>
-            <li><a class="nav-item" href="~/User/Index">User</a></li>
-            <li><a class="nav-item" href="~/Supplier/Index">Supplier</a></li>
-            <li><a class="nav-item" href="~/Stock/Index">Stock</a></li>
-            <li><a class="nav-item" href="~/Sales/Index">Sales</a></li>
-            <li><a class="nav-item" href="~/Product/Index">Product</a></li>
-            <li><a class="nav-item" href="~/Procurement/Index">Procurement</a></li>
-            <li><a class="nav-item" href="~/Permission/Index">Permission</a></li>
-            <li><a class="nav-item" href="~/Login/Login">Login</a></li>
-        </ul>
-
-        <!-- The dropdown navigation to be shown on smaller screens -->
-        <div class="dropdown">
-            <img class="dropbtn" src="~/images/menu.png" alt="Menu" width="50px" height="40px">
-            <div class="dropdown-content">
-                <a class="nav-item active" href="~/Index">Home</a>
-                <a class="nav-item" href="~/User/Index">User</a>
-                <a class="nav-item" href="~/Supplier/Index">Supplier</a>
-                <a class="nav-item" href="~/Stock/Index">Stock</a>
-                <a class="nav-item" href="~/Sales/Index">Sales</a>
-                <a class="nav-item" href="~/Product/Index">Product</a>
-                <a class="nav-item" href="~/Procurement/Index">Procurement</a>
-                <a class="nav-item" href="~/Permission/Index">Permission</a>
-                <a class="nav-item" href="~/Login/Login">Login</a>
-            </div>
-        </div>
-    </header>
-
      <div class="content">
         
         <h1>View Products</h1>
 
         <ul class="options">
-            <li><a id="active-products" href="~/Product/ViewProducts?type=active">Active Products</a></li>
-            <li><a id="deactivated-products" href="~/Product/ViewProducts?type=deactivated">Deactivated Products</a></li>
-            <li class="dropdown-prod">
+            <li class="menu-option">
+                <button class="btn-active-products">
+                    Active Products
+                </button>
+            </li>
+            <li class="menu-option">
+                <button class="btn-deactivated-products">
+                    Deactivated Products
+                </button>
+            </li>
+            <li class="dropdown-prod menu-option">
                 <span class="dropbtn-prod">Categories</span>
                 <div class="dropdown-content-prod">
-                    <a href="~/Product/ViewProducts?type=Hard drive">Hard Drives</a>
-                    <a href="~/Product/ViewProducts?type=Monitors">Monitors</a>
-                    <a href="~/Product/ViewProducts?type=Keyboards">Keyboards</a>
-                    <a href="~/Product/ViewProducts?type=Floppy drive">Floppy Drives</a>
-                    <a href="~/Product/ViewProducts?type=Kitchen">Kitchen Tools</a>
-                    <a href="~/Product/ViewProducts?type=Computers">Computers</a>
-                    <a href="~/Product/ViewProducts?type=Graphics card">Graphics Cards</a>
-                    <a href="~/Product/ViewProducts?type=Tool">Tools</a>
-                    <a href="~/Product/ViewProducts?type=Games">Games</a>
+                    <a class="lnk lnk-hard-drives" href="~/Product/ViewProducts?type=Hard drive">Hard Drives</a>
+                    <a class="lnk lnk-monitors" href="~/Product/ViewProducts?type=Monitors">Monitors</a>
+                    <a class="lnk lnk-keyboards" href="~/Product/ViewProducts?type=Keyboards">Keyboards</a>
+                    <a class="lnk lnk-floppy-drives" href="~/Product/ViewProducts?type=Floppy drive">Floppy Drives</a>
+                    <a class="lnk lnk-kitchen-tools" href="~/Product/ViewProducts?type=Kitchen">Kitchen Tools</a>
+                    <a class="lnk lnk-computers" href="~/Product/ViewProducts?type=Computers">Computers</a>
+                    <a class="lnk lnk-graphics" href="~/Product/ViewProducts?type=Graphics card">Graphics Cards</a>
+                    <a class="lnk lnk-tools" href="~/Product/ViewProducts?type=Tool">Tools</a>
+                    <a class="lnk lnk-games" href="~/Product/ViewProducts?type=Games">Games</a>
                 </div>
             </li>
         </ul>

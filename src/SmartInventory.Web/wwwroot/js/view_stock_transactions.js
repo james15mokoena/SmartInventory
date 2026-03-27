@@ -6,98 +6,64 @@ const btnDamaged = document.querySelector(".menu-item .btn-damaged");
 const btnNewProduct = document.querySelector(".menu-item .btn-new-product");
 
 /**
+ * Assigns the "select" property to the clicked button.
+ * @param {*} selectedBtn The selected button.
+ * @param {*} selectedBtnName The name of the selected button
+ * @param {*} url The url of the page to be loaded.
+ */
+function selectOrDeselectBtnHandler(selectedBtn, selectedBtnName, url) {
+    if (!selectedBtn.classList.contains("selected")) {
+        localStorage.setItem("selectedBtn", selectedBtnName);
+        if (url != null)
+            window.location.href = url;
+    }
+}
+
+/**
  * Handles the changing of the background color of the selected
  * or deselected button.
  */
-btnAll.addEventListener("click", () => {
+btnAll.addEventListener("click", () => selectOrDeselectBtnHandler(btnAll, "btnAll", "ViewStockTransactions"));
 
-    if (!btnAll.classList.contains("selected")) {
-        localStorage.setItem("selectedBtn", "btnAll");
-        window.location.href = "ViewStockTransactions";
-    }
-    else
-        localStorage.removeItem("selectedBtn");
-});
+btnIssued.addEventListener("click", () => selectOrDeselectBtnHandler(btnIssued, "btnIssued", "ViewStockTransactions?reason=Issued"));
 
-btnIssued.addEventListener("click", () => {
-    if (!btnIssued.classList.contains("selected")) {
-        localStorage.setItem("selectedBtn", "btnIssued");
-        window.location.href = "ViewStockTransactions?reason=Issued";
-    }
-    else {
-        localStorage.removeItem("selectedBtn");
-    }
-});
+btnReceived.addEventListener("click", () => selectOrDeselectBtnHandler(btnReceived,"btnReceived","ViewStockTransactions?reason=Received"));
 
-btnReceived.addEventListener("click", () => {
-    if (!btnReceived.classList.contains("selected")) {
-        localStorage.setItem("selectedBtn", "btnReceived");
-        window.location.href = "ViewStockTransactions?reason=Received";
-    }
-    else
-        localStorage.removeItem("selectedBtn");
-});
+btnReturned.addEventListener("click", () => selectOrDeselectBtnHandler(btnReturned,"btnReturned","ViewStockTransactions?reason=Returned"));
 
-btnReturned.addEventListener("click", () => {
-    if (!btnReturned.classList.contains("selected")) {
-        localStorage.setItem("selectedBtn", "btnReturned");
-        window.location.href = "ViewStockTransactions?reason=Returned";
-    }
-    else
-        localStorage.removeItem("selectedBtn");
-});
+btnDamaged.addEventListener("click", () => selectOrDeselectBtnHandler(btnDamaged,"btnDamaged","ViewStockTransactions?reason=Damaged"));
 
-btnDamaged.addEventListener("click", () => {
-    if (!btnDamaged.classList.contains("selected")) {
-        localStorage.setItem("selectedBtn", "btnDamaged");
-        window.location.href = "ViewStockTransactions?reason=Damaged";
-    }
-    else
-        localStorage.removeItem("selectedBtn");
-});
+btnNewProduct.addEventListener("click", () =>
+    selectOrDeselectBtnHandler(btnNewProduct, "btnNewProduct", "ViewStockTransactions?reason=New Product"));
 
-btnNewProduct.addEventListener("click", () => {
-    if (!btnNewProduct.classList.contains("selected")) {
-        localStorage.setItem("selectedBtn", "btnNewProduct");
-        window.location.href = "ViewStockTransactions?reason=New Product";
-    }
-    else
-        localStorage.removeItem("selectedBtn");
-});
+/**
+ * Changes the background color of the selected button.
+ * @param {*} selectedBtn The selected button.
+ */
+function changeButtonBgColor(selectedBtn) {
+    selectedBtn.classList.add("selected");
+    selectedBtn.style.backgroundColor = "lightseagreen";
+}
 
 // Changes the background color of the selected or deselected menu option.
 if (localStorage.getItem("selectedBtn") === "btnAll") {
-    btnAll.classList.add("selected");
-    btnAll.style.backgroundColor = "lightseagreen";
-    btnAll.classList.remove("deselected");
+    changeButtonBgColor(btnAll);
 }
 else if(localStorage.getItem("selectedBtn") === "btnIssued"){
-    btnIssued.classList.add("selected");
-    btnIssued.style.backgroundColor = "lightseagreen";
-    btnIssued.classList.remove("deselected");
+    changeButtonBgColor(btnIssued);
 }
 else if(localStorage.getItem("selectedBtn") === "btnReceived"){
-    btnReceived.classList.add("selected");
-    btnReceived.style.backgroundColor = "lightseagreen";
-    btnReceived.classList.remove("deselected");
+    changeButtonBgColor(btnReceived);
 }
 else if(localStorage.getItem("selectedBtn") === "btnReturned"){
-    btnReturned.classList.add("selected");
-    btnReturned.style.backgroundColor = "lightseagreen";
-    btnReturned.classList.remove("deselected");
+    changeButtonBgColor(btnReturned);
 }
 else if(localStorage.getItem("selectedBtn") === "btnDamaged"){
-    btnDamaged.classList.add("selected");
-    btnDamaged.style.backgroundColor = "lightseagreen";
-    btnDamaged.classList.remove("deselected");
+    changeButtonBgColor(btnDamaged);
 }
 else if(localStorage.getItem("selectedBtn") === "btnNewProduct"){
-    btnNewProduct.classList.add("selected");
-    btnNewProduct.style.backgroundColor = "lightseagreen";
-    btnNewProduct.classList.remove("deselected");
+    changeButtonBgColor(btnNewProduct);
 }
 else {
-    btnAll.classList.add("selected");
-    btnAll.style.backgroundColor = "lightseagreen";
-    btnAll.classList.remove("deselected");   
+    changeButtonBgColor(btnAll);
 }

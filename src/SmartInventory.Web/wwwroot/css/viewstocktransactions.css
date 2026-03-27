@@ -7,7 +7,7 @@
 }
 .tbl-stock{
     border-collapse: collapse;
-    width: 90%;
+    width: 95%;
 }
 
 .tbl-stock th, .tbl-stock td{
@@ -64,6 +64,29 @@
     background-color: lightseagreen;
 }
 
-.deselected{
+/*.deselected{
     background-color: peru;
+}*/
+
+@media (max-width: 682px) {
+    
+    .menu{
+        display: grid;
+        grid-template-columns: repeat(2,1fr);
+    }
+}
+
+@media (max-width: 456px) {
+    .menu{
+        display: grid;
+        grid-template-columns: repeat(1,1fr);
+    }
+}
+
+@media (min-width: 683px) and (max-width:1328px) {
+    
+    .menu{
+        display: grid;
+        grid-template-columns: repeat(3,1fr);
+    }
 }

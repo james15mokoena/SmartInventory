@@ -9,43 +9,33 @@ const addReasonTab = document.querySelector(".add-reason-tab");
 const viewReasonsTab = document.querySelector(".view-reasons-tab");
 
 /**
- * Responsible for showing or hiding the "add-reason-tab", when the
- * add-btn is clicked.
+ * Displays the tab that is selected by the user.
+ * @param {*} tabToShow The tab to be displayed.
+ * @param {*} tabToHide The tab to be hidden.
+ * @param {*} selectedBtn The button that opens the tab to be displayed.
+ * @param {*} deselectedBtn The button that opens the tab to be hidden.
  */
-function showAddReasonTab() {
-    // we want to display the add-reason-tab
-    if (!addReasonTab.classList.contains("show")) {
-        // show the add-reason-tab
-        addReasonTab.classList.add("show");
-        addReasonTab.classList.remove("hide");
-        // hide the view-reasons-tab
-        viewReasonsTab.classList.remove("show");
-        viewReasonsTab.classList.add("hide");
-        // change the colors after selection
-        btnAddTransactionReason.style.backgroundColor = "lightseagreen";
-        btnViewTransactionReasons.style.backgroundColor = "peru";
-    }
-}
+function showOrHideTabHandler(tabToShow, tabToHide, selectedBtn, deselectedBtn) {
+    if (!tabToShow.classList.contains("show")) {
+        // add the property to show the tab.
+        tabToShow.classList.add("show");
+        // remove the property for hiding the tab.
+        tabToShow.classList.remove("hide");
 
-/**
- * Responsible for showing or hiding the "view-reasons-tab", when the view-btn
- * is clicked.
- */
-function showViewReasonsTab() {
-    // we want to display the view-reasons-tab
-    if (!viewReasonsTab.classList.contains("show")) {
-        // show the view-reasons-tab
-        viewReasonsTab.classList.add("show");
-        viewReasonsTab.classList.remove("hide");
-        // hide the add-reason-tab
-        addReasonTab.classList.remove("show");
-        addReasonTab.classList.add("hide")
-        // change the colors after selection
-        btnViewTransactionReasons.style.backgroundColor = "lightseagreen";
-        btnAddTransactionReason.style.backgroundColor = "peru";
+        // hide the tab that needs to be hidden
+        tabToHide.classList.remove("show");
+        tabToHide.classList.add("hide");
+
+        // change the color of the selected button and the deselected button
+        selectedBtn.style.backgroundColor = "lightseagreen";
+        deselectedBtn.style.backgroundColor = "peru";
     }
 }
 
 // add the event listener
-btnAddTransactionReason.addEventListener("click", showAddReasonTab);
-btnViewTransactionReasons.addEventListener("click", showViewReasonsTab);
+
+btnAddTransactionReason.addEventListener("click", () =>
+    showOrHideTabHandler(addReasonTab, viewReasonsTab, btnAddTransactionReason, btnViewTransactionReasons));
+
+btnViewTransactionReasons.addEventListener("click", () =>
+    showOrHideTabHandler(viewReasonsTab,addReasonTab,btnViewTransactionReasons,btnAddTransactionReason));
