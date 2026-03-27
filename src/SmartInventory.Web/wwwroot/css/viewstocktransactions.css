@@ -21,3 +21,49 @@
 .tbl-stock tbody tr:hover{
     background-color: lightskyblue;
 }
+
+.btn-more{
+    margin: 15px;
+    font-size: 25px;
+    font-weight: bold;
+    color: black;
+}
+
+.btn-more:hover{
+    background-color: lightcoral;
+}
+
+.btn-more span{
+    text-align: center;
+}
+
+.menu{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    list-style-type: none;
+    margin-top: 0;
+    margin-bottom: 25px;
+}
+
+.menu-item button{
+    border-radius: 15px;
+    background-color: peru;
+    margin: 7px;
+    width: 200px;
+    padding: 10px;
+    border: none;
+    font-size: 18px;
+}
+
+.menu-item button:hover{
+    background-color: lightgray;
+}
+
+.selected{
+    background-color: lightseagreen;
+}
+
+.deselected{
+    background-color: peru;
+}

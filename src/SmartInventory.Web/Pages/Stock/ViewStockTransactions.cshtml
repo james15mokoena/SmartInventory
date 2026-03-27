@@ -47,24 +47,57 @@
         
         <h1>View Stock Transactions</h1>
 
-        <table class="tbl-stock">
-            <thead>
-                <tr>
-                    <th>Transaction Id</th>
-                    <th>Product</th>
-                    <th>Date</th>
-                    <th>Previous Stock</th>
-                    <th>New Stock</th>
-                    <th>Reason</th>
-                    <th>Initiator</th>
-                </tr>
-            </thead>
-            <tbody>
-                @if(Model.StockTransactions != null && Model.StockTransactions.Count > 0){
+        <ul class="menu">
+            <li class="menu-item">
+                <button class="btn-all">
+                    All
+                </button>
+            </li>
+            <li class="menu-item">
+                <button class="btn-issued">
+                    Issued (Sold)
+                </button>
+            </li>
+            <li class="menu-item">
+                <button class="btn-received">
+                    Received (Purchased)
+                </button>
+            </li>
+            <li class="menu-item"> 
+                <button class="btn-returned">
+                    Returned
+                </button>
+            </li>
+            <li class="menu-item">
+                <button class="btn-damaged">
+                    Damaged
+                </button>
+            </li>
+            <li class="menu-item">
+                <button class="btn-new-product">
+                    New Product
+                </button>
+            </li>
+        </ul>
 
-                    List<StockTransactionDto> transactions = Model.StockTransactions;
-                    
-                    foreach(StockTransactionDto transaction in transactions){
+        @if(Model.StockTransactions != null && Model.StockTransactions.Count > 0){            
+
+            List<StockTransactionDto> transactions = Model.StockTransactions;
+
+            <table class="tbl-stock">
+                <thead>
+                    <tr>
+                        <th>Transaction Id</th>
+                        <th>Product</th>
+                        <th>Date</th>
+                        <th>Previous Stock</th>
+                        <th>New Stock</th>
+                        <th>Reason</th>
+                        <th>Initiator</th>
+                    </tr>
+                </thead>
+                <tbody>             
+                    @foreach(StockTransactionDto transaction in transactions){
                         <tr>
                             <td>@transaction.TransactionId</td>
                             <td>@transaction.ProductName</td>
@@ -75,13 +108,28 @@
                             <td>@transaction.UserName</td>
                         </tr>
                     }
-                }
-            </tbody>
-        </table>
-        
-        @if(Model.IsFetched == "false"){
+                </tbody>
+            </table>
+
+            @if(@Model.IsFetched == "false" && @Model.StockTransactions.Count > 0){
+                <a class="btn-more" style="display: none;" href="~/Stock/ViewStockTransactions">
+                    Get More
+                </a>
+                <h3 style="color: green;">All transactions are displayed.</h3>
+            }
+            else{
+                <a class="btn-more" href="~/Stock/ViewStockTransactions">
+                    Get More
+                </a>
+            }     
+        }
+        else{
             <h3 style="color: red;">No transactions</h3>
         }
+
+        @if(Model.IsFetched == "false" && @Model.StockTransactions!.Count == 0){
+            <h3 style="color: red;">No transactions</h3>
+        }  
 
     </div>
 
@@ -90,3 +138,5 @@
     </footer>
 
 </div>
+
+<script type="text/javascript" src="~/js/view_stock_transactions.js"></script>
