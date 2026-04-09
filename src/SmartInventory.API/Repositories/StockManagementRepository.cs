@@ -173,8 +173,8 @@ public class StockManagementRepository(DatabaseContext context, UserManagementRe
     /// </summary>
     /// <param name="reason"></param>
     /// <returns></returns>
-    public List<StockTransaction>? GetStockTransactionsByReason(int start, int count, string reason) =>
-        [.. from transaction in _context.StockTransactions.Skip(start).Take(count)
+    public List<StockTransaction>? GetStockTransactionsByReason(string reason) =>
+        [.. from transaction in _context.StockTransactions
         where transaction.ReasonTypeId == GetTransactionReasonId(reason)
         select transaction];
 

@@ -70,7 +70,7 @@ public class Product
     /// <summary>
     /// The size of the product.
     /// </summary>
-    public float UnitMeasurement { get; set; }
+    public string UnitMeasurement { get; set; } = "";
 
     /// <summary>
     /// Indicates if the product is available, to avoid deleting stock history.

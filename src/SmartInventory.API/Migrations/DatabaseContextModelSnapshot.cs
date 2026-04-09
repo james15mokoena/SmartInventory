@@ -56,7 +56,7 @@ namespace SmartInventory.API.Migrations
 
                     b.HasIndex("InvoiceId");
 
-                    b.ToTable("InvoiceItem");
+                    b.ToTable("InvoiceItem", (string)null);
                 });
 
             modelBuilder.Entity("SmartInventory.API.Domain.Models.OrderItem", b =>
@@ -93,7 +93,7 @@ namespace SmartInventory.API.Migrations
 
                     b.HasIndex("OrderNo");
 
-                    b.ToTable("OrderItem");
+                    b.ToTable("OrderItem", (string)null);
                 });
 
             modelBuilder.Entity("SmartInventory.API.Domain.Models.Orders", b =>
@@ -169,7 +169,7 @@ namespace SmartInventory.API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Orders");
+                    b.ToTable("Orders", (string)null);
                 });
 
             modelBuilder.Entity("SmartInventory.API.Domain.Models.Permission", b =>
@@ -194,7 +194,7 @@ namespace SmartInventory.API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Permission");
+                    b.ToTable("Permission", (string)null);
                 });
 
             modelBuilder.Entity("SmartInventory.API.Domain.Models.Product", b =>
@@ -260,7 +260,7 @@ namespace SmartInventory.API.Migrations
 
                     b.HasIndex("SupplierId");
 
-                    b.ToTable("Product");
+                    b.ToTable("Product", (string)null);
                 });
 
             modelBuilder.Entity("SmartInventory.API.Domain.Models.PurchaseOrder", b =>
@@ -295,7 +295,7 @@ namespace SmartInventory.API.Migrations
 
                     b.HasIndex("SupplierId");
 
-                    b.ToTable("PurchaseOrder");
+                    b.ToTable("PurchaseOrder", (string)null);
                 });
 
             modelBuilder.Entity("SmartInventory.API.Domain.Models.PurchaseOrderItem", b =>
@@ -334,7 +334,7 @@ namespace SmartInventory.API.Migrations
 
                     b.HasIndex("PurchaseOrderId");
 
-                    b.ToTable("PurchaseOrderItem");
+                    b.ToTable("PurchaseOrderItem", (string)null);
                 });
 
             modelBuilder.Entity("SmartInventory.API.Domain.Models.Quotation", b =>
@@ -362,7 +362,7 @@ namespace SmartInventory.API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Quotation");
+                    b.ToTable("Quotation", (string)null);
                 });
 
             modelBuilder.Entity("SmartInventory.API.Domain.Models.QuotationItem", b =>
@@ -397,7 +397,7 @@ namespace SmartInventory.API.Migrations
 
                     b.HasIndex("QuotationId");
 
-                    b.ToTable("QuotationItem");
+                    b.ToTable("QuotationItem", (string)null);
                 });
 
             modelBuilder.Entity("SmartInventory.API.Domain.Models.ReasonType", b =>
@@ -417,7 +417,7 @@ namespace SmartInventory.API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ReasonType");
+                    b.ToTable("ReasonType", (string)null);
                 });
 
             modelBuilder.Entity("SmartInventory.API.Domain.Models.Requisition", b =>
@@ -441,7 +441,7 @@ namespace SmartInventory.API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Requisition");
+                    b.ToTable("Requisition", (string)null);
                 });
 
             modelBuilder.Entity("SmartInventory.API.Domain.Models.RequisitionItem", b =>
@@ -466,7 +466,7 @@ namespace SmartInventory.API.Migrations
 
                     b.HasIndex("RequisitionId");
 
-                    b.ToTable("RequisitionItem");
+                    b.ToTable("RequisitionItem", (string)null);
                 });
 
             modelBuilder.Entity("SmartInventory.API.Domain.Models.Role", b =>
@@ -486,7 +486,7 @@ namespace SmartInventory.API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Role");
+                    b.ToTable("Role", (string)null);
                 });
 
             modelBuilder.Entity("SmartInventory.API.Domain.Models.RolePermission", b =>
@@ -501,7 +501,7 @@ namespace SmartInventory.API.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("RolePermission");
+                    b.ToTable("RolePermission", (string)null);
                 });
 
             modelBuilder.Entity("SmartInventory.API.Domain.Models.Staff", b =>
@@ -552,7 +552,7 @@ namespace SmartInventory.API.Migrations
                     b.HasIndex("Username")
                         .IsUnique();
 
-                    b.ToTable("Staff");
+                    b.ToTable("Staff", (string)null);
                 });
 
             modelBuilder.Entity("SmartInventory.API.Domain.Models.StockTransaction", b =>
@@ -589,7 +589,7 @@ namespace SmartInventory.API.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("StockTransaction");
+                    b.ToTable("StockTransaction", (string)null);
                 });
 
             modelBuilder.Entity("SmartInventory.API.Domain.Models.Supplier", b =>
@@ -655,7 +655,7 @@ namespace SmartInventory.API.Migrations
                     b.HasIndex("Phone")
                         .IsUnique();
 
-                    b.ToTable("Supplier");
+                    b.ToTable("Supplier", (string)null);
                 });
 
             modelBuilder.Entity("SmartInventory.API.Domain.Models.TaxInvoice", b =>
@@ -727,7 +727,7 @@ namespace SmartInventory.API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("TaxInvoice");
+                    b.ToTable("TaxInvoice", (string)null);
                 });
 
             modelBuilder.Entity("SmartInventory.API.Domain.Models.InvoiceItem", b =>

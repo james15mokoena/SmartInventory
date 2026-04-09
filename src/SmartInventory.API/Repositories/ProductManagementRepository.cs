@@ -192,7 +192,7 @@ public class ProductManagementRepository(DatabaseContext context, StockManagemen
                 isUpdated = true;
             }
 
-            if (product.UnitMeasurement != updatedProduct.UnitMeasurement && updatedProduct.UnitMeasurement > 0)
+            if (!string.IsNullOrEmpty(updatedProduct.UnitMeasurement) && product.UnitMeasurement != updatedProduct.UnitMeasurement)
             {
                 product.UnitMeasurement = updatedProduct.UnitMeasurement;
                 isUpdated = true;

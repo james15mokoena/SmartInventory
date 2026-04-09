@@ -1,37 +1,4 @@
--- SELECT * FROM Product;
--- SELECT * FROM Staff;
--- SELECT * FROM RolePermission;
--- SELECT * from Role;
--- update Role set Name = "General User" WHERE Name = "Visitor";
--- update Product set MaximumStockLevel = 100;
--- SELECT * FROM RolePermission;
--- SELECT DISTINCT Name from Permission as p
--- INNER JOIN RolePermission as rp
--- ON p.Id = rp.PermissionId
--- WHERE rp.RoleId = 5;
--- SELECT * FROM Product;
--- update Product set MaximumStockLevel = 20 WHERE SKU = 'PCV-R222G';
--- delete from Product where SKU = 'PCV-R222G';
--- SELECT * FROM StockTransaction;
--- SELECT * FROM Permission;
--- SELECT * FROM Requisition;
--- SELECT * FROM RequisitionItem;
--- SELECT * from Quotation;
--- SELECT * FROM QuotationItem;
--- delete from Quotation where Id = 2;
--- delete from Quotation;
--- SELECT FirstName, LastName, Username
--- FROM Staff as s
--- INNER JOIN Role as r
--- ON s.RoleId = r.Id
--- WHERE r.Name = "Sales Manager";
--- SELECT * FROM Supplier;
--- SELECT * from InvoiceItem;
--- SELECT * FROM ReasonType;
--- delete from ReasonType where Id >= 8;
--- SELECT * from StockTransaction;
--- SELECT * from Staff where Id = 3;
--- SELECT * FROM Product;
--- SELECT * FROM Staff;
--- delete from StockTransaction where UserId = 3;7
-SELECT count(*) from StockTransaction;
+-- SELECT st.TransactionId, st.ProductId, rt.Reason FROM StockTransaction as st
+-- INNER JOIN ReasonType as rt
+-- ON st.ReasonTypeId = rt.Id;
+SELECT * FROM Product;

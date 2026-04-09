@@ -34,7 +34,7 @@ public class ProductManagementService(ProductManagementRepository productRepo, S
             !string.IsNullOrEmpty(newProduct.Description) && !string.IsNullOrEmpty(newProduct.Category) &&
             newProduct.CostPrice >= 0.0 && newProduct.UnitPrice >= 0.0 && newProduct.CurrentStock >= 0 &&
             newProduct.DateCreated != default && newProduct.LastUpdated != default && newProduct.MinimumStockLevel >= 0 &&
-            newProduct.ReorderQuantity >= 0 && newProduct.UnitMeasurement >= 0.0 && newProduct.SupplierId >= 0 &&
+            newProduct.ReorderQuantity >= 0 && newProduct.UnitMeasurement != null && newProduct.SupplierId >= 0 &&
             !string.IsNullOrEmpty(username) && newProduct.MaximumStockLevel >= 0 && _permService.IsAuthorized(username,"AddProduct"))
         {
             // get the supplier of this product.
@@ -374,7 +374,7 @@ public class ProductManagementService(ProductManagementRepository productRepo, S
            updatedProduct.Barcode != null && !string.IsNullOrEmpty(updatedProduct.Category) && updatedProduct.ImageUrl != null &&
            !string.IsNullOrEmpty(updatedProduct.Description) && updatedProduct.CostPrice >= 0.0 &&
            updatedProduct.CurrentStock >= 0.0 && updatedProduct.MinimumStockLevel >= 0.0 && updatedProduct.ReorderQuantity >= 0 &&
-           updatedProduct.UnitPrice >= 0.0 && updatedProduct.UnitMeasurement >= 0.0 && updatedProduct.SupplierId >= 0 &&
+           updatedProduct.UnitPrice >= 0.0 && updatedProduct.UnitMeasurement != null  && updatedProduct.SupplierId >= 0 &&
            updatedProduct.MaximumStockLevel >= 0 && _permService.IsAuthorized(username,"EditProduct"))
             return _productRepo.EditProduct(updatedProduct) is Product p ? updatedProduct : null;
         return null;

@@ -110,10 +110,10 @@ public class StockManagementService(StockManagementRepository stockRepo, UserMan
     /// Used to fetch stock transactions by reason.
     /// </summary>
     /// <returns></returns>
-    public List<StockTransactionDto>? GetStockTransactionsByReason(string username, int start, int count, string reason)
+    public List<StockTransactionDto>? GetStockTransactionsByReason(string username, string reason)
     {
         if (!string.IsNullOrEmpty(username) && _permService.IsAuthorized(username, "ViewStockTransactions") &&
-            _stockRepo.GetStockTransactionsByReason(start,count,reason) is List<StockTransaction> stockTransactions)
+            _stockRepo.GetStockTransactionsByReason(reason) is List<StockTransaction> stockTransactions)
         {
             if (stockTransactions != null && stockTransactions.Count > 0)
             {
