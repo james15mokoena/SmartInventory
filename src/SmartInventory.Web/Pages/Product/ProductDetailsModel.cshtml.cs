@@ -50,7 +50,7 @@ public class ProductDetailsModel(HttpClient client, ServerConstants server) : Pa
         if (IsValid(Product!.SKU!) && IsValid(Product.Name) && IsValid(Product.Description!) &&
             IsValid(Product.Category!) && Product.UnitPrice >= 0 && Product.CostPrice >= 0 &&
             Product.CurrentStock >= 0 && Product.MinimumStockLevel >= 0 && Product.MaximumStockLevel >= 0 &&
-            Product.ReorderQuantity >= 0 && Product.UnitMeasurement >= 0 && Product.SupplierId >= 0 &&
+            Product.ReorderQuantity >= 0 && Product.UnitMeasurement != null && Product.SupplierId >= 0 &&
             Product.Barcode != null && Product.ImageUrl != null)
         {
             // convert the model to the json.
