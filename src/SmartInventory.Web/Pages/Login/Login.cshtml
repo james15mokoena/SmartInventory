@@ -5,54 +5,62 @@
     Layout = null;
 }
 
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
 <link rel="stylesheet" href="~/css/login.css" />
 
-<div class="lg-container">
+<div class="container">
 
     <div class="app-name-container">
         <h1 class="app-name">SmartInventory</h1>
     </div>
 
-    <form method="post">
+    <div class="form-container">
 
-        <div class="row">
-            <div class="col">
-                <h1 class="lg-heading">Login</h1>
-            </div>
-        </div>
+        <form method="post" class="login-form">
 
-        <div class="row">
-            <div class="col">
-                <label class="u-lbl">Username:</label>
-                <input class="u-inp" type="text" asp-for="@Model.Details.Username" required/>
+            <div class="row">
+                <div class="col">
+                    <h1 class="lg-heading">Login</h1>
+                </div>
             </div>
 
-            <div class="col">
-                <label class="p-lbl">Password:</label>
-                <input class="p-inp" type="password" asp-for="@Model.Details.Password" required/>
-            </div>
-        </div>
-        
-        <div class="row">
-            <div class="col">
-                <button class="s-btn" type="submit" asp-page-handler="Login">Login</button>
-            </div>
-        </div>
+            <div class="row">
+                <div class="col">
+                    <label class="u-lbl">Username:</label>
+                    <input class="u-inp" type="text" asp-for="@Model.Details.Username" required/>
+                </div>
 
-        <div class="row">
-            <div class="col">
-                @if(Model.IsLoggedIn == "false"){
-
-                    <div class="status" style="display:block;color: red;">
-                        Failed!!!
-                    </div>
-                }
-                else if(Model.IsLoggedIn == "true"){
-                    <div class="status" style="display:block;color: green;">
-                        Success!!!
-                    </div>
-                }
+                <div class="col">
+                    <label class="p-lbl">Password:</label>
+                    <input class="p-inp" type="password" asp-for="@Model.Details.Password" required/>
+                </div>
             </div>
-        </div>
-    </form>
+            
+            <div class="row">
+                <div class="col">
+                    <button class="s-btn" type="submit" asp-page-handler="Login">Login</button>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col">
+                    @if(Model.IsLoggedIn == "false"){
+
+                        <div class="status" style="display:block;color: red;">
+                            Failed!!!
+                        </div>
+                    }
+                    else if(Model.IsLoggedIn == "true"){
+                        <div class="status" style="display:block;color: green;">
+                            Success!!!
+                        </div>
+                    }
+                </div>
+            </div>
+        </form>
+
+    </div>
+    
 </div>

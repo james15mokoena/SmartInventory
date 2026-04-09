@@ -5,7 +5,7 @@ using SmartInventory.Web.Models;
 
 namespace SmartInventory.Web.Pages.Stock;
 
-public class ViewStockReportModel(HttpClient client) : PageModel
+public class ViewStockReportModel(HttpClient client, ServerConstants server) : PageModel
 {
     private readonly HttpClient _client = client;
 
@@ -29,7 +29,7 @@ public class ViewStockReportModel(HttpClient client) : PageModel
         {
             string company = "Action Computers";
 
-            HttpResponseMessage resp = await _client.GetAsync($"http://192.168.43.172:5196/api/Stock/GetStockReport/{company}/{username}");
+            HttpResponseMessage resp = await _client.GetAsync($"{server.ApiAddress}/Stock/GetStockReport/{company}/{username}");
 
             if (resp.IsSuccessStatusCode)
             {

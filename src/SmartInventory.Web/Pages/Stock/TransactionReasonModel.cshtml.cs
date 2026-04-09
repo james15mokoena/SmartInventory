@@ -6,7 +6,7 @@ using SmartInventory.Web.Models;
 
 namespace SmartInventory.Web.Pages.Stock;
 
-public class TransactionReasonModel(HttpClient client) : PageModel
+public class TransactionReasonModel(HttpClient client, ServerConstants server) : PageModel
 {
     private readonly HttpClient _client = client;
 
@@ -51,7 +51,7 @@ public class TransactionReasonModel(HttpClient client) : PageModel
         string? username = HttpContext.Session.GetString("Username");
 
         // get transaction reasons
-        HttpResponseMessage resp = await _client.GetAsync($"http://localhost:5196/api/Stock/ViewTransactionReasons/{username}");
+        HttpResponseMessage resp = await _client.GetAsync($"{server.ApiAddress}/Stock/ViewTransactionReasons/{username}");
 
         if (resp.IsSuccessStatusCode)
         {
@@ -76,7 +76,7 @@ public class TransactionReasonModel(HttpClient client) : PageModel
         StringContent content = new(JsonSerializer.Serialize(TransactionReason), Encoding.UTF8, "application/json");
 
         // send the request
-        HttpResponseMessage? resp = await _client.PostAsync($"http://localhost:5196/api/Stock/AddTransactionReason/{username}", content);
+        HttpResponseMessage? resp = await _client.PostAsync($"{server.ApiAddress}/Stock/AddTransactionReason/{username}", content);
 
         if (resp.IsSuccessStatusCode)
             IsAdded = "true";

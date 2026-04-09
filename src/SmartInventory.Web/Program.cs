@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Hosting.StaticWebAssets;
+using SmartInventory.Web.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +13,9 @@ builder.Services.AddSession(options =>
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });
+
+// add server constants
+builder.Services.AddSingleton<ServerConstants>();
 
 var app = builder.Build();
 

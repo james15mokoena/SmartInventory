@@ -6,7 +6,7 @@ using SmartInventory.Web.Models;
 
 namespace SmartInventory.Web.Pages.Product;
 
-public class EditProductModel(HttpClient client) : PageModel
+public class EditProductModel(HttpClient client, ServerConstants server) : PageModel
 {
     private readonly HttpClient _client = client;
 
@@ -40,10 +40,10 @@ public class EditProductModel(HttpClient client) : PageModel
 
         // send the request to fetch the data using the sku of the product.
         if (IsValid(Product!.SKU!))
-            resp = await _client.GetAsync($"http://192.168.43.172:5196/api/Product/ViewProductDetailsBySku/{Product.SKU}/{HttpContext.Session.GetString("Username")}");
+            resp = await _client.GetAsync($"{server.ApiAddress}/Product/ViewProductDetailsBySku/{Product.SKU}/{HttpContext.Session.GetString("Username")}");
         else if (IsValid(Product!.Name))
             // send the request to fetch the data using the name of the product
-            resp = await _client.GetAsync($"http://192.168.43.172:5196/api/Product/ViewProductDetailsByName/{Product.Name}/{HttpContext.Session.GetString("Username")}");
+            resp = await _client.GetAsync($"{server.ApiAddress}/Product/ViewProductDetailsByName/{Product.Name}/{HttpContext.Session.GetString("Username")}");
 
         if (resp != null && resp.IsSuccessStatusCode)
         {
@@ -83,7 +83,7 @@ public class EditProductModel(HttpClient client) : PageModel
             string? username = HttpContext.Session.GetString("Username");
 
             // send the request
-            HttpResponseMessage resp = await _client.PutAsync($"http://192.168.43.172:5196/api/Product/EditProduct/{username}", content);
+            HttpResponseMessage resp = await _client.PutAsync($"{server.ApiAddress}/Product/EditProduct/{username}", content);
 
             if (resp.IsSuccessStatusCode)
                 IsEdited = "true";

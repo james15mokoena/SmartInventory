@@ -6,7 +6,7 @@ using SmartInventory.Web.Models;
 
 namespace SmartInventory.Web.Pages.Product;
 
-public class ProductDetailsModel(HttpClient client) : PageModel
+public class ProductDetailsModel(HttpClient client, ServerConstants server) : PageModel
 {
     private readonly HttpClient _client = client;
 
@@ -26,7 +26,7 @@ public class ProductDetailsModel(HttpClient client) : PageModel
     {
         // send the request to fetch the data using the sku of the product.
         HttpResponseMessage resp = await _client.GetAsync(
-            $"http://192.168.43.172:5196/api/Product/ViewProductDetailsBySku/{sku}/{HttpContext.Session.GetString("Username")}");
+            $"{server.ApiAddress}/Product/ViewProductDetailsBySku/{sku}/{HttpContext.Session.GetString("Username")}");
 
         if (resp != null && resp.IsSuccessStatusCode)
         {
@@ -60,7 +60,7 @@ public class ProductDetailsModel(HttpClient client) : PageModel
 
             // send the request
             HttpResponseMessage resp = await _client.PutAsync(
-                $"http://192.168.43.172:5196/api/Product/ActivateOrDeactivateProduct/{Product.SKU}/{username}", content);
+                $"{server.ApiAddress}/Product/ActivateOrDeactivateProduct/{Product.SKU}/{username}", content);
 
             if (resp.IsSuccessStatusCode)
                 IsEdited = "true";

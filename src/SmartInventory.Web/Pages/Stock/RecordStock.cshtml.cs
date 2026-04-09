@@ -6,7 +6,7 @@ using SmartInventory.Web.Models;
 
 namespace SmartInventory.Web.Pages.Stock;
 
-public class RecordStockModel(HttpClient client) : PageModel
+public class RecordStockModel(HttpClient client, ServerConstants server) : PageModel
 {
     private readonly HttpClient _client = client;
 
@@ -35,7 +35,7 @@ public class RecordStockModel(HttpClient client) : PageModel
             // convert to JSON object
             StringContent content = new(JsonSerializer.Serialize(Transaction!), Encoding.UTF8, "application/json");
 
-            HttpResponseMessage resp = await _client.PostAsync($"http://192.168.43.172:5196/api/Stock/RecordIncomingStock", content);
+            HttpResponseMessage resp = await _client.PostAsync($"{server.ApiAddress}/Stock/RecordIncomingStock", content);
 
             if (resp.IsSuccessStatusCode)
                 IsRecorded = "true";

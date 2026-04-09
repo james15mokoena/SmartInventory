@@ -1,9 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using SmartInventory.Web.Models;
 
 namespace SmartInventory.Web.Pages.Stock;
 
-public class UpdateTransactionReason(HttpClient client) : PageModel
+public class UpdateTransactionReason(HttpClient client, ServerConstants server) : PageModel
 {
     private readonly HttpClient _client = client;
 
@@ -15,7 +16,7 @@ public class UpdateTransactionReason(HttpClient client) : PageModel
     {
         string? username = HttpContext.Session.GetString("Username");
 
-        HttpResponseMessage resp = await _client.PutAsync($"http://localhost:5196/api/Stock/ToggleTransactionReasonStatus/{reasonId}/{username}", null);
+        HttpResponseMessage resp = await _client.PutAsync($"{server.ApiAddress}/Stock/ToggleTransactionReasonStatus/{reasonId}/{username}", null);
 
         if (resp.IsSuccessStatusCode)
         {

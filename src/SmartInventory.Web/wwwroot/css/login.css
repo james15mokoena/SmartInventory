@@ -1,60 +1,72 @@
+html{
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    box-sizing: border-box;
+    font-family: sans-serif;
+    font-size: 18px;
+    overflow: auto;
+}
+
+*, *::before, *::after{
+    box-sizing: inherit;
+}
+
 body{
     margin: 0;
     padding: 0;
     height: 100%;
     width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     overflow: auto;
     background-color: burlywood;
+    /*(background-image: url("../images/login-background-img2.png");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;*/
+    border: 2px solid black;
 }
 
-.lg-container{
+.container{
     display: flex;
-    padding: 0;
-    width: 100vw;
-    max-width: 100%;
-    text-align: center;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     height: 100vh;
-    /*box-shadow: 0px 0px 0 5px grey;*/
 }
 
 .app-name-container{
     display: flex;
+    flex-direction: row;
     justify-content: center;
     align-items: center;
-    background-image: url("../images/login-background-img2.png");
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    height: 100vh;
-    width: 50%;
-    margin-right: 0;
+    margin: 0;
+    padding: 0;
+    background-color: burlywood;
+    text-align: center;
+    width: 50vw;
 }
 
-.app-name{
-    color: white;
-    border-radius: 10px;
-    padding: 10px;
-}
-
-h1{
+.app-name-container .app-name{
     font-size: 3em;
 }
 
-form{
+.form-container{
     display: flex;
     flex-direction: column;
-    align-items: center;
     justify-content: center;
-    margin-left: 0;
-    margin-right: auto;
-    margin-bottom:auto;
-    margin-top: auto;
-    padding: 20px;
-    width: 50%;
-    height: 100vh;
+    align-items: center;
+    width: 60vw;
+    height: 60vh;
+    border-radius: 15px;
+    margin: 10px;
+    margin-top: 20px;
+    background: linear-gradient(peru, burlywood);
+}
+
+.lg-heading{
+    text-align: center;
+    font-size: 2.5em;
 }
 
 .row{
@@ -68,34 +80,27 @@ form{
     flex-direction: column;
     justify-content: center;
     align-items: center;
-}
-
-.p-lbl, .u-lbl, .s-btn{
-    font-size: 2em;
+    margin: 10px;
 }
 
 .u-lbl, .p-lbl{
-    margin: 15px;
+    font-size: 1.8em;
 }
 
 .u-inp, .p-inp{
-    width: 400px;
-    max-width: 100%;
+    font-size: 1.5em;
     border-radius: 10px;
-    border-width: 4px;
-    border-style: none;
-    border-bottom-style: solid;
-    font-size: 22px;
-    padding: 15px;
-    margin: 7px;
+    border: none;
+    height: 50px;
+    width: 450px;
 }
 
 .s-btn{
     width: 200px;
-    max-width: 100%;
-    min-height: 50px;
-    border-radius: 15px;
-    margin: 25px;
+    height: 45px;
+    font-size: 1.5em;
+    border: none;
+    border-radius: 10px;
     background-color: blue;
     color: white;
 }
@@ -113,89 +118,157 @@ form{
     font-size: 30px;
 }
 
-@media (max-width: 1609px) {
-    
-    .lg-container{
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-    }
-
-    .app-name-container{
-        width: 100vw;
-    }
-
-    form{
-        width: 100vw;
-    }
-}
-
-@media (min-width: 686px) and (max-width: 1609px) {
-    
-    .app-name-container{
-        height: 50vh;
-    }
-
-    form{
-        height: 50vh;
-    }
-}
-
-@media (min-width: 928px) and (max-width: 1608px) {
-    
-    .p-inp, .u-inp{
-        width: 450px;
-    }
-}
-
-@media (min-width: 829px) and (max-width: 927px) {
-    
-    .p-inp, .u-inp{
-        width: 400px;
-    }
-}
-
-@media (min-width: 686px) and (max-width: 828px) {
-    
-    .p-inp, .u-inp{
-        width: 320px;
-    }
-}
-
-@media (min-width: 500px) and (max-width: 685px) {
+@media (min-width: 350px) and (max-width: 399px) {
     
     .row{
+        display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
     }
 
-    .p-inp, .u-inp{
-        width: 500px;
+    .u-inp, .p-inp{
+        width: 280px;
+    }
+
+    .app-name-container .app-name{
+        font-size: 2em;
     }
 }
 
-@media (min-width: 200px) and (max-width: 499px) {
+@media (min-width: 300px) and (max-width: 399px) {
     
     .row{
+        display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
     }
 
-    .p-inp, .u-inp{
-        width: 350px;
+    .u-inp, .p-inp{
+        width: 200px;
     }
 
-    .app-name{
-        font-size: 2.5rem;
+    .form-container{
+        width: 80vw;
     }
 }
 
-/*
-    Targets small screen devices that don't display the login page
-    well in landscape mode.
+@media (min-width: 400px) and (max-width: 449px) {
+    
+    .row{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
 
-    WHEN YOU HAVE TIME TRY FIXING THIS!!!!
-*/
+    .u-inp, .p-inp{
+        width: 300px;
+    }
+
+    .form-container{
+        width: 80vw;
+    }
+}
+
+@media (min-width: 450px) and (max-width: 484px) {
+    
+    .row{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .u-inp, .p-inp{
+        width: 330px;
+    }
+
+    .form-container{
+        width: 80vw;
+    }
+}
+
+@media (min-width: 485px) and (max-width: 712px) {
+    
+    .row{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .form-container{
+        width: 80vw;
+    }
+
+    .u-inp, .p-inp{
+        width: 380px;
+    }
+}
+
+@media (min-width: 713px) and (max-width: 858px) {
+    
+    .form-container{
+        width: 90vw;
+    }
+
+    .u-inp, .p-inp{
+        width: 310px;
+    }
+}
+
+@media (min-width: 859px) and (max-width: 862px) {
+    
+    .form-container{
+        width: 60vw;
+    }
+
+    .u-inp, .p-inp{
+        width: 360px;
+    }
+}
+
+@media (min-width: 863px) and (max-width: 1237px) {
+    
+    .form-container{
+        width: 85vw;
+    }
+
+    .u-inp, .p-inp{
+        width: 340px;
+    }
+}
+
+@media (min-width: 1238px) and (max-width: 1600px) {
+    
+    .form-container{
+        width: 75vw;
+    }
+
+    .u-inp, .p-inp{
+        width: 340px;
+    }
+}
+
+/*@media (max-width: 799px) {
+    
+    .form-container{
+        width: 80vw;
+    }
+
+    .u-inp, .p-inp{
+        width: 300px;
+    }
+}*/
+
+
+
+
+
+
+
+
+
 

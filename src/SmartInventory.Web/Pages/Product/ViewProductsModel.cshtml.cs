@@ -5,7 +5,7 @@ using SmartInventory.Web.Models;
 
 namespace SmartInventory.Web.Pages.Product;
 
-public class ViewProductsModel(HttpClient client) : PageModel
+public class ViewProductsModel(HttpClient client, ServerConstants server) : PageModel
 {
     private readonly HttpClient _client = client;
 
@@ -23,12 +23,12 @@ public class ViewProductsModel(HttpClient client) : PageModel
 
         // send the request to fetch active products.
         if ((!string.IsNullOrEmpty(type) && type == "active") || type == null)
-            resp = await _client.GetAsync($"http://192.168.43.172:5196/api/Product/ViewActiveProducts/{username}");
+            resp = await _client.GetAsync($"{server.ApiAddress}/Product/ViewActiveProducts/{username}");
         // send the request to fetch deactivated products.
         else if (!string.IsNullOrEmpty(type) && type == "deactivated")
-            resp = await _client.GetAsync($"http://192.168.43.172:5196/api/Product/ViewDeactivatedProducts/{username}");
+            resp = await _client.GetAsync($"{server.ApiAddress}/Product/ViewDeactivatedProducts/{username}");
         else if (!string.IsNullOrEmpty(type))
-            resp = await _client.GetAsync($"http://192.168.43.172:5196/api/Product/ViewProductsByCategory/{type}/{username}");
+            resp = await _client.GetAsync($"{server.ApiAddress}/Product/ViewProductsByCategory/{type}/{username}");
 
         if (resp != null && resp.IsSuccessStatusCode)
         {

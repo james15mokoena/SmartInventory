@@ -7,7 +7,7 @@ using SmartInventory.Web.Models;
 
 namespace SmartInventory.Web.Pages.Product;
 
-public class AddProductModel(HttpClient client) : PageModel
+public class AddProductModel(HttpClient client, ServerConstants server) : PageModel
 {
     /// <summary>
     /// Used to interact with the API.
@@ -55,7 +55,7 @@ public class AddProductModel(HttpClient client) : PageModel
 
             // send the POST request
             HttpResponseMessage resp = await _client.PostAsync(
-                                        $"http://192.168.43.172:5196/api/Product/AddProduct/{username}", content);
+                                        $"{server.ApiAddress}/Product/AddProduct/{username}", content);
 
             if (resp.IsSuccessStatusCode)
                 IsAdded = "true";

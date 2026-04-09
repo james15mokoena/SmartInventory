@@ -5,7 +5,7 @@ using SmartInventory.Web.Models;
 
 namespace SmartInventory.Web.Pages.Stock;
 
-public class ViewStockTransactionsModel(HttpClient client) : PageModel
+public class ViewStockTransactionsModel(HttpClient client, ServerConstants server) : PageModel
 {
     private readonly HttpClient _client = client;
 
@@ -53,7 +53,7 @@ public class ViewStockTransactionsModel(HttpClient client) : PageModel
                 StockTransactions = JsonSerializer.Deserialize<List<StockTransactionDto>>(HttpContext.Session.GetString("Transactions")!);
             }
 
-            HttpResponseMessage? resp = await _client.GetAsync($"http://192.168.43.172:5196/api/Stock/ViewStockTransactions/{username}/{Start}/{Count}");
+            HttpResponseMessage? resp = await _client.GetAsync($"{server.ApiAddress}/Stock/ViewStockTransactions/{username}/{Start}/{Count}");
 
             if (resp.IsSuccessStatusCode)
             {
@@ -110,7 +110,7 @@ public class ViewStockTransactionsModel(HttpClient client) : PageModel
                     StockTransactions = JsonSerializer.Deserialize<List<StockTransactionDto>>(HttpContext.Session.GetString("TransactionsByReason")!);
                 }*/
 
-                HttpResponseMessage resp = await _client.GetAsync($"http://192.168.43.172:5196/api/Stock/ViewStockTransactionsByReason/{username}/{reason}");
+                HttpResponseMessage resp = await _client.GetAsync($"{server.ApiAddress}/Stock/ViewStockTransactionsByReason/{username}/{reason}");
 
                 if (resp.IsSuccessStatusCode)
                 {

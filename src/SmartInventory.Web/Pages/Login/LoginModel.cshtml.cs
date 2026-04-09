@@ -6,7 +6,7 @@ using SmartInventory.Web.Models;
 
 namespace SmartInventory.Web.Pages.Login;
 
-public class LoginModel(HttpClient client) : PageModel
+public class LoginModel(HttpClient client, ServerConstants server) : PageModel
 {
     /// <summary>
     /// Will be used to send HTTP requests to the API.
@@ -40,8 +40,8 @@ public class LoginModel(HttpClient client) : PageModel
 
         // prepare the request content
         StringContent content = new(JsonSerializer.Serialize(Details), Encoding.UTF8, "application/json");
-
-        HttpResponseMessage resp = await _client.PostAsync("http://192.168.43.172:5196/api/User/Login", content);
+        
+        HttpResponseMessage resp = await _client.PostAsync($"{server.ApiAddress}/User/Login", content);
 
         if (resp.IsSuccessStatusCode)
         {
