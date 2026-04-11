@@ -75,12 +75,12 @@ public class StockController(StockManagementService stockService) : ControllerBa
         BadRequest("Failed to fetch stock transactions!");
 
     /// <summary>
-    /// Fetches stock transactions by reason.
+    /// Generates transactions summaries for each product.
     /// </summary>
     /// <returns></returns>
     [HttpGet("{username}/{reason}")]
-    public IActionResult ViewStockTransactionsByReason(string username,string reason) =>
-        _stockService.GetStockTransactionsByReason(username, reason) is List<StockTransactionDto> dtos ?
+    public IActionResult ViewStockTransactionSummaries(string username,string reason) =>
+        _stockService.GetStockTransactionsSummaries(username,reason) is List<StockTransactionSummary> dtos ?
         Ok(dtos) :
         BadRequest("Failed to fetch stock transactions!");
 

@@ -105,7 +105,19 @@ public class StockManagementService(StockManagementRepository stockRepo, UserMan
 
         return null;
     }
-    
+
+    /// <summary>
+    /// Generates a summary of the stock transactions.
+    /// </summary>
+    /// <param name="username"></param>
+    /// <param name="reason"></param>
+    /// <returns></returns>
+    public List<StockTransactionSummary>? GetStockTransactionsSummaries(string username, string? reason) =>
+        !string.IsNullOrEmpty(username) && !string.IsNullOrEmpty(reason) &&
+        _permService.IsAuthorized(username, "ViewStockTransactions") &&
+        _stockRepo.GetStockTransactionsSummaries(reason) is List<StockTransactionSummary> summaries ?
+        summaries : null;
+
     /// <summary>
     /// Used to fetch stock transactions by reason.
     /// </summary>
