@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using Microsoft.EntityFrameworkCore;
 using SmartInventory.API.Data;
 using SmartInventory.API.Domain.DTO;
@@ -91,43 +92,56 @@ public class StockManagementRepository(DatabaseContext context, UserManagementRe
     /// <returns></returns>
     private static List<DateTime>? FindLongestPeriodWithoutSales(List<StockTransaction> transactions)
     {
-        // the first day of the current month.
-        DateTime startDate = new(DateTime.Now.Year, DateTime.Now.Month, 1);
-        // the number of days between the longest period without sales.
-        int numDays = 0;
         // the longest period without sales
-        List<DateTime> longestPeriodWithoutSales = [];
+        List<DateTime> lpws = [];
 
         if (transactions.Count > 0)
         {
-            for (int i = 0; i < transactions.Count; ++i)
-            {
-                StockTransaction st1 = transactions[i];
-                StockTransaction? st2 = (i + 1 < transactions.Count) ? transactions[i + 1] : null;
+            int i = 0, j = i + 1;
+            DateTime? startLpws = null;
+            DateTime? endLpws = null;
+            int maxPeriod = 0;
 
-                if (i == 0)
+            StockTransaction t1 = transactions[i];
+            DateTime startDate = FirstDateOfCurrentMonth();
+            int dayDiff = t1.Date.Day - startDate.Day;
+
+            if (dayDiff >= 2 && dayDiff > maxPeriod)
+            {
+                maxPeriod = dayDiff;
+                startLpws = startDate;
+                endLpws = t1.Date;
+            }            
+            
+            while (i < transactions.Count && j < transactions.Count)
+            {
+                t1 = transactions[i];
+                StockTransaction t2 = transactions[j];
+                dayDiff = t2.Date.Day - t1.Date.Day;
+
+                if (dayDiff >= 2 && dayDiff > maxPeriod)
                 {
-                    numDays = Math.Abs(st1.Date.Day - startDate.Day);
-                    longestPeriodWithoutSales.Add(startDate);
-                    longestPeriodWithoutSales.Add(st1.Date);
+                    maxPeriod = dayDiff;
+                    startLpws = t1.Date;
+                    endLpws = t2.Date;
                 }
-                else if (i > 0 && st2 != null)
-                {
-                    numDays = Math.Abs(st2.Date.Day - st1.Date.Day) > numDays ? Math.Abs(st2.Date.Day - st1.Date.Day) : numDays;
-                    longestPeriodWithoutSales.Add(st1.Date);
-                    longestPeriodWithoutSales.Add(st2.Date);
-                }
-                
-                if(i == 0 && st2 != null && Math.Abs(st2.Date.Day - st1.Date.Day) > numDays)
-                {
-                    numDays = Math.Abs(st2.Date.Day - st1.Date.Day);
-                    longestPeriodWithoutSales.Clear();
-                    longestPeriodWithoutSales.Add(st1.Date);
-                    longestPeriodWithoutSales.Add(st2.Date);
-                }
+
+                ++i;
+                ++j;
             }
 
-            return longestPeriodWithoutSales;
+            if (startLpws != null && endLpws != null)
+            {
+                lpws.Add(new DateTime(startLpws.Value.Date.Year, startLpws.Value.Date.Month, startLpws.Value.Date.Day));
+                lpws.Add(new DateTime(endLpws.Value.Date.Year, endLpws.Value.Date.Month, endLpws.Value.Date.Day));
+            }
+            else
+            {
+                lpws.Add(new DateTime(transactions[0].Date.Year, transactions[0].Date.Month, transactions[0].Date.Day));
+                lpws.Add(new DateTime(transactions[0].Date.Year, transactions[0].Date.Month, transactions[0].Date.Day));             
+            }
+            
+            return lpws;
         }
 
         return null;
@@ -140,50 +154,100 @@ public class StockManagementRepository(DatabaseContext context, UserManagementRe
     /// <returns></returns>
     private static List<DateTime>? FindLongestPeriodWithConsecutiveSales(List<StockTransaction> transactions)
     {
-        if(transactions.Count > 0)
+        if(transactions.Count > 1)
         {
-            List<DateTime> longestPeriodWithConsecutiveSales = [];
-            int numDays = 1;
-            // the start date of the longest period with consecutive sales
-            DateTime startDate = DateTime.Now;
-            int maxPeriod = 0;
-            List<int> numConsecutiveDays = [];
+            int i = 0, j = i + 1;
+            int idx = 1;
+            // stores the longest period with consecutive sales.
+            DateTime? startLpwcs = null;
+            DateTime? endLpwcs = null;
+            bool isDiscontinued = false;
 
-            for(int i=0; i<transactions.Count;)
+            while (i < transactions.Count)
             {
-                StockTransaction st1 = transactions[i];
-                startDate = st1.Date;
-                longestPeriodWithConsecutiveSales.Add(st1.Date);
-                int j = i + 1;
+                StockTransaction t1 = transactions[i];
 
                 while (j < transactions.Count)
                 {
-                    if (st1.Date.AddDays(j) == transactions[j].Date)
+                    StockTransaction t2 = transactions[j];
+                    DateOnly t2Date = DateOnly.FromDateTime(t2.Date);
+                    DateOnly nextDate = DateOnly.FromDateTime(t1.Date.AddDays(idx));                    
+
+                    if (nextDate != t2Date)
                     {
-                        if (startDate == longestPeriodWithConsecutiveSales[0])
+                        if (startLpwcs == null)
+                            startLpwcs = t1.Date;
+
+                        if (endLpwcs == null)
+                            endLpwcs = transactions[j - 1].Date;
+
+                        if (Math.Abs(startLpwcs.Value.Day - endLpwcs.Value.Day) <= Math.Abs(t1.Date.Day - transactions[j - 1].Date.Day))
                         {
-                            numDays += 1;
-                            maxPeriod = Math.Max(numDays, maxPeriod);                            
-                            longestPeriodWithConsecutiveSales.Add(transactions[j].Date);
+                            startLpwcs = t1.Date;
+                            endLpwcs = transactions[j - 1].Date;
                         }
-                    }
-                    else // WORK ON THIS!!!!!!
-                    {
-                        // the new start date
-                        startDate = transactions[j].Date;
-                        numConsecutiveDays.Add(numDays);
-                        i = j;
+
+                        isDiscontinued = true;
                         break;
                     }
 
+                    ++idx;
                     ++j;
-                }                
+                }
 
-                
+                if (isDiscontinued)
+                {
+                    i = j;
+                    j = i + 1;
+                    idx = 1;
+                    isDiscontinued = false;
+                }
+                else
+                    ++i;
+
+                if (j >= transactions.Count)
+                    break;
             }
+
+            if(startLpwcs != null && endLpwcs != null)
+            {
+                List<DateTime> lpwcs = [];
+                lpwcs.Add(new DateTime(startLpwcs.Value.Year, startLpwcs.Value.Month, startLpwcs.Value.Day));
+                lpwcs.Add(new DateTime(endLpwcs.Value.Year, endLpwcs.Value.Month, endLpwcs.Value.Day));
+                return lpwcs;
+            }
+
+        }
+        else if (transactions.Count  == 1)
+        {
+            List<DateTime> lpwcs = [];
+            lpwcs.Add(new DateTime(transactions[0].Date.Year, transactions[0].Date.Month, transactions[0].Date.Day));
+            lpwcs.Add(new DateTime(transactions[0].Date.Year, transactions[0].Date.Month, transactions[0].Date.Day));
+            return lpwcs;
         }
 
         return null;
+    }
+
+    /// <summary>
+    /// Finds the first date of the current month.
+    /// </summary>
+    /// <returns></returns>
+    private static DateTime FirstDateOfCurrentMonth() => DateTime.Now.AddDays((DateTime.Now.Day - 1) * -1);
+    
+    /// <summary>
+    /// Finds the last date of the current month.
+    /// </summary>
+    /// <returns></returns>
+    private static DateTime LastDateOfCurrentMonth()
+    {
+        return DateTime.Now.Month switch
+        {
+            2                                   => DateTime.Now.AddDays(28 - DateTime.Now.Day),
+            4 or 6 or 9 or 11                   => DateTime.Now.AddDays(30 - DateTime.Now.Day),
+            1 or 3 or 5 or 7 or 8 or 10 or 12   => DateTime.Now.AddDays(31 - DateTime.Now.Day),
+            _                                   => DateTime.Now,
+        };
     }
 
     /// <summary>
@@ -197,10 +261,11 @@ public class StockManagementRepository(DatabaseContext context, UserManagementRe
 
         if (!string.IsNullOrEmpty(reason) && _context.ReasonTypes.FirstOrDefault(r => r.Reason == reason) is ReasonType rType)
         {
-            // get all transactions categorized by reason.
+            // Which sales transactions occurred in the current month of the current year?
             List<StockTransaction>? transactions = [..
                 from transaction in _context.StockTransactions
-                where transaction.ReasonTypeId == rType.Id
+                where transaction.ReasonTypeId == rType.Id && transaction.Date >= FirstDateOfCurrentMonth() &&
+                transaction.Date <= LastDateOfCurrentMonth()
                 orderby transaction.ProductId, transaction.Date
                 select transaction
             ];
@@ -208,7 +273,7 @@ public class StockManagementRepository(DatabaseContext context, UserManagementRe
             // summaries for each product's transactions
             List<StockTransactionSummary> transactionSummaries = [];
 
-            // how many transactions categorized by reason does each product have?
+            // How many transactions categorized by reason does each product have?
             var numTransactionForEachProduct =
                 from transaction in _context.StockTransactions
                 where transaction.ReasonTypeId == rType.Id
@@ -230,6 +295,8 @@ public class StockManagementRepository(DatabaseContext context, UserManagementRe
 
                 // stores the longest period without sales for the current product.
                 List<DateTime> longestPeriodWithoutSales = [];
+                // stores the longes period with consecutive sales for the current product.
+                List<DateTime> longestPeriodWithConsecutiveSales = [];
 
                 // contains transactions for a single product.
                 List<StockTransaction> stockTransactions = [];
@@ -241,11 +308,15 @@ public class StockManagementRepository(DatabaseContext context, UserManagementRe
 
                 // find the longest period without sales
                 longestPeriodWithoutSales = FindLongestPeriodWithoutSales(stockTransactions)!;
+                // find the longest period with consecutive sales
+                longestPeriodWithConsecutiveSales = FindLongestPeriodWithConsecutiveSales(stockTransactions)!;
 
                 // compile the summary
                 summary.ProductName = _context.Products.FirstOrDefault(p => p.SKU == numTransactionForEachProduct.ElementAt(i).ProductId)!.Name;
                 summary.StartOfLongestPeriodWithoutSales = longestPeriodWithoutSales.ElementAt(0);
                 summary.EndOfLongestPeriodWithoutSales = longestPeriodWithoutSales.ElementAt(1);
+                summary.StartOfLongestPeriodWithConsecutiveSales = longestPeriodWithConsecutiveSales.ElementAt(0);
+                summary.EndOfLongestPeriodWithConsecutiveSales = longestPeriodWithConsecutiveSales.ElementAt(1);
 
                 // add the summary to the list
                 transactionSummaries.Add(summary);
@@ -426,20 +497,4 @@ public class StockManagementRepository(DatabaseContext context, UserManagementRe
 
         return null;
     }
-}
-
-/// <summary>
-/// Stores the number of transactions that a product has.
-/// </summary>
-class ProductTransactionCount
-{
-    /// <summary>
-    /// The product's SKU.
-    /// </summary>
-    public string ProductId { get; set; } = "";
-
-    /// <summary>
-    /// The number of transactions.
-    /// </summary>
-    public int NumTransactions { get; set; }
 }
