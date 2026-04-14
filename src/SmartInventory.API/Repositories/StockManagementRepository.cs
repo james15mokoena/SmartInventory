@@ -1,3 +1,4 @@
+using System.Collections;
 using System.ComponentModel;
 using Microsoft.EntityFrameworkCore;
 using SmartInventory.API.Data;
@@ -148,105 +149,6 @@ public class StockManagementRepository(DatabaseContext context, UserManagementRe
     }
 
     /// <summary>
-    /// Finds a transaction with the largest sale for the given product.
-    /// </summary>
-    /// <param name="sku"></param>
-    /// <returns></returns>
-    private double LargestSaleInTheCurrentMonth(string sku)
-    {
-        // What is the largest sale for each product in the current month?
-        var largestSaleForEachProduct =
-            from transaction in _context.StockTransactions
-            join product in _context.Products on transaction.ProductId equals product.SKU
-            join reasonType in _context.ReasonTypes on transaction.ReasonTypeId equals reasonType.Id
-            where reasonType.Reason == "Sold" && transaction.Date >= FirstDateOfCurrentMonth() && transaction.Date <= LastDateOfCurrentMonth()
-            group transaction by transaction.ProductId into transactionGroup
-            select new
-            {
-                ProductId = transactionGroup.Key,
-                LargestSale = (
-                    from trans in transactionGroup
-                    join prod in _context.Products on trans.ProductId equals prod.SKU
-                    select trans.QuantityChange * prod.UnitPrice
-                ).Max()
-            };
-
-        for (int i = 0; i < largestSaleForEachProduct.Count(); ++i)
-        {
-            if (largestSaleForEachProduct.ElementAt(i).ProductId == sku)
-                return largestSaleForEachProduct.ElementAt(i).LargestSale;
-        }
-
-        return 0;
-    }
-
-    /// <summary>
-    /// Finds a transaction with the lowest sale for the given product.
-    /// </summary>
-    /// <param name="sku"></param>
-    /// <returns></returns>
-    private double LowestSaleInTheCurrentMonth(string sku)
-    {
-        // What is the lowest sale for each product in the current month?
-        var lowestSaleForEachProduct =
-            from transaction in _context.StockTransactions
-            join product in _context.Products on transaction.ProductId equals product.SKU
-            join reasonType in _context.ReasonTypes on transaction.ReasonTypeId equals reasonType.Id
-            where reasonType.Reason == "Sold" && transaction.Date >= FirstDateOfCurrentMonth() && transaction.Date <= LastDateOfCurrentMonth()
-            group transaction by transaction.ProductId into transactionGroup
-            select new
-            {
-                ProductId = transactionGroup.Key,
-                LowestSale = (
-                    from trans in transactionGroup
-                    join prod in _context.Products on trans.ProductId equals prod.SKU
-                    select trans.QuantityChange * prod.UnitPrice
-                ).Min()
-            };
-
-        for (int i = 0; i < lowestSaleForEachProduct.Count(); ++i)
-        {
-            if (lowestSaleForEachProduct.ElementAt(i).ProductId == sku)
-                return lowestSaleForEachProduct.ElementAt(i).LowestSale;
-        }
-
-        return 0;
-    }
-
-    /// <summary>
-    /// Finds the total sales for the given product in the current month.
-    /// </summary>
-    /// <param name="sku"></param>
-    /// <returns></returns>
-    private double TotalSalesInTheCurrentMonth(string sku)
-    {
-        // What is the lowest sale for each product in the current month?
-        var totalSalesForEachProduct =
-            from transaction in _context.StockTransactions
-            join product in _context.Products on transaction.ProductId equals product.SKU
-            join reasonType in _context.ReasonTypes on transaction.ReasonTypeId equals reasonType.Id
-            where reasonType.Reason == "Sold" && transaction.Date >= FirstDateOfCurrentMonth() && transaction.Date <= LastDateOfCurrentMonth()
-            group transaction by transaction.ProductId into transactionGroup
-            select new
-            {
-                ProductId = transactionGroup.Key,
-                TotalSales = (
-                    from trans in transactionGroup
-                    join prod in _context.Products on trans.ProductId equals prod.SKU
-                    select trans.QuantityChange * prod.UnitPrice
-                ).Sum()
-            };
-
-        for(int i=0; i<totalSalesForEachProduct.Count(); ++i)
-        {
-            if (totalSalesForEachProduct.ElementAt(i).ProductId == sku)
-                return totalSalesForEachProduct.ElementAt(i).TotalSales;
-        }
-
-        return 0;
-    }
-
-    /// <summary>
     /// Finds the longest period with consecutive sales for a given product during the month.
     /// </summary>
     /// <param name="transactions"></param>
@@ -375,14 +277,125 @@ public class StockManagementRepository(DatabaseContext context, UserManagementRe
             // How many transactions categorized by reason does each product have?
             var numTransactionForEachProduct =
                 from transaction in _context.StockTransactions
+                join product in _context.Products on transaction.ProductId equals product.SKU
                 where transaction.ReasonTypeId == rType.Id
                 group transaction by transaction.ProductId into transactionGroup
                 select new
                 {
-                    ProductId = transactionGroup.Key
-                    ,
+                    ProductId = transactionGroup.Key,
                     NumTransactions = transactionGroup.Count()
-                };            
+                };
+
+            // What is the largest sale for each product in the current month?
+            var largestSaleForEachProduct =
+                from transaction in _context.StockTransactions
+                join product in _context.Products on transaction.ProductId equals product.SKU
+                join reasonType in _context.ReasonTypes on transaction.ReasonTypeId equals reasonType.Id
+                where reasonType.Reason == "Sold" && transaction.Date >= FirstDateOfCurrentMonth() && transaction.Date <= LastDateOfCurrentMonth()
+                group transaction by transaction.ProductId into transactionGroup
+                select new
+                {
+                    ProductId = transactionGroup.Key,
+                    LargestSale = (
+                        from trans in transactionGroup
+                        join prod in _context.Products on trans.ProductId equals prod.SKU
+                        select trans.QuantityChange * prod.UnitPrice
+                    ).Max()
+                };
+
+            // What is the lowest sale for each product in the current month?
+            var lowestSaleForEachProduct =
+                from transaction in _context.StockTransactions
+                join product in _context.Products on transaction.ProductId equals product.SKU
+                join reasonType in _context.ReasonTypes on transaction.ReasonTypeId equals reasonType.Id
+                where reasonType.Reason == "Sold" && transaction.Date >= FirstDateOfCurrentMonth() && transaction.Date <= LastDateOfCurrentMonth()
+                group transaction by transaction.ProductId into transactionGroup
+                select new
+                {
+                    ProductId = transactionGroup.Key,
+                    LowestSale = (
+                        from trans in transactionGroup
+                        join prod in _context.Products on trans.ProductId equals prod.SKU
+                        select trans.QuantityChange * prod.UnitPrice
+                    ).Min()
+                };
+
+            // What is the total sale for each product in the current month?
+            var totalSalesForEachProduct =
+                from transaction in _context.StockTransactions
+                join product in _context.Products on transaction.ProductId equals product.SKU
+                join reasonType in _context.ReasonTypes on transaction.ReasonTypeId equals reasonType.Id
+                where reasonType.Reason == "Sold" && transaction.Date >= FirstDateOfCurrentMonth() && transaction.Date <= LastDateOfCurrentMonth()
+                group transaction by transaction.ProductId into transactionGroup
+                select new
+                {
+                    ProductId = transactionGroup.Key,
+                    TotalSales = (
+                        from trans in transactionGroup
+                        join prod in _context.Products on trans.ProductId equals prod.SKU
+                        select trans.QuantityChange * prod.UnitPrice
+                    ).Sum()
+                };
+
+            // what is the largest order (purchase) for each product this month?
+            var largestOrderForeachProduct =
+                from transaction in _context.StockTransactions
+                join product in _context.Products on transaction.ProductId equals product.SKU
+                join reasonType in _context.ReasonTypes on transaction.ReasonTypeId equals reasonType.Id
+                where reasonType.Reason == "Purchased" && transaction.Date >= FirstDateOfCurrentMonth() && transaction.Date <= LastDateOfCurrentMonth()
+                group transaction by transaction.ProductId into transactionGroup
+                select new
+                {
+                    ProductId = transactionGroup.Key,
+                    LargestOrder = (from trans in transactionGroup
+                                    join pro in _context.Products on trans.ProductId equals pro.SKU
+                                    select trans.QuantityChange * pro.CostPrice).Max()
+                };
+
+            // What is the lowest order (purchase) for each product this month?
+            var lowestOrderForeachProduct =
+                from transaction in _context.StockTransactions
+                join product in _context.Products on transaction.ProductId equals product.SKU
+                join reasonType in _context.ReasonTypes on transaction.ReasonTypeId equals reasonType.Id
+                where reasonType.Reason == "Purchased" && transaction.Date >= FirstDateOfCurrentMonth() && transaction.Date <= LastDateOfCurrentMonth()
+                group transaction by transaction.ProductId into transactionGroup
+                select new
+                {
+                    ProductId = transactionGroup.Key,
+                    LowestOrder = (from trans in transactionGroup
+                                   join product in _context.Products on trans.ProductId equals product.SKU
+                                   select trans.QuantityChange * product.CostPrice).Min()
+                };
+
+            // How many times has each product been ordered this month?
+            var NumberOfTimesTheProductHasBeenOrdered =
+                from transaction in _context.StockTransactions
+                join product in _context.Products on transaction.ProductId equals product.SKU
+                join reasonType in _context.ReasonTypes on transaction.ReasonTypeId equals reasonType.Id
+                where reasonType.Reason == "Purchased" && transaction.Date >= FirstDateOfCurrentMonth() && transaction.Date <= LastDateOfCurrentMonth()
+                group transaction by transaction.ProductId into transactionGroup
+                select new
+                {
+                    ProductId = transactionGroup.Key,
+                    OrderFrequency =
+                        (from trans in transactionGroup
+                         select trans).Count()
+                };
+
+            // What is the total cost (purchase) for each product this month?
+            var totalCostForeachProduct =
+                from trans in _context.StockTransactions
+                join product in _context.Products on trans.ProductId equals product.SKU
+                join reasonType in _context.ReasonTypes on trans.ReasonTypeId equals reasonType.Id
+                where reasonType.Reason == "Purchased" && trans.Date >= FirstDateOfCurrentMonth() && trans.Date <= LastDateOfCurrentMonth()
+                group trans by trans.ProductId into transGroup
+                select new
+                {
+                    ProductId = transGroup.Key,
+                    TotalCost = (from trans2 in transGroup
+                                    join product in _context.Products on trans2.ProductId equals product.SKU
+                                    select trans2.QuantityChange * product.CostPrice).Sum()
+                };
 
             // the next index in the transactions list for when creating separate lists.
             int nextIndex = 0;
@@ -415,10 +428,70 @@ public class StockManagementRepository(DatabaseContext context, UserManagementRe
                 summary.StartOfLongestPeriodWithoutSales = longestPeriodWithoutSales.ElementAt(0);
                 summary.EndOfLongestPeriodWithoutSales = longestPeriodWithoutSales.ElementAt(1);
                 summary.StartOfLongestPeriodWithConsecutiveSales = longestPeriodWithConsecutiveSales.ElementAt(0);
-                summary.EndOfLongestPeriodWithConsecutiveSales = longestPeriodWithConsecutiveSales.ElementAt(1);
-                summary.LargestSale = LargestSaleInTheCurrentMonth(numTransactionForEachProduct.ElementAt(i).ProductId);
-                summary.LowestSale = LowestSaleInTheCurrentMonth(numTransactionForEachProduct.ElementAt(i).ProductId);
-                summary.TotalSales = TotalSalesInTheCurrentMonth(numTransactionForEachProduct.ElementAt(i).ProductId);
+                summary.EndOfLongestPeriodWithConsecutiveSales = longestPeriodWithConsecutiveSales.ElementAt(1);                
+
+                for (int k = 0; k < largestSaleForEachProduct.Count(); ++k)
+                {
+                    if (largestSaleForEachProduct.ElementAt(k).ProductId == numTransactionForEachProduct.ElementAt(i).ProductId)
+                    {
+                        summary.LargestSale = largestSaleForEachProduct.ElementAt(k).LargestSale;
+                        break;
+                    }
+                }
+                
+                for (int k = 0; k < lowestSaleForEachProduct.Count(); ++k)
+                {
+                    if (lowestSaleForEachProduct.ElementAt(k).ProductId == numTransactionForEachProduct.ElementAt(i).ProductId)
+                    {
+                        summary.LowestSale = lowestSaleForEachProduct.ElementAt(k).LowestSale;
+                        break;
+                    }
+                }
+
+                for (int k = 0; k < totalSalesForEachProduct.Count(); ++k)
+                {
+                    if (totalSalesForEachProduct.ElementAt(k).ProductId == numTransactionForEachProduct.ElementAt(i).ProductId)
+                    {
+                        summary.TotalSales = totalSalesForEachProduct.ElementAt(k).TotalSales;
+                        break;
+                    }
+                }
+                
+                for (int k = 0; k < largestOrderForeachProduct.Count(); k++)
+                {
+                    if (largestOrderForeachProduct.ElementAt(k).ProductId == numTransactionForEachProduct.ElementAt(i).ProductId)
+                    {
+                        summary.LargestOrder = largestOrderForeachProduct.ElementAt(k).LargestOrder;
+                        break;
+                    }
+                }
+
+                for (int k = 0; k < lowestOrderForeachProduct.Count(); k++)
+                {
+                    if (lowestOrderForeachProduct.ElementAt(k).ProductId == numTransactionForEachProduct.ElementAt(i).ProductId)
+                    {
+                        summary.LowestOrder = lowestOrderForeachProduct.ElementAt(k).LowestOrder;
+                        break;
+                    }
+                }
+
+                for (int k = 0; k < NumberOfTimesTheProductHasBeenOrdered.Count(); k++)
+                {
+                    if (NumberOfTimesTheProductHasBeenOrdered.ElementAt(k).ProductId == numTransactionForEachProduct.ElementAt(i).ProductId)
+                    {
+                        summary.NumberOfTimesTheProductHasBeenOrdered = NumberOfTimesTheProductHasBeenOrdered.ElementAt(k).OrderFrequency;
+                        break;
+                    }
+                }
+                
+                for (int k = 0; k < totalCostForeachProduct.Count(); ++k)
+                {
+                    if (totalCostForeachProduct.ElementAt(k).ProductId == numTransactionForEachProduct.ElementAt(i).ProductId)
+                    {
+                        summary.TotalCost = totalCostForeachProduct.ElementAt(k).TotalCost;
+                        break;
+                    }
+                }
 
                 // add the summary to the list
                 transactionSummaries.Add(summary);

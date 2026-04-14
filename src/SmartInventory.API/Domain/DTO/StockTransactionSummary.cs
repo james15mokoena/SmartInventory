@@ -6,6 +6,8 @@ namespace SmartInventory.API.Domain.DTO;
 /// </summary>
 public class StockTransactionSummary
 {
+    // SALES SUMMARY //
+
     /// <summary>
     /// The name of the product/stock.
     /// </summary>
@@ -44,5 +46,27 @@ public class StockTransactionSummary
     /// <summary>
     /// Stores the product's total sales in the current month.
     /// </summary>
-    public double TotalSales{ get; set; }
+    public double TotalSales { get; set; }
+
+    // PURCHASES SUMMARY //
+
+    /// <summary>
+    /// Stores the number of times the product has been ordered this month.
+    /// </summary>
+    public int NumberOfTimesTheProductHasBeenOrdered { get; set; }
+
+    /// <summary>
+    /// The largest amount spent when purchasing this product this month.
+    /// </summary>
+    public double LargestOrder { get; set; }
+
+    /// <summary>
+    /// The lowest amount spent when purchasing this product this month.
+    /// </summary>
+    public double LowestOrder { get; set; }
+
+    /// <summary>
+    /// The total cost of the product this month.
+    /// </summary>
+    public double TotalCost { get; set; }
 }
