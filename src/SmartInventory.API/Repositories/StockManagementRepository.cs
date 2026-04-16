@@ -393,8 +393,43 @@ public class StockManagementRepository(DatabaseContext context, UserManagementRe
                 {
                     ProductId = transGroup.Key,
                     TotalCost = (from trans2 in transGroup
-                                    join product in _context.Products on trans2.ProductId equals product.SKU
-                                    select trans2.QuantityChange * product.CostPrice).Sum()
+                                 join product in _context.Products on trans2.ProductId equals product.SKU
+                                 select trans2.QuantityChange * product.CostPrice).Sum()
+                };
+
+
+            // How many units of each product have been sold and how many are unsold as of this month?
+            var quantityUnitsSoldAndUnsoldForeachProduct =
+                from trans in _context.StockTransactions
+                join reasonType in _context.ReasonTypes on trans.ReasonTypeId equals reasonType.Id
+                join product in _context.Products on trans.ProductId equals product.SKU
+                where reasonType.Reason == "Sold" && trans.Date >= FirstDateOfCurrentMonth() && trans.Date <= LastDateOfCurrentMonth()
+                group trans by new
+                {
+                    trans.ProductId,
+                    product.CurrentStock
+                } into transGroup
+                select new
+                {
+                    transGroup.Key.ProductId,
+
+                    QuantityUnitsSold = (from tr in transGroup
+                                         select tr.QuantityChange).Sum(),
+
+                    QuantityUnitsUnsold = transGroup.Key.CurrentStock
+                };
+
+            // How many units of each product have been purchased this month?
+            var quantityUnitsPurchasedForeachProduct =
+                from trans in _context.StockTransactions
+                join reasonType in _context.ReasonTypes on trans.ReasonTypeId equals reasonType.Id
+                where reasonType.Reason == "Purchased" && trans.Date >= FirstDateOfCurrentMonth() && trans.Date <= LastDateOfCurrentMonth()
+                group trans by trans.ProductId into transGroup
+                select new
+                {
+                    ProductId = transGroup.Key,
+                    QuantityUnitsPurchased = (from tr in transGroup
+                                              select tr.QuantityChange).Sum()
                 };
 
             // the next index in the transactions list for when creating separate lists.
@@ -456,6 +491,16 @@ public class StockManagementRepository(DatabaseContext context, UserManagementRe
                         break;
                     }
                 }
+
+                for(int k=0; k < quantityUnitsSoldAndUnsoldForeachProduct.Count(); ++k)
+                {
+                    if(quantityUnitsSoldAndUnsoldForeachProduct.ElementAt(k).ProductId == numTransactionForEachProduct.ElementAt(i).ProductId)
+                    {
+                        summary.QuantityUnitsSold = quantityUnitsSoldAndUnsoldForeachProduct.ElementAt(k).QuantityUnitsSold;
+                        summary.QuantityUnitsUnsold = quantityUnitsSoldAndUnsoldForeachProduct.ElementAt(k).QuantityUnitsUnsold;
+                        break;
+                    }
+                }
                 
                 for (int k = 0; k < largestOrderForeachProduct.Count(); k++)
                 {
@@ -483,12 +528,21 @@ public class StockManagementRepository(DatabaseContext context, UserManagementRe
                         break;
                     }
                 }
-                
+
                 for (int k = 0; k < totalCostForeachProduct.Count(); ++k)
                 {
                     if (totalCostForeachProduct.ElementAt(k).ProductId == numTransactionForEachProduct.ElementAt(i).ProductId)
                     {
                         summary.TotalCost = totalCostForeachProduct.ElementAt(k).TotalCost;
+                        break;
+                    }
+                }
+
+                for(int k=0; k < quantityUnitsPurchasedForeachProduct.Count(); ++k)
+                {
+                    if(quantityUnitsPurchasedForeachProduct.ElementAt(k).ProductId == numTransactionForEachProduct.ElementAt(i).ProductId)
+                    {
+                        summary.QuantityUnitsPurchased = quantityUnitsPurchasedForeachProduct.ElementAt(k).QuantityUnitsPurchased;
                         break;
                     }
                 }

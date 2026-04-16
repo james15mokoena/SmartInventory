@@ -1,6 +1,5 @@
 namespace SmartInventory.API.Domain.DTO;
 
-
 /// <summary>
 /// A summary of the transaction of a specific product.
 /// </summary>
@@ -48,6 +47,16 @@ public class StockTransactionSummary
     /// </summary>
     public double TotalSales { get; set; }
 
+    /// <summary>
+    /// The number of units of the product sold this month.
+    /// </summary>
+    public int QuantityUnitsSold { get; set; }
+
+    /// <summary>
+    /// The number of units of the product unsold as of this month.
+    /// </summary>
+    public int QuantityUnitsUnsold { get; set; }
+
     // PURCHASES SUMMARY //
 
     /// <summary>
@@ -69,4 +78,9 @@ public class StockTransactionSummary
     /// The total cost of the product this month.
     /// </summary>
     public double TotalCost { get; set; }
+
+    /// <summary>
+    /// The number of units of the product purchased as of this month?
+    /// </summary>
+    public int QuantityUnitsPurchased { get; set; }
 }
