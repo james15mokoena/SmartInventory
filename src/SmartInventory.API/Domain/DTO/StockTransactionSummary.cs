@@ -83,4 +83,28 @@ public class StockTransactionSummary
     /// The number of units of the product purchased as of this month?
     /// </summary>
     public int QuantityUnitsPurchased { get; set; }
+
+    // RETURNED SUMMARY //
+
+    /// <summary>
+    /// The total amount reclaimed from units returned to the supplier.
+    /// </summary>
+    public double AmountReclaimed { get; set; }
+
+    /// <summary>
+    /// The number of units of this product returned to the supplier.
+    /// </summary>
+    public int QuantityReturned { get; set; }
+
+    // DAMAGED SUMMARY //
+
+    /// <summary>
+    /// The number of units of the product that were damaged.
+    /// </summary>
+    public int QuantityDamaged { get; set; }
+
+    /// <summary>
+    /// The total cost of the damaged units of the product.
+    /// </summary>
+    public double DamageCost { get; set; }
 }
