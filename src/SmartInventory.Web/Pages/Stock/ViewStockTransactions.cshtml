@@ -60,14 +60,21 @@
                                 @if(Model.Reason == "Sold"){
 
                                     <ul class="facts-list">
+                                        
+                                        @{
+                                            int lpws = summary.EndOfLongestPeriodWithoutSales.Day - summary.
+                                                        StartOfLongestPeriodWithoutSales.Day;
+                                            int lpwcs = summary.EndOfLongestPeriodWithConsecutiveSales.Day - summary.StartOfLongestPeriodWithConsecutiveSales.Day;
+
+                                        }
 
                                         <li class="fact">
                                             <span class="lbls">Longest period without sales: </span>
-                                            <span class="val">[@summary.StartOfLongestPeriodWithoutSales , @summary.EndOfLongestPeriodWithoutSales]</span>
+                                            <span class="val">[@summary.StartOfLongestPeriodWithoutSales , @summary.EndOfLongestPeriodWithoutSales] (@lpws days) </span>
                                         </li>
                                         <li class="fact">
                                             <span class="lbls">Longest period with consecutive sales: </span>
-                                            <span class="val">[@summary.StartOfLongestPeriodWithConsecutiveSales , @summary.EndOfLongestPeriodWithConsecutiveSales]</span>
+                                            <span class="val">[@summary.StartOfLongestPeriodWithConsecutiveSales , @summary.EndOfLongestPeriodWithConsecutiveSales] (@lpwcs days)</span>
                                         </li>
                                         <li class="fact">
                                             <span class="lbls">Largest sale: R </span>
