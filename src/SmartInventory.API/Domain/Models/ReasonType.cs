@@ -17,7 +17,7 @@ public class ReasonType
 
     /// <summary>
     /// Indicates the reason for making modification.<br/>
-    /// Possible reasons: Purchased, Sold, Damaged, Returned, New Product.
+    /// Possible reasons: Purchased, Sold, Damaged, Returned.
     /// </summary>
     public required string Reason { get; set; }
 

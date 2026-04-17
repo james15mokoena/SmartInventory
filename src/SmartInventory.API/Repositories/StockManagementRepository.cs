@@ -1,6 +1,3 @@
-using System.Collections;
-using System.ComponentModel;
-using Microsoft.EntityFrameworkCore;
 using SmartInventory.API.Data;
 using SmartInventory.API.Domain.DTO;
 using SmartInventory.API.Domain.Models;
@@ -234,7 +231,7 @@ public class StockManagementRepository(DatabaseContext context, UserManagementRe
     /// Finds the first date of the current month.
     /// </summary>
     /// <returns></returns>
-    private static DateTime FirstDateOfCurrentMonth() => DateTime.Now.AddDays((DateTime.Now.Day - 1) * -1);
+    private static DateTime FirstDateOfCurrentMonth() => new (DateTime.Now.Year, DateTime.Now.Month, 1);
 
     /// <summary>
     /// Finds the last date of the current month.
@@ -808,33 +805,30 @@ public class StockManagementRepository(DatabaseContext context, UserManagementRe
     public bool RecordIncomingStock(string sku, int quantity, int userId, string reason)
     {
         if (_context.Products.FirstOrDefault(s => s.SKU == sku) is Product stock && !string.IsNullOrEmpty(reason) &&
-            _context.ReasonTypes.FirstOrDefault(r => r.Reason == reason) is ReasonType reasonType)
+            _context.ReasonTypes.FirstOrDefault(r => r.Reason == reason) is ReasonType reasonType && quantity > 0 && userId >= 0)
         {
 
-            if (stock.CurrentStock + quantity >= 0)
+            // record the transaction
+            _context.StockTransactions.Add(new()
             {
-                // record the transaction
-                _context.StockTransactions.Add(new()
-                {
-                    UserId = userId
-                    ,
-                    Date = DateTime.Now
-                    ,
-                    ProductId = sku
-                    ,
-                    Product = stock
-                    ,
-                    PreviousStock = stock.CurrentStock
-                    ,
-                    NewStock = stock.CurrentStock + quantity
-                    ,
-                    QuantityChange = quantity
-                    ,
-                    ReasonTypeId = reasonType.Id
-                    ,
-                    TransactionId = 0
-                });
-            }
+                UserId = userId
+                ,
+                Date = DateTime.Now
+                ,
+                ProductId = sku
+                ,
+                Product = stock
+                ,
+                PreviousStock = stock.CurrentStock
+                ,
+                NewStock = stock.CurrentStock + quantity
+                ,
+                QuantityChange = quantity
+                ,
+                ReasonTypeId = reasonType.Id
+                ,
+                TransactionId = 0
+            });
 
             // increase the stock's quantity
             stock.CurrentStock += quantity;
@@ -856,7 +850,7 @@ public class StockManagementRepository(DatabaseContext context, UserManagementRe
     public bool RecordOutgoingStock(string sku, int quantity, int userId, string reason)
     {
         if (_context.Products.FirstOrDefault(s => s.SKU == sku) is Product stock && userId >= 0 && !string.IsNullOrEmpty(reason)
-                && _context.ReasonTypes.FirstOrDefault(r => r.Reason == reason) is ReasonType reasonType)
+                && _context.ReasonTypes.FirstOrDefault(r => r.Reason == reason) is ReasonType reasonType && quantity > 0)
         {
             if (stock.CurrentStock - quantity >= 0)
             {
