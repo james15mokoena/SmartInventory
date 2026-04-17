@@ -1,4 +1,8 @@
-﻿<!DOCTYPE html>
+﻿@{
+    string? currentPage = ViewContext.RouteData.Values["page"] as string ?? "/Index";
+}
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -14,30 +18,30 @@
 
         <!-- The navigation of the web page-->
         <ul class="admin-nav">
-            <li><a class="nav-item home" href="~/Index">Home</a></li>
-            <li><a class="nav-item user" href="~/User/Index">User</a></li>
-            <li><a class="nav-item supplier" href="~/Supplier/Index">Supplier</a></li>
-            <li><a class="nav-item stock" href="~/Stock/Index">Stock</a></li>
-            <li><a class="nav-item sales" href="~/Sales/Index">Sales</a></li>
-            <li><a class="nav-item product-lnk" href="~/Product/Index">Product</a></li>
-            <li><a class="nav-item procurement" href="~/Procurement/Index">Procurement</a></li>
-            <li><a class="nav-item permission" href="~/Permission/Index">Permission</a></li>
-            <li><a class="nav-item login" href="~/Login/Login">Login</a></li>
+            <li><a class="nav-item home @(currentPage.StartsWith("/Index") == true ? "active" : "")" href="~/Index">Home</a></li>
+            <li><a class="nav-item user @(currentPage.StartsWith("/User") == true ? "active" : "")" href="~/User/Index">User</a></li>
+            <li><a class="nav-item supplier @(currentPage.StartsWith("/Supplier") == true ? "active" : "")" href="~/Supplier/Index">Supplier</a></li>
+            <li><a class="nav-item stock @(currentPage.StartsWith("/Stock") == true ? "active" : "")" href="~/Stock/Index">Stock</a></li>
+            <li><a class="nav-item sales @(currentPage.StartsWith("/Sales") == true ? "active" : "")" href="~/Sales/Index">Sales</a></li>
+            <li><a class="nav-item product-link @(currentPage.StartsWith("/Product") == true ? "active" : "")" href="~/Product/Index">Product</a></li>
+            <li><a class="nav-item procurement @(currentPage.StartsWith("/Procurement") == true ? "active" : "")" href="~/Procurement/Index">Procurement</a></li>
+            <li><a class="nav-item permission @(currentPage.StartsWith("/Permission") ? "active" : "")" href="~/Permission/Index">Permission</a></li>
+            <li><a class="nav-item login @(currentPage.StartsWith("/Login") ? "active" : "")" href="~/Login/Login">Login</a></li>
         </ul>
 
         <!-- The dropdown navigation to be shown on smaller screens -->
         <div class="dropdown">
             <img class="dropbtn" src="~/images/menu.png" alt="Menu" width="50px" height="40px">
             <div class="dropdown-content">
-                <a class="nav-item" href="Index">Home</a>
-                <a class="nav-item" href="~/User/Index">User</a>
-                <a class="nav-item" href="~/Supplier/Index">Supplier</a>
-                <a class="nav-item" href="~/Stock/Index">Stock</a>
-                <a class="nav-item" href="~/Sales/Index">Sales</a>
-                <a class="nav-item" href="~/Product/Index">Product</a>
-                <a class="nav-item" href="~/Procurement/Index">Procurement</a>
-                <a class="nav-item" href="~/Permission/Index">Permission</a>
-                <a class="nav-item" href="~/Login/Login">Login</a>
+                <a class="nav-item @(currentPage.StartsWith("/Index") == true ? "active" : "")" href="/Index">Home</a>
+                <a class="nav-item @(currentPage.StartsWith("/User") == true ? "active" : "")" href="~/User/Index">User</a>
+                <a class="nav-item @(currentPage.StartsWith("/Supplier") == true ? "active" : "")" href="~/Supplier/Index">Supplier</a>
+                <a class="nav-item @(currentPage.StartsWith("/Stock") == true ? "active" : "")" href="~/Stock/Index">Stock</a>
+                <a class="nav-item @(currentPage.StartsWith("/Sales") == true ? "active" : "")" href="~/Sales/Index">Sales</a>
+                <a class="nav-item @(currentPage.StartsWith("/Product") == true ? "active" : "")" href="~/Product/Index">Product</a>
+                <a class="nav-item @(currentPage.StartsWith("/Procurement") == true ? "active" : "")" href="~/Procurement/Index">Procurement</a>
+                <a class="nav-item @(currentPage.StartsWith("/Permission") ? "active" : "")" href="~/Permission/Index">Permission</a>
+                <a class="nav-item @(currentPage.StartsWith("/Login") ? "active" : "")" href="~/Login/Login">Login</a>
             </div>
         </div>
 

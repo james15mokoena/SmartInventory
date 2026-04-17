@@ -52,7 +52,11 @@
                                         <td>@item.StockLevel</td>
                                         <td>@item.ReorderLevel</td>
                                         <td>@item.MaximumLevel</td>
-                                        <td style="border-right: none;">@item.IsReorder</td>
+                                        @if(item.IsReorder == "Yes"){
+                                            <td style="border-right: none;background-color:green;color:white;">@item.IsReorder</td>
+                                        }else{
+                                            <td style="border-right: none;background-color:red;color:white;">@item.IsReorder</td>
+                                        }
                                     </tr>    
                                 }
                                 else{
@@ -62,7 +66,11 @@
                                         <td>@item.StockLevel</td>
                                         <td>@item.ReorderLevel</td>
                                         <td>@item.MaximumLevel</td>
-                                        <td style="border-right: none;">@item.IsReorder</td>
+                                        @if(item.IsReorder == "Yes"){
+                                            <td style="border-right: none;background-color:green;color:white;">@item.IsReorder</td>
+                                        }else{
+                                            <td style="border-right: none;background-color:red;color:white;">@item.IsReorder</td>
+                                        }
                                     </tr>
                                 }
                             }

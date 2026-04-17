@@ -35,13 +35,21 @@ public class RecordStockModel(HttpClient client, ServerConstants server) : PageM
             // convert to JSON object
             StringContent content = new(JsonSerializer.Serialize(Transaction!), Encoding.UTF8, "application/json");
 
-            HttpResponseMessage resp = await _client.PostAsync($"{server.ApiAddress}/Stock/RecordIncomingStock", content);
+            HttpResponseMessage? resp = null;
 
-            if (resp.IsSuccessStatusCode)
+            if (Transaction.TransactionReason == "Issued" || Transaction.TransactionReason == "Damaged" ||
+                Transaction.TransactionReason == "Returned")
+                resp = await _client.PostAsync($"{server.ApiAddress}/Stock/RecordOutgoingStock", content);
+            else if(Transaction.TransactionReason == "Received")
+                resp = await _client.PostAsync($"{server.ApiAddress}/Stock/RecordIncomingStock", content);
+
+            if (resp != null && resp.IsSuccessStatusCode)
                 IsRecorded = "true";
             else
                 IsRecorded = "false";
         }
+        else
+            IsRecorded = "false";
     }
 
 }

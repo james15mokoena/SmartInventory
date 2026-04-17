@@ -2,102 +2,155 @@
 @using SmartInventory.Web.Models
 @model SmartInventory.Web.Pages.Stock.ViewStockTransactionsModel;
 @{
-    ViewData["Title"] = "Stock Transactions";
+    ViewData["Title"] = "Stock Transaction Summaries";
 }
 
-<link href="~/css/layout.css" rel="stylesheet"/>
-<link href="~/css/common.css" rel="stylesheet"/>
+@*<link href="~/css/layout.css" rel="stylesheet"/>*@
+@*<link href="~/css/common.css" rel="stylesheet"/>*@
 <link href="~/css/viewstocktransactions.css" rel="stylesheet"/>
 
 <div class="container">
     
      <div class="content">
         
-        <h1>View Stock Transactions</h1>
+        <h1>Transaction Summaries</h1>
 
-        <ul class="menu">
+        <ul class="menu">           
             <li class="menu-item">
-                <button class="btn-all">
-                    All
+                <button class="tab btn-sales">
+                    Sales
                 </button>
             </li>
             <li class="menu-item">
-                <button class="btn-issued">
-                    Issued (Sold)
-                </button>
-            </li>
-            <li class="menu-item">
-                <button class="btn-received">
-                    Received (Purchased)
+                <button class="tab btn-purchases">
+                    Purchases
                 </button>
             </li>
             <li class="menu-item"> 
-                <button class="btn-returned">
+                <button class="tab btn-returned">
                     Returned
                 </button>
             </li>
             <li class="menu-item">
-                <button class="btn-damaged">
+                <button class="tab btn-damaged">
                     Damaged
-                </button>
-            </li>
-            <li class="menu-item">
-                <button class="btn-new-product">
-                    New Product
                 </button>
             </li>
         </ul>
 
-        @if(Model.StockTransactions != null && Model.StockTransactions.Count > 0){            
+        <div class="summaries">
 
-            List<StockTransactionDto> transactions = Model.StockTransactions;
+            @{
+                if(Model.TransactionSummaries != null && Model.TransactionSummaries.Count > 0){
 
-            <table class="tbl-stock">
-                <thead>
-                    <tr>
-                        <th>Transaction Id</th>
-                        <th>Product</th>
-                        <th>Date</th>
-                        <th>Previous Stock</th>
-                        <th>New Stock</th>
-                        <th>Reason</th>
-                        <th>Initiator</th>
-                    </tr>
-                </thead>
-                <tbody>             
-                    @foreach(StockTransactionDto transaction in transactions){
-                        <tr>
-                            <td>@transaction.TransactionId</td>
-                            <td>@transaction.ProductName</td>
-                            <td>@transaction.Date</td>
-                            <td>@transaction.PreviousStock</td>
-                            <td>@transaction.NewStock</td>
-                            <td>@transaction.Reason</td>
-                            <td>@transaction.UserName</td>
-                        </tr>
+                    List<StockTransactionSummary> summaries = Model.TransactionSummaries;
+                    
+                    foreach(StockTransactionSummary summary in summaries){
+
+                        <div class="summary">
+
+                            <div class="summary-header">
+                                <button class="collaps">+</button>
+                                <h3>@summary.ProductName</h3>
+                                <span></span>
+                            </div>
+
+                            <div class="summary-content closed">
+                                
+                                @if(Model.Reason == "Sold"){
+
+                                    <ul class="facts-list">
+
+                                        <li class="fact">
+                                            <span class="lbls">Longest period without sales: </span>
+                                            <span class="val">[@summary.StartOfLongestPeriodWithoutSales , @summary.EndOfLongestPeriodWithoutSales]</span>
+                                        </li>
+                                        <li class="fact">
+                                            <span class="lbls">Longest period with consecutive sales: </span>
+                                            <span class="val">[@summary.StartOfLongestPeriodWithConsecutiveSales , @summary.EndOfLongestPeriodWithConsecutiveSales]</span>
+                                        </li>
+                                        <li class="fact">
+                                            <span class="lbls">Largest sale: R </span>
+                                            <span class="val">@summary.LargestSale</span>
+                                        </li>
+                                        <li class="fact">
+                                            <span class="lbls">Lowest sale: R </span>
+                                            <span class="val">@summary.LowestSale</span>
+                                        </li>
+                                        <li class="fact">
+                                            <span class="lbls">Total sales: R</span>
+                                            <span class="val">@summary.TotalSales</span>
+                                        </li>
+                                        <li class="fact">
+                                            <span class="lbls">Number of units sold this month: </span>
+                                            <span class="val">@summary.QuantityUnitsSold</span>
+                                        </li>
+                                        <li class="fact">
+                                            <span class="lbls">Number of units unsold: </span>
+                                            <span class="val">@summary.QuantityUnitsUnsold</span>
+                                        </li>
+                                    </ul>
+                                }
+                                else if(Model.Reason == "Purchased"){
+
+                                    <ul class="facts-list">
+                                        
+                                        <li class="fact">
+                                            <span class="lbls">Number of times ordered: </span>
+                                            <span class="val">@summary.NumberOfTimesTheProductHasBeenOrdered</span>
+                                        </li>
+                                        <li class="fact">
+                                            <span class="lbls">Quantity units purchased: </span>
+                                            <span class="val">@summary.QuantityUnitsPurchased</span>
+                                        </li>
+                                        <li class="fact">
+                                            <span class="lbls">Largest order: R </span>
+                                            <span class="val">@summary.LargestOrder</span>
+                                        </li>
+                                        <li class="fact">
+                                            <span class="lbls">Lowest order: R </span>
+                                            <span class="val">@summary.LowestOrder</span>
+                                        </li>
+                                        <li class="fact">
+                                            <span class="lbls">Total cost: R</span>
+                                            <span class="val">@summary.TotalCost</span>
+                                        </li>
+                                    </ul>
+                                }
+                                else if(Model.Reason == "Returned"){
+
+                                    <ul class="facts-list">
+                                        
+                                        <li class="fact">
+                                            <span class="lbls">Quantity units returned: </span>
+                                            <span class="val">@summary.QuantityReturned</span>
+                                        </li>
+                                        <li class="fact">
+                                            <span class="lbls">Total amount reclaimed: R</span>
+                                            <span class="val">@summary.AmountReclaimed</span>
+                                        </li>                                       
+                                    </ul>
+                                }
+                                else if(Model.Reason == "Damaged"){
+                                    <ul class="facts-list">
+                                        
+                                        <li class="fact">
+                                            <span class="lbls">Quantity units damaged: </span>
+                                            <span class="val">@summary.QuantityDamaged</span>
+                                        </li>
+                                        <li class="fact">
+                                            <span class="lbls">Total damage cost: R</span>
+                                            <span class="val">@summary.DamageCost</span>
+                                        </li>                                       
+                                    </ul>
+                                }
+
+                            </div>
+                        </div>
                     }
-                </tbody>
-            </table>
-
-            @if(@Model.IsFetched == "false" && @Model.StockTransactions.Count > 0){
-                <a class="btn-more" style="display: none;" href="~/Stock/ViewStockTransactions">
-                    Get More
-                </a>
-                <h3 style="color: green;">All transactions are displayed.</h3>
-            }
-            else{
-                <a class="btn-more" href="~/Stock/ViewStockTransactions">
-                    Get More
-                </a>
-            }     
-        }
-        else{
-            <h3 style="color: red;">No transactions</h3>
-        }
-
-        @if(Model.IsFetched == "false" && @Model.StockTransactions!.Count == 0){
-            <h3 style="color: red;">No transactions</h3>
-        }  
+                }
+            }                
+        </div>
 
     </div>
 
