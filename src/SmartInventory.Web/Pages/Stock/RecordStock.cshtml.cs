@@ -22,7 +22,11 @@ public class RecordStockModel(HttpClient client, ServerConstants server) : PageM
     [BindProperty]
     public string? IsRecorded { get; set; } = "";
 
-    public void OnGet() { }
+    public void OnGet() 
+    {
+        if (HttpContext.Session.GetString("Username") is string username)
+            TempData["Username"] = username;    
+    }
 
     public async Task OnPostRecordStock()
     {

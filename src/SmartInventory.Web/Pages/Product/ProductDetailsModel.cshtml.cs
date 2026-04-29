@@ -24,6 +24,9 @@ public class ProductDetailsModel(HttpClient client, ServerConstants server) : Pa
 
     public async Task OnGet(string sku)
     {
+        if (HttpContext.Session.GetString("Username") is string username)
+            TempData["Username"] = username;
+
         // send the request to fetch the data using the sku of the product.
         HttpResponseMessage resp = await _client.GetAsync(
             $"{server.ApiAddress}/Product/ViewProductDetailsBySku/{sku}/{HttpContext.Session.GetString("Username")}");

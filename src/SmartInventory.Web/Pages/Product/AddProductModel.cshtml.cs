@@ -28,7 +28,8 @@ public class AddProductModel(HttpClient client, ServerConstants server) : PageMo
 
     public void OnGet()
     {
-
+        if (HttpContext.Session.GetString("Username") is string username)
+            TempData["Username"] = username;
     }
 
     /// <summary>

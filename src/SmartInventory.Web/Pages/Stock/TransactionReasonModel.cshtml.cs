@@ -49,6 +49,8 @@ public class TransactionReasonModel(HttpClient client, ServerConstants server) :
         }
 
         string? username = HttpContext.Session.GetString("Username");
+        if (username != null)
+            TempData["Username"] = username;
 
         // get transaction reasons
         HttpResponseMessage resp = await _client.GetAsync($"{server.ApiAddress}/Stock/ViewTransactionReasons/{username}");

@@ -40,4 +40,6 @@ app.MapStaticAssets();
 app.MapRazorPages()
    .WithStaticAssets();
 
+app.UseStaticFiles();
+
 app.Run();

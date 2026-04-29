@@ -28,7 +28,11 @@ public class EditProductModel(HttpClient client, ServerConstants server) : PageM
     [BindProperty]
     public string IsFetched { get; set; } = "";
 
-    public void OnGet() { }
+    public void OnGet()
+    {
+        if (HttpContext.Session.GetString("Username") is string username)
+            TempData["Username"] = username;
+    }
 
     /// <summary>
     /// Fetches a product's data before its being updated.

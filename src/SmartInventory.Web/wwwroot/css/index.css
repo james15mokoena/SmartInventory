@@ -1,9 +1,89 @@
 .content{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     text-align: center;
 }
 
-footer{
+.charts{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.chart{
+    width: 750px;
+    height: 700px;
+    border: 2px solid red;
+    margin: 7px;
+}
+
+.revenue-chart-cnt{
+    border: 2px solid blue;
+    margin: 7px;
+    border-radius: 7px;
+}
+
+.btn-view-more-info{
+    width: 150px;
+    height: 40px;
+    border-radius: 12px;
+    font-size: 15px;
+    margin: 10px;
+    background-color: lightblue;
+}
+
+.info{
+    border: 1px solid green;
+    margin: 5px;
+    background-color: antiquewhite;
+    border: 2px solid antiquewhite;
+}
+
+.show{
+    display: block;
+}
+
+.hide{
+    display: none;
+}
+
+.btn-item{
+    width: 200px;
+    height: 50px;
+    background-color: peru;
+    font-size: 20px;
+    border-radius: 15px;
+    margin: 7px;
+    border: none;
+}
+
+.btn-item:hover{
+    background-color: lightseagreen;
+}
+
+.show-reports-tab{
+    display: block;
+}
+
+.hide-reports-tab{
+    display: none;
+}
+
+.home-menu{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.home-heading{
+    font-size: 50px;
+}
+
+/*footer{
     position: fixed;
     width: 100%;
     bottom: 0px;
-}
+}*/

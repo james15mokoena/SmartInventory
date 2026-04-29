@@ -1,4 +1,5 @@
 ﻿@page
+@using System.Text.Json
 @model SmartInventory.Web.Pages.IndexModel
 
 @{
@@ -11,7 +12,62 @@
 <div class="container">
 
     <div class="content">
-        Landing Home Page Content
+        
+        <h1 class="home-heading">Dashboard</h1>
+
+        <div class="home-menu">
+            <button class="btn-item btn-sales-charts">Sales Reports</button>
+            <button class="btn-item btn-purchases-charts">Purchases Reports</button>
+            <button class="btn-item btn-returns-charts">Returns Reports</button>
+            <button class="btn-item btn-damages-charts">Damages Reports</button>
+        </div>
+
+        @if(Model.IsFetched == "true"){
+
+            <div class="charts">
+
+                <div class="sales-reports show-reports-tab">
+
+                    <h2 style="font-size: 30px;">Sales Reports</h2>
+
+                    <div class="revenue-chart-cnt">
+                        <canvas id="revenue-chart-canvas" class="chart"></canvas>
+                        <div class="more-info">
+                            <button class="btn-view-more-info">View More Info</button>
+                            <div class="info hide">
+                                Provides more insight/information regarding the monthly revenue trends.
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="purchases-reports hide-reports-tab">
+
+                    <h2 style="font-size: 30px;">Purchases Reports</h2>
+
+                </div>
+
+                <div class="returns-reports hide-reports-tab">
+
+                    <h2 style="font-size: 30px;">Returns Reports</h2>
+
+                </div>
+
+                <div class="damages-reports hide-reports-tab">
+
+                    <h2 style="font-size: 30px;">Damages Reports</h2>
+                </div>
+
+            </div>
+        }
+        else if(Model.IsFetched == "false"){
+            <h2 style="text-align: center;background-color: red;">
+                No reports generated.
+            </h2>
+        }
+        
+    
     </div>
 
     <footer>
@@ -19,3 +75,44 @@
     </footer>
 
 </div>
+
+<script src="~/lib/chartjs/chart.umd.min.js" type="text/javascript"></script>
+<script src="~/js/index.js" type="text/javascript"></script>
+
+<script>
+
+    /**
+    * Code for the "Monthly Revenue Trends" chart.
+    */
+    const revenueChartCanvasCtx = document.getElementById("revenue-chart-canvas").getContext("2d");
+    let months = @Html.Raw(JsonSerializer.Serialize(Model.Months));
+    let revenues = @Html.Raw(JsonSerializer.Serialize(Model.Revenues));
+
+    const revenueChart = new Chart(revenueChartCanvasCtx, {
+        type: 'line',
+        data: {
+            // x-axis
+            labels: months,
+            datasets: [
+                {
+                    label: 'Monthly Revenue Trends (R)',
+                    data: revenues,
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    labels: {
+                        font: {
+                            size: 25
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+
+</script>

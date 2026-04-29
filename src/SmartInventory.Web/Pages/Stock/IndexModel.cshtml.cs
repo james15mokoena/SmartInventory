@@ -4,5 +4,9 @@ namespace SmartInventory.Web.Pages.Stock;
 
 public class IndexModel : PageModel
 {
-    public void OnGet(){}
+    public void OnGet()
+    {
+        if (HttpContext.Session.GetString("Username") is string username)
+            TempData["Username"] = username;
+    }
 }

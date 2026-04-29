@@ -55,6 +55,9 @@ public class ViewStockTransactionsModel(HttpClient client, ServerConstants serve
     /// <returns></returns>
     public async Task OnGet(string? reason = "Sold")
     {
+        if (HttpContext.Session.GetString("Username") is string username)
+            TempData["Username"] = username;
+
         if (!string.IsNullOrEmpty(reason))
             await GetStockTransactionSummaries(reason);
         else

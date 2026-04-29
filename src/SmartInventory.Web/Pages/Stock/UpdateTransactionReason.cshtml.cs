@@ -15,6 +15,8 @@ public class UpdateTransactionReason(HttpClient client, ServerConstants server) 
     public async Task<IActionResult> OnGet(int reasonId)
     {
         string? username = HttpContext.Session.GetString("Username");
+        if (username != null)
+            TempData["Username"] = username;
 
         HttpResponseMessage resp = await _client.PutAsync($"{server.ApiAddress}/Stock/ToggleTransactionReasonStatus/{reasonId}/{username}", null);
 

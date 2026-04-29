@@ -18,6 +18,8 @@ public class ViewProductsModel(HttpClient client, ServerConstants server) : Page
     public async Task OnGet(string? type)
     {
         string? username = HttpContext.Session.GetString("Username");
+        if (username != null)
+            TempData["Username"] = username;
 
         HttpResponseMessage? resp = null;
 

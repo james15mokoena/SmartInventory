@@ -24,6 +24,8 @@ public class ViewStockReportModel(HttpClient client, ServerConstants server) : P
     public async Task OnGet()
     {
         string? username = HttpContext.Session.GetString("Username");
+        if (username != null)
+            TempData["Username"] = username;
 
         if (!string.IsNullOrEmpty(username))
         {
