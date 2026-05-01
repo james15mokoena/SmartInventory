@@ -31,6 +31,231 @@ public class HomeRepository(DatabaseContext context)
     }
 
     /// <summary>
+    /// Returns the name of the month with the given index.
+    /// </summary>
+    /// <param name="monthIdx"></param>
+    /// <returns></returns>
+    private static string GetMonth(int monthIdx)
+    {
+        return monthIdx switch
+        {
+            1 => "Jan",
+            2 => "Feb",
+            3 => "Mar",
+            4 => "Apr",
+            5 => "May",
+            6 => "Jun",
+            7 => "Jul",
+            8 => "Aug",
+            9 => "Sep",
+            10 => "Oct",
+            11 => "Nov",
+            12 => "Dec",
+            _ => "Jan"
+        };
+    }
+
+    /// <summary>
+    /// Query: <b>Which product categories contribute at most 50% of the total revenue for this month?</b>
+    /// </summary>
+    /// <returns></returns>
+    public List<CategorySales>? GetCategoriesContributingAtMost50PercentMonth()
+    {
+
+        var result =
+            from trans in _context.StockTransactions
+            join product in _context.Products on trans.ProductId equals product.SKU
+            join r in _context.ReasonTypes on trans.ReasonTypeId equals r.Id
+            where r.Reason == "Sold" && trans.Date >= FirstDateOfCurrentMonth() && trans.Date <= LastDateOfCurrentMonth()
+            group trans by product.Category into tGroup
+            select new
+            {
+                Category = tGroup.Key,
+                Percentage =
+                    (from t in tGroup
+                     join product2 in _context.Products on t.ProductId equals product2.SKU
+                     select t.QuantityChange * product2.UnitPrice).Sum()
+            } into res
+            orderby res.Percentage descending
+            select res;
+
+        // compute the total revenue for this month
+        double revenue =
+            (from trans in _context.StockTransactions
+             join product in _context.Products on trans.ProductId equals product.SKU
+             join r in _context.ReasonTypes on trans.ReasonTypeId equals r.Id
+             where r.Reason == "Sold" && trans.Date >= FirstDateOfCurrentMonth() && trans.Date <= LastDateOfCurrentMonth()
+             select trans.QuantityChange * product.UnitPrice).Sum();
+
+        if (result.Any())
+        {
+            List<CategorySales> results = [];
+
+            foreach (var item in result)
+            {
+                CategorySales category = new()
+                {
+                    Category = item.Category,
+                    Sales = 100 * (item.Percentage / revenue)
+                };
+
+                if (category.Sales <= 50)
+                    results.Add(category);
+            }
+
+            return results;
+        }
+
+        return null;
+    }
+
+    /// <summary>
+    /// Query: <b>Which product categories contribute at most 50% of the total revenue for this month?</b>
+    /// </summary>
+    /// <returns></returns>
+    public List<CategorySales>? GetCategoriesContributingMoreThan50PercentMonth()
+    {
+
+        var result =
+            from trans in _context.StockTransactions
+            join product in _context.Products on trans.ProductId equals product.SKU
+            join r in _context.ReasonTypes on trans.ReasonTypeId equals r.Id
+            where r.Reason == "Sold" && trans.Date >= FirstDateOfCurrentMonth() && trans.Date <= LastDateOfCurrentMonth()
+            group trans by product.Category into tGroup
+            select new
+            {
+                Category = tGroup.Key,
+                Percentage =
+                    (from t in tGroup
+                     join product2 in _context.Products on t.ProductId equals product2.SKU
+                     select t.QuantityChange * product2.UnitPrice).Sum()
+            } into res
+            orderby res.Percentage descending
+            select res;
+
+        // compute the total revenue for this month
+        double revenue =
+            (from trans in _context.StockTransactions
+             join product in _context.Products on trans.ProductId equals product.SKU
+             join r in _context.ReasonTypes on trans.ReasonTypeId equals r.Id
+             where r.Reason == "Sold" && trans.Date >= FirstDateOfCurrentMonth() && trans.Date <= LastDateOfCurrentMonth()
+             select trans.QuantityChange * product.UnitPrice).Sum();
+
+        if (result.Any())
+        {
+            List<CategorySales> results = [];
+
+            foreach (var item in result)
+            {
+                CategorySales category = new()
+                {
+                    Category = item.Category,
+                    Sales = 100 * (item.Percentage / revenue)
+                };
+
+                if (category.Sales > 50)
+                    results.Add(category);
+            }
+
+            return results;
+        }
+
+        return null;
+    }
+
+    /// <summary>
+    /// Answers: <b>Which product categories make up the top 5 most sales this month?</b>
+    /// </summary>
+    /// <returns></returns>
+    public List<CategorySales>? GetTopFiveMostSellingCategoriesThisMonth()
+    {
+        var topFiveMostSelling =
+            (from trans in _context.StockTransactions
+             join product in _context.Products on trans.ProductId equals product.SKU
+             join rType in _context.ReasonTypes on trans.ReasonTypeId equals rType.Id
+             where rType.Reason == "Sold" && trans.Date >= FirstDateOfCurrentMonth() && trans.Date <= LastDateOfCurrentMonth()
+             group trans by product.Category into tGroup
+             select new
+             {
+                 Category = tGroup.Key,
+                 Sales = (from trans2 in tGroup
+                          join product2 in _context.Products on trans2.ProductId equals product2.SKU
+                          select trans2.QuantityChange * product2.UnitPrice).Sum()
+             } into result
+             orderby result.Sales descending
+             select result).Take(5);
+
+        if (topFiveMostSelling.Any())
+        {
+            List<CategorySales> mostSelling = [];
+
+            foreach (var res in topFiveMostSelling)
+            {
+                CategorySales category = new()
+                {
+                    Category = res.Category,
+                    Sales = res.Sales
+                };
+
+                mostSelling.Add(category);
+            }
+
+            return mostSelling;
+        }
+
+        return null;
+    }
+
+    /// <summary>
+    /// Answers: <b>What is the total revenue for each month this year?</b>
+    /// </summary>
+    /// <returns></returns>
+    public List<MonthlyRevenue>? GetMonthlyRevenues()
+    {
+        // the first and last dates of the current year.
+        DateTime startDate = new(DateTime.Now.Year, 1, 1);
+        DateTime lastDate = new(DateTime.Now.Year, 12, 31);
+
+        var monthlyRevenues =
+            from trans in _context.StockTransactions
+            join product in _context.Products on trans.ProductId equals product.SKU
+            join rType in _context.ReasonTypes on trans.ReasonTypeId equals rType.Id
+            where rType.Reason == "Sold" && trans.Date >= startDate && trans.Date <= lastDate
+            group trans by trans.Date.Month into transGroup
+            orderby transGroup.Key
+            select new
+            {
+                Month = transGroup.Key,
+                Revenue =
+                    (from trans2 in transGroup
+                     join product2 in _context.Products on trans2.ProductId equals product2.SKU
+                     select trans2.QuantityChange * product2.UnitPrice).Sum()
+            };
+
+        if (monthlyRevenues.Any())
+        {
+            List<MonthlyRevenue> revenues = [];
+            int i = 0;
+
+            while (i < monthlyRevenues.Count())
+            {
+                MonthlyRevenue monthlyRevenue = new()
+                {
+                    Month = GetMonth(monthlyRevenues.ElementAt(i).Month),
+                    Revenue = monthlyRevenues.ElementAt(i).Revenue
+                };
+
+                revenues.Add(monthlyRevenue);
+                ++i;
+            }
+
+            return revenues;
+        }
+
+        return null;
+    }
+
+    /// <summary>
     /// Answers the question: <b>What is the total revenue for this month?</b>
     /// </summary>
     /// <returns></returns>

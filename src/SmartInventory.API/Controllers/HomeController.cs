@@ -11,6 +11,45 @@ public class HomeController(HomeService homeService) : ControllerBase
     private readonly HomeService _homeServ = homeService;
 
     /// <summary>
+    /// Gets categories that contribute at most 50% towards the revenue this month.
+    /// </summary>
+    /// <param name="username"></param>
+    /// <returns></returns>
+    [HttpGet("{username}")]
+    public IActionResult GetCategoriesContributingAtMost50PercentMonth(string username) =>
+        !string.IsNullOrEmpty(username) && _homeServ.GetCategoriesContributingAtMost50PercentMonth(username)
+        is List<CategorySales> res ? Ok(res) : BadRequest("Failed to get the data!");
+
+    /// <summary>
+    /// Gets categories that contribute more than 50% towards the revenue this month.
+    /// </summary>
+    /// <param name="username"></param>
+    /// <returns></returns>
+    [HttpGet("{username}")]
+    public IActionResult GetCategoriesContributingMoreThan50PercentMonth(string username) =>
+        !string.IsNullOrEmpty(username) && _homeServ.GetCategoriesContributingMoreThan50PercentMonth(username)
+        is List<CategorySales> res ? Ok(res) : BadRequest("Failed to get the data!");
+
+    /// <summary>
+    /// Gets the top 5 most selling categories.
+    /// </summary>
+    /// <param name="username"></param>
+    /// <returns></returns>
+    [HttpGet("{username}")]
+    public IActionResult GetTopFiveMostSellingCategoriesThisMonth(string username) =>
+        !string.IsNullOrEmpty(username) && _homeServ.GetTopFiveMostSellingCategoriesThisMonth(username) is List<CategorySales> s ? Ok(s) : BadRequest("Failed to get the top 5 most selling products.");
+
+    /// <summary>
+    /// Gets the monthly revenues in the current year.
+    /// </summary>
+    /// <param name="username"></param>
+    /// <returns></returns>
+    [HttpGet("{username}")]
+    public IActionResult ViewMonthlyRevenues(string username) =>
+        !string.IsNullOrEmpty(username) ? Ok(_homeServ.GetMonthlyRevenues(username)) :
+        BadRequest("Failed to get monthly revenues!");
+
+    /// <summary>
     /// Gets the total revenue for the current month.
     /// </summary>
     /// <param name="username"></param>
