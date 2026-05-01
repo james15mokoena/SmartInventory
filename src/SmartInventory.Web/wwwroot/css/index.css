@@ -15,19 +15,21 @@
 .chart{
     width: 750px;
     height: 700px;
-    border: 2px solid red;
     margin: 7px;
 }
 
 .revenue-chart-cnt{
-    border: 2px solid blue;
     margin: 7px;
     border-radius: 7px;
 }
 
+.chart{
+    background-color: bisque;
+}
+
 .btn-view-more-info{
     width: 150px;
-    height: 40px;
+    height: 35px;
     border-radius: 12px;
     font-size: 15px;
     margin: 10px;
@@ -39,14 +41,6 @@
     margin: 5px;
     background-color: antiquewhite;
     border: 2px solid antiquewhite;
-}
-
-.show{
-    display: block;
-}
-
-.hide{
-    display: none;
 }
 
 .btn-item{
@@ -80,6 +74,25 @@
 
 .home-heading{
     font-size: 50px;
+    margin-bottom: 20px;
+    margin-top: 5px;
+}
+
+.show{
+    display: block;
+}
+
+.hide{
+    display: none;
+}
+
+.all-charts-cnts{
+    display: grid;
+    grid-template-columns: repeat(2, 700px);
+}
+
+.inner-charts{
+    margin: 10px;
 }
 
 /*footer{

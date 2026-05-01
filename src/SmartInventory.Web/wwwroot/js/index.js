@@ -28,32 +28,25 @@ let homeMenuBtns = document.querySelectorAll(".btn-item");
  * When a button is clicked, it deselects other buttons.
  */
 function deselectBtns() {
-    
-    homeMenuBtns.forEach(btn => {
-        btn.classList.remove("show");
-        btn.style.backgroundColor = "peru";
-    });
+    homeMenuBtns.forEach(btn => btn.style.backgroundColor = "peru");
 }
 
 /**
- * Shows or hide a tab based on the selected menu button.
- * @param {*} tabClassName A class name for the tab to be shown.
+ * Hides all reports tab before the selected one is displayed.
  */
-function showOrHideReportsTab(tabClassName) {
+function hideReportsTabs() {
     
     const reportsDiv = document.querySelector(".charts");
-    const reportsTabs = reportsDiv.children;
+    
+    if (reportsDiv != null) {
 
-    for (i = 0; i < reportsTabs.length; ++i){
+        const tabs = reportsDiv.children;
 
-        if (!reportsTabs[i].classList.contains(tabClassName)) {
-            reportsTabs[i].classList.remove("show-reports-tab");
-            reportsTabs[i].classList.add("hide-reports-tab");
-        } else {
-            reportsTabs[i].classList.remove("hide-reports-tab");
-            reportsTabs[i].classList.add("show-reports-tab");
+        for (i = 0; i < tabs.length; ++i) {
+
+            tabs[i].classList.remove("show-reports-tab");
+            tabs[i].classList.add("hide-reports-tab");
         }
-            
     }
 }
 
@@ -63,46 +56,69 @@ homeMenuBtns.forEach(btn => {
 
         deselectBtns();
 
-        const reportsDiv = document.querySelector(".charts");
-
-        if (btn.classList.contains("btn-sales-charts") && !btn.classList.contains("show")) {
-            btn.classList.add("show");
-
-            // show the sales reports tab and hide all other tabs.
-            const reportsTabs = reportsDiv.children;
-
-            showOrHideReportsTab("sales-reports");
+        if (btn.classList.contains("btn-sales-charts")) {
             
-            console.log(reportsTabs);
+            // show the sales reports tab and hide all other tabs.            
+            localStorage.setItem("clickedHomeBtn", "btn-sales-charts");
+            localStorage.setItem("tabToShow", "sales-reports");
+            window.location.href = "http://localhost:5289/Index?action=Sales";
         }
         else if (btn.classList.contains("btn-purchases-charts") && !btn.classList.contains("show")) {
-            btn.classList.add("show");
 
             // show the purchases reports tab and hide all other tabs.
-            const reportsTabs = reportsDiv.children;
-            showOrHideReportsTab("purchases-reports");
-            console.log(reportsTabs);
+            localStorage.setItem("clickedHomeBtn", "btn-purchases-charts");
+            localStorage.setItem("tabToShow", "purchases-reports");
+            window.location.href = "http://localhost:5289/Index?action=Purchases";
         }
         else if (btn.classList.contains("btn-returns-charts") && !btn.classList.contains("show")) {
-            btn.classList.add("show");
 
             // show the returns reports tab and hide all other tabs.
-            const reportsTabs = reportsDiv.children;
-            showOrHideReportsTab("returns-reports");
-            console.log(reportsTabs);
+            localStorage.setItem("clickedHomeBtn", "btn-returns-charts");
+            localStorage.setItem("tabToShow", "returns-reports");
+            window.location.href = "http://localhost:5289/Index?action=Returns";
         }
         else if (btn.classList.contains("btn-damages-charts") && !btn.classList.contains("show")) {
-            btn.classList.add("show");
 
             // show the damages reports tab and hide all other tabs.
-            const reportsTabs = reportsDiv.children;
-            showOrHideReportsTab("damages-reports");
-            console.log(reportsTabs);
+            localStorage.setItem("clickedHomeBtn", "btn-damages-charts");
+            localStorage.setItem("tabToShow", "damages-reports");
+            window.location.href = "http://localhost:5289/Index?action=Damages";
         }
-
-        btn.style.backgroundColor = "lightseagreen";
     });
 });
+
+// After page reload change the background color of the clicked button and show its corresponding tab/content.
+let clickedHomeBtn = localStorage.getItem("clickedHomeBtn");
+let tabToShow = localStorage.getItem("tabToShow");
+
+/**
+ * Changes the background color of the selected button and shows the corresponding
+ * tab.
+ * @param {*} clickedBtn The clicked button.
+ * @param {*} tabToShowClassName The class name of the tab to be displayed.
+ */
+function changeClickedBtnBgColorHelper(clickedBtn, tabToShowClassName) {
+    
+    clickedBtn.style.backgroundColor = "lightseagreen";
+    hideReportsTabs();
+    let tab = document.querySelector(tabToShowClassName);
+    tab.classList.remove("hide-reports-tab");
+    tab.classList.add("show-reports-tab");
+}
+
+homeMenuBtns.forEach(btn => {
+
+    if (btn.classList.contains("btn-sales-charts") && clickedHomeBtn === "btn-sales-charts")
+        changeClickedBtnBgColorHelper(btn, ".sales-reports")
+    else if (btn.classList.contains("btn-purchases-charts") && clickedHomeBtn === "btn-purchases-charts")
+        changeClickedBtnBgColorHelper(btn, ".purchases-reports")
+    else if (btn.classList.contains("btn-returns-charts") && clickedHomeBtn === "btn-returns-charts")
+        changeClickedBtnBgColorHelper(btn, ".returns-reports")
+    else if (btn.classList.contains("btn-damages-charts") && clickedHomeBtn === "btn-damages-charts")
+        changeClickedBtnBgColorHelper(btn, ".damages-reports")
+});
+
+localStorage.clear();
 
 // ##################################### UTILITY FUNCTIONS ##################################### //
 
