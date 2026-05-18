@@ -110,7 +110,7 @@ public class IndexModel(HttpClient client, ServerConstants server) : PageModel
     /// </summary>
     /// <param name="action">Indicates whether to generates sales, purchases, returns or damages reports</param>
     /// <returns></returns>
-    public async Task OnGet(string? action = "Sales")
+    public async Task OnGet(string? action = "Sales", int monthIdx = 1)
     {
         string? username = HttpContext.Session.GetString("Username");
 
@@ -121,7 +121,7 @@ public class IndexModel(HttpClient client, ServerConstants server) : PageModel
         {
             if ((!string.IsNullOrEmpty(action) && action == "Sales") || string.IsNullOrEmpty(action))
             {
-                if (await GenerateSalesReports(username))
+                if (await GenerateSalesReports(username, monthIdx))
                     IsFetched = "true";
                 else
                     IsFetched = "false";
@@ -150,7 +150,7 @@ public class IndexModel(HttpClient client, ServerConstants server) : PageModel
                         PropertyNameCaseInsensitive = true
                     });
 
-                if (MonthlyRevenues != null && MonthlyRevenues.Count > 0)
+                if (MonthlyRevenues != null && MonthlyRevenues.Count >= 0)
                 {
                     Months.Clear();
                     Revenues.Clear();
@@ -170,15 +170,15 @@ public class IndexModel(HttpClient client, ServerConstants server) : PageModel
     }
 
     /// <summary>
-    /// Fetches data for the top five most selling categories this month report.
+    /// Fetches data for the top five most selling categories in the given month report.
     /// </summary>
     /// <param name="username"></param>
     /// <returns></returns>
-    private async Task<bool> GenerateTopFiveMostSellingCategoriesThisMonthReport(string username)
+    private async Task<bool> GenerateTopFiveMostSellingCategoriesThisMonthReport(string username, int monthIdx)
     {
         if (!string.IsNullOrEmpty(username))
         {
-            HttpResponseMessage resp = await _client.GetAsync($"{_server.ApiAddress}/Home/GetTopFiveMostSellingCategoriesThisMonth/{username}");
+            HttpResponseMessage resp = await _client.GetAsync($"{_server.ApiAddress}/Home/GetTopFiveMostSellingCategoriesThisMonth/{username}/{monthIdx}");
 
             if (resp.IsSuccessStatusCode)
             {
@@ -188,7 +188,7 @@ public class IndexModel(HttpClient client, ServerConstants server) : PageModel
                         PropertyNameCaseInsensitive = true
                     });
 
-                if (TopFiveMostSellingCategories != null && TopFiveMostSellingCategories.Count > 0)
+                if (TopFiveMostSellingCategories != null && TopFiveMostSellingCategories.Count >= 0)
                 {
                     TopFiveCategories.Clear();
                     TopFiveCategoriesSales.Clear();
@@ -208,16 +208,54 @@ public class IndexModel(HttpClient client, ServerConstants server) : PageModel
     }
 
     /// <summary>
-    /// Fetches data for categories contributing more than 50% towards this month's revenue.
+    /// Fetches data for the bottom five least selling categories in the given month report.
     /// </summary>
     /// <param name="username"></param>
     /// <returns></returns>
-    private async Task<bool> GenerateCategoriesContributingMoreThan50PercentMonthReport(string username)
+    private async Task<bool> GenerateBottomFiveLeastSellingCategoriesThisMonthReport(string username, int monthIdx)
+    {
+        if (!string.IsNullOrEmpty(username))
+        {
+            HttpResponseMessage resp = await _client.GetAsync($"{_server.ApiAddress}/Home/GetBottomFiveLeastSellingCategoriesThisMonth/{username}/{monthIdx}");
+
+            if (resp.IsSuccessStatusCode)
+            {
+                BottomFiveLeastSellingCategories = JsonSerializer.Deserialize<List<CategorySales>>(await resp.Content.ReadAsStringAsync(),
+                    new JsonSerializerOptions
+                    {
+                        PropertyNameCaseInsensitive = true
+                    });
+
+                if (BottomFiveLeastSellingCategories != null && BottomFiveLeastSellingCategories.Count >= 0)
+                {
+                    BottomFiveCategories.Clear();
+                    BottomFiveCategoriesSales.Clear();
+
+                    foreach (var item in BottomFiveLeastSellingCategories)
+                    {
+                        BottomFiveCategories.Add(item.Category);
+                        BottomFiveCategoriesSales.Add(item.Sales);
+                    }
+
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    /// Fetches data for categories contributing more than 50% towards the given month's revenue.
+    /// </summary>
+    /// <param name="username"></param>
+    /// <returns></returns>
+    private async Task<bool> GenerateCategoriesContributingMoreThan50PercentMonthReport(string username, int monthIdx)
     {
         if (!string.IsNullOrEmpty(username))
         {
             HttpResponseMessage resp =
-            await _client.GetAsync($"{_server.ApiAddress}/Home/GetCategoriesContributingMoreThan50PercentMonth/{username}");
+            await _client.GetAsync($"{_server.ApiAddress}/Home/GetCategoriesContributingMoreThan50PercentMonth/{username}/{monthIdx}");
 
             if (resp.IsSuccessStatusCode)
             {
@@ -227,7 +265,7 @@ public class IndexModel(HttpClient client, ServerConstants server) : PageModel
                         PropertyNameCaseInsensitive = true
                     });
 
-                if (CategoriesContributingMoreThan50Percent != null && CategoriesContributingMoreThan50Percent.Count > 0)
+                if (CategoriesContributingMoreThan50Percent != null && CategoriesContributingMoreThan50Percent.Count >= 0)
                 {
                     CategoriesCMT50Percent.Clear();
                     ContributionsMT50Percent.Clear();
@@ -247,16 +285,16 @@ public class IndexModel(HttpClient client, ServerConstants server) : PageModel
     }
 
     /// <summary>
-    /// Fetches data for categories contributing at most 50% towards this month's revenue.
+    /// Fetches data for categories contributing at most 50% towards the given month's revenue.
     /// </summary>
     /// <param name="username"></param>
     /// <returns></returns>
-    private async Task<bool> GenerateCategoriesContributingAtMost50PercentMonth(string username)
+    private async Task<bool> GenerateCategoriesContributingAtMost50PercentMonth(string username, int monthIdx)
     {
         if (!string.IsNullOrEmpty(username))
         {
             HttpResponseMessage resp =
-                await _client.GetAsync($"{_server.ApiAddress}/Home/GetCategoriesContributingAtMost50PercentMonth/{username}");
+                await _client.GetAsync($"{_server.ApiAddress}/Home/GetCategoriesContributingAtMost50PercentMonth/{username}/{monthIdx}");
 
             if (resp.IsSuccessStatusCode)
             {
@@ -266,7 +304,7 @@ public class IndexModel(HttpClient client, ServerConstants server) : PageModel
                         PropertyNameCaseInsensitive = true
                     });
 
-                if (CategoriesContributingAtMost50Percent != null && CategoriesContributingAtMost50Percent.Count > 0)
+                if (CategoriesContributingAtMost50Percent != null && CategoriesContributingAtMost50Percent.Count >= 0)
                 {
                     CategoriesCAM50Percent.Clear();
                     ContributionsAM50Percent.Clear();
@@ -290,14 +328,15 @@ public class IndexModel(HttpClient client, ServerConstants server) : PageModel
     /// </summary>
     /// <param name="username"></param>
     /// <returns></returns>
-    private async Task<bool> GenerateSalesReports(string username)
+    private async Task<bool> GenerateSalesReports(string username, int monthIdx)
     {
         if (!string.IsNullOrEmpty(username))
         {
             if (await GenerateMonthlyRevenuesReport(username) &&
-                await GenerateCategoriesContributingMoreThan50PercentMonthReport(username) &&
-                await GenerateCategoriesContributingAtMost50PercentMonth(username) &&
-                await GenerateTopFiveMostSellingCategoriesThisMonthReport(username))
+                await GenerateCategoriesContributingMoreThan50PercentMonthReport(username, monthIdx) &&
+                await GenerateCategoriesContributingAtMost50PercentMonth(username, monthIdx) &&
+                await GenerateTopFiveMostSellingCategoriesThisMonthReport(username,monthIdx) &&
+                await GenerateBottomFiveLeastSellingCategoriesThisMonthReport(username,monthIdx))
                 return true;
         }
 

@@ -15,16 +15,12 @@
 .chart{
     width: 750px;
     height: 700px;
-    margin: 7px;
+    margin: 7px;    
 }
 
 .revenue-chart-cnt{
     margin: 7px;
     border-radius: 7px;
-}
-
-.chart{
-    background-color: bisque;
 }
 
 .btn-view-more-info{
@@ -93,10 +89,109 @@
 
 .inner-charts{
     margin: 10px;
+    background-color: bisque;
 }
 
-/*footer{
-    position: fixed;
-    width: 100%;
-    bottom: 0px;
-}*/
+.prev-month, .next-month{
+    width: 40px;
+    height: 40px;
+    border-radius: 15px;
+    border: none;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.selected-month{
+    font-size: 20px;
+    font-weight: bold;
+    text-decoration: underline;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+@media (max-width: 1388px) {
+    .sales-charts{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+}
+
+@media (min-width: 1000px) and (max-width: 1388px) {
+
+    .inner-charts{
+        width: 1000px;
+    }
+}
+
+@media (max-width: 852px) {
+    .home-menu{
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+}
+
+@media (min-width: 800px) and (max-width: 1000px) {
+    
+    .inner-charts{
+        width: 800px;
+    }
+}
+
+@media (min-width: 701px) and (max-width: 799px) {
+
+    .inner-charts{
+        width: 700px;
+    }
+}
+
+@media (min-width: 600px) and (max-width: 700px) {
+
+    .inner-charts{
+        width: 600px;
+    }
+}
+
+@media (min-width: 547px) and (max-width: 599px) {
+
+    .inner-charts{
+        width: 550px;
+    }
+}
+
+@media (min-width: 492px) and (max-width: 546px) {
+
+    .inner-charts{
+        width: 500px;
+    }
+}
+
+@media (min-width: 442px) and (max-width: 491px) {
+
+    .inner-charts{
+        width: 430px;
+    }
+}
+
+@media (max-width: 400px) {
+    .home-menu{
+        display: grid;
+        grid-template-columns: repeat(1, 1fr);
+    }
+}
+
+@media (min-width: 400px) and (max-width: 441px) {
+
+    .inner-charts{
+        width: 380px;
+    }
+}
+
+@media (min-width: 100px) and (max-width: 400px) {
+
+    .inner-charts{
+        width: 350px;
+    }
+}

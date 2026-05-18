@@ -56,12 +56,13 @@ homeMenuBtns.forEach(btn => {
 
         deselectBtns();
 
-        if (btn.classList.contains("btn-sales-charts")) {
+        if (btn.classList.contains("btn-sales-charts") && !btn.classList.contains("show")) {
             
             // show the sales reports tab and hide all other tabs.            
             localStorage.setItem("clickedHomeBtn", "btn-sales-charts");
             localStorage.setItem("tabToShow", "sales-reports");
-            window.location.href = "http://localhost:5289/Index?action=Sales";
+            window.location.href = "http://localhost:5289/Index?action=Sales&monthIdx=1";            
+
         }
         else if (btn.classList.contains("btn-purchases-charts") && !btn.classList.contains("show")) {
 
@@ -118,7 +119,71 @@ homeMenuBtns.forEach(btn => {
         changeClickedBtnBgColorHelper(btn, ".damages-reports")
 });
 
-localStorage.clear();
+
+/**
+ * Finds a reports tab that is currently displayed.
+ * @returns A class name that uniquely identifies this reports tab.
+ */
+function findActiveReportsTab() {
+    const reportsTabsCont = document.querySelector(".charts");
+    const children = reportsTabsCont.children;
+
+    for (i = 0; i < children.length; ++i){
+        if (children[i].classList.contains("show-reports-tab"))
+            return children[i].classList[0];
+    }
+}
+
+const btnPrevMonth = document.querySelector(".prev-month");
+const btnNextMonth = document.querySelector(".next-month");
+const selectedMonth = document.querySelector(".selected-month");
+
+
+/**
+ * Given a month name, it gets the preceeding month's index.
+ * @param {*} month The name of the month whose preceeding month's index is to be returned.
+ */
+function getPreceedingMonth() {
+
+    var selectedMo = selectedMonth.textContent;
+
+    if (getMonthIndex(selectedMo) >= 1) {
+        var preceedingIdx = getMonthIndex(selectedMo) - 1;
+        selectedMonth.textContent = getMonth(preceedingIdx);
+        localStorage.setItem("currentMonth", selectedMonth.textContent);
+        if (findActiveReportsTab() === "sales-reports") {
+            ++preceedingIdx;
+            window.location.href = `http://localhost:5289/Index?action=Sales&monthIdx=${preceedingIdx}`;
+        }
+    }
+}
+
+/**
+ * Given a month name, it gets the next month's index.
+ * @param {*} month The name of the month whose next month's index is to be returned.
+ */
+function getNextMonth() {
+
+    var selectedMo = selectedMonth.textContent;
+
+    if (getMonthIndex(selectedMo) <= 10) {
+        var nextIdx = getMonthIndex(selectedMo) + 1;
+        selectedMonth.textContent = getMonth(nextIdx);
+        localStorage.setItem("currentMonth", selectedMonth.textContent);
+        if (findActiveReportsTab() === "sales-reports") {
+            ++nextIdx;
+            window.location.href = `http://localhost:5289/Index?action=Sales&monthIdx=${nextIdx}`;
+        }
+            
+    }
+}
+
+selectedMonth.textContent = localStorage.getItem("currentMonth") ?? selectedMonth.textContent;
+
+// register event listener and event handler
+btnPrevMonth.addEventListener("click", getPreceedingMonth);
+btnNextMonth.addEventListener("click", getNextMonth);
+
 
 // ##################################### UTILITY FUNCTIONS ##################################### //
 
@@ -179,5 +244,104 @@ function getMonths() {
     months.reverse();
     return months;
 }
+
+/**
+ * Given a month name, it returns its index.
+ * @param {*} month The name of the month.
+ */
+function getMonthIndex(month) {
+    
+    switch (month) {
+        case "January":
+            return 0;
+            break;
+        case "February":
+            return 1;
+            break;
+        case "March":
+            return 2;
+            break;
+        case "April":
+            return 3;
+            break;
+        case "May":
+            return 4;
+            break;
+        case "June":
+            return 5;
+            break;
+        case "July":
+            return 6;
+            break;
+        case "August":
+            return 7;
+            break;
+        case "September":
+            return 8;
+            break;
+        case "October":
+            return 9;
+            break;
+        case "November":
+            return 10;
+            break;
+        case "December":
+            return 11;
+            break;
+        default:
+            break;
+    }
+}
+
+/**
+ * Given a month's index, it returns the name of the month.
+ * @param {*} monthIdx The index of the month.
+ */
+function getMonth(monthIdx) {
+    
+    switch (monthIdx) {
+        case 0:
+            return "January";
+            break;
+        case 1:
+            return "February";
+            break;
+        case 2:
+            return "March";
+            break;
+        case 3:
+            return "April";
+            break;
+        case 4:
+            return "May";
+            break;
+        case 5:
+            return "June";
+            break;
+        case 6:
+            return "July";
+            break;
+        case 7:
+            return "August";
+            break;
+        case 8:
+            return "September";
+            break;
+        case 9:
+            return "October";
+            break;
+        case 10:
+            return "November";
+            break;
+        case 11:
+            return "December";
+            break;
+        default:
+            break;
+    }
+}
+
+// clear the local storage
+//localStorage.clear();
 
 // ##################################### CHART CREATION CODE ##################################### //

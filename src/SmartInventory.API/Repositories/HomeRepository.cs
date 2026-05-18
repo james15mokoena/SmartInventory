@@ -1,7 +1,5 @@
-using Microsoft.EntityFrameworkCore;
 using SmartInventory.API.Data;
 using SmartInventory.API.Domain.DTO;
-using SmartInventory.API.Domain.Models;
 
 namespace SmartInventory.API.Repositories;
 
@@ -56,17 +54,107 @@ public class HomeRepository(DatabaseContext context)
     }
 
     /// <summary>
-    /// Query: <b>Which product categories contribute at most 50% of the total revenue for this month?</b>
+    /// Query: <b>What are top 5 most selling products in a given month?</b>
+    /// </summary>
+    /// <param name="monthIdx"></param>
+    /// <returns></returns>
+    public List<CategorySales>? GetTopFiveMostSellingProductsInMonth(int monthIdx)
+    {
+        var topFiveMostSelling =
+            (from trans in _context.StockTransactions
+             from product in _context.Products
+             from rType in _context.ReasonTypes
+             where trans.ProductId == product.SKU && trans.ReasonTypeId == rType.Id && trans.Date.Month == monthIdx
+                && rType.Reason == "Sold"
+             group trans by product.Name into tGroup
+             select new
+             {
+                 Name = tGroup.Key
+                 ,
+                 Sales = (from trans2 in tGroup
+                          join prod2 in _context.Products on trans2.ProductId equals prod2.SKU
+                          select trans2.QuantityChange * prod2.UnitPrice).Sum()
+             } into res
+             orderby res.Sales descending
+             select res).Take(5);
+
+        if (topFiveMostSelling.Any())
+        {
+            List<CategorySales> fiveMostSellingProducts = [];
+
+            foreach (var item in topFiveMostSelling)
+            {
+                fiveMostSellingProducts.Add(new()
+                {
+                    Category = item.Name
+                    ,
+                    Sales = item.Sales
+                });
+            }
+
+            return fiveMostSellingProducts;
+        }
+
+        return null;
+    }
+    
+    /// <summary>
+    /// Query: <b>What are 5 least selling products in a given month?</b>
+    /// </summary>
+    /// <param name="monthIdx"></param>
+    /// <returns></returns>
+    public List<CategorySales>? GetFiveLeastSellingProductsInMonth(int monthIdx)
+    {
+        var fiveLeastSelling =
+            (from trans in _context.StockTransactions
+            from product in _context.Products
+            from rType in _context.ReasonTypes
+            where trans.ProductId == product.SKU && trans.ReasonTypeId == rType.Id && trans.Date.Month == monthIdx
+                && rType.Reason == "Sold"
+            group trans by product.Name into tGroup
+            select new
+            {
+                Name = tGroup.Key
+                ,
+                Sales = (from trans2 in tGroup
+                         join prod2 in _context.Products on trans2.ProductId equals prod2.SKU
+                         select trans2.QuantityChange * prod2.UnitPrice).Sum()
+            } into res
+            orderby res.Sales
+            select res).Take(5);
+
+        if (fiveLeastSelling.Any())
+        {
+            List<CategorySales> fiveLeastSellingProducts = [];
+
+            foreach (var item in fiveLeastSelling)
+            {
+                fiveLeastSellingProducts.Add(new()
+                {
+                    Category = item.Name
+                    ,
+                    Sales = item.Sales
+                });
+            }
+
+            return fiveLeastSellingProducts;
+        }
+
+        return null;
+    }
+
+    /// <summary>
+    /// Query: <b>Which product categories contribute at most 50% of the total revenue for the given month?</b>
     /// </summary>
     /// <returns></returns>
-    public List<CategorySales>? GetCategoriesContributingAtMost50PercentMonth()
+    public List<CategorySales>? GetCategoriesContributingAtMost50PercentMonth(int monthIdx)
     {
 
         var result =
             from trans in _context.StockTransactions
             join product in _context.Products on trans.ProductId equals product.SKU
             join r in _context.ReasonTypes on trans.ReasonTypeId equals r.Id
-            where r.Reason == "Sold" && trans.Date >= FirstDateOfCurrentMonth() && trans.Date <= LastDateOfCurrentMonth()
+            where r.Reason == "Sold" && trans.Date.Month == monthIdx
             group trans by product.Category into tGroup
             select new
             {
@@ -79,12 +167,12 @@ public class HomeRepository(DatabaseContext context)
             orderby res.Percentage descending
             select res;
 
-        // compute the total revenue for this month
+        // compute the total revenue for the given month
         double revenue =
             (from trans in _context.StockTransactions
              join product in _context.Products on trans.ProductId equals product.SKU
              join r in _context.ReasonTypes on trans.ReasonTypeId equals r.Id
-             where r.Reason == "Sold" && trans.Date >= FirstDateOfCurrentMonth() && trans.Date <= LastDateOfCurrentMonth()
+             where r.Reason == "Sold" && trans.Date.Month == monthIdx
              select trans.QuantityChange * product.UnitPrice).Sum();
 
         if (result.Any())
@@ -110,17 +198,17 @@ public class HomeRepository(DatabaseContext context)
     }
 
     /// <summary>
-    /// Query: <b>Which product categories contribute at most 50% of the total revenue for this month?</b>
+    /// Query: <b>Which product categories contribute at most 50% of the total revenue for the given month?</b>
     /// </summary>
     /// <returns></returns>
-    public List<CategorySales>? GetCategoriesContributingMoreThan50PercentMonth()
+    public List<CategorySales>? GetCategoriesContributingMoreThan50PercentMonth(int monthIdx)
     {
 
         var result =
             from trans in _context.StockTransactions
             join product in _context.Products on trans.ProductId equals product.SKU
             join r in _context.ReasonTypes on trans.ReasonTypeId equals r.Id
-            where r.Reason == "Sold" && trans.Date >= FirstDateOfCurrentMonth() && trans.Date <= LastDateOfCurrentMonth()
+            where r.Reason == "Sold" && trans.Date.Month == monthIdx
             group trans by product.Category into tGroup
             select new
             {
@@ -133,12 +221,12 @@ public class HomeRepository(DatabaseContext context)
             orderby res.Percentage descending
             select res;
 
-        // compute the total revenue for this month
+        // compute the total revenue for the given month
         double revenue =
             (from trans in _context.StockTransactions
              join product in _context.Products on trans.ProductId equals product.SKU
              join r in _context.ReasonTypes on trans.ReasonTypeId equals r.Id
-             where r.Reason == "Sold" && trans.Date >= FirstDateOfCurrentMonth() && trans.Date <= LastDateOfCurrentMonth()
+             where r.Reason == "Sold" && trans.Date.Month == monthIdx
              select trans.QuantityChange * product.UnitPrice).Sum();
 
         if (result.Any())
@@ -164,16 +252,16 @@ public class HomeRepository(DatabaseContext context)
     }
 
     /// <summary>
-    /// Answers: <b>Which product categories make up the top 5 most sales this month?</b>
+    /// Answers: <b>Which product categories make up the top 5 most sales in the given month?</b>
     /// </summary>
     /// <returns></returns>
-    public List<CategorySales>? GetTopFiveMostSellingCategoriesThisMonth()
+    public List<CategorySales>? GetTopFiveMostSellingCategoriesThisMonth(int monthIdx)
     {
         var topFiveMostSelling =
             (from trans in _context.StockTransactions
              join product in _context.Products on trans.ProductId equals product.SKU
              join rType in _context.ReasonTypes on trans.ReasonTypeId equals rType.Id
-             where rType.Reason == "Sold" && trans.Date >= FirstDateOfCurrentMonth() && trans.Date <= LastDateOfCurrentMonth()
+             where rType.Reason == "Sold" && trans.Date.Month == monthIdx
              group trans by product.Category into tGroup
              select new
              {
@@ -201,6 +289,49 @@ public class HomeRepository(DatabaseContext context)
             }
 
             return mostSelling;
+        }
+
+        return null;
+    }
+
+    /// <summary>
+    /// Answers: <b>Which product categories make up the bottom 5 least sales in the given month?</b>
+    /// </summary>
+    /// <returns></returns>
+    public List<CategorySales>? GetBottomFiveMostLeastCategoriesThisMonth(int monthIdx)
+    {
+        var bottomFiveLeastSelling =
+            (from trans in _context.StockTransactions
+             join product in _context.Products on trans.ProductId equals product.SKU
+             join rType in _context.ReasonTypes on trans.ReasonTypeId equals rType.Id
+             where rType.Reason == "Sold" && trans.Date.Month == monthIdx
+             group trans by product.Category into tGroup
+             select new
+             {
+                 Category = tGroup.Key,
+                 Sales = (from trans2 in tGroup
+                          join product2 in _context.Products on trans2.ProductId equals product2.SKU
+                          select trans2.QuantityChange * product2.UnitPrice).Sum()
+             } into result
+             orderby result.Sales
+             select result).Take(5);
+
+        if (bottomFiveLeastSelling.Any())
+        {
+            List<CategorySales> leastSelling = [];
+
+            foreach (var res in bottomFiveLeastSelling)
+            {
+                CategorySales category = new()
+                {
+                    Category = res.Category,
+                    Sales = res.Sales
+                };
+
+                leastSelling.Add(category);
+            }
+
+            return leastSelling;
         }
 
         return null;
@@ -272,17 +403,16 @@ public class HomeRepository(DatabaseContext context)
     }
 
     /// <summary>
-    /// Answers the Question: <b>What is the total sales for each product category for this month?</b>
+    /// Answers the Question: <b>What is the total sales for each product category for the given month?</b>
     /// </summary>
     /// <returns></returns>
-    public List<TotalSalesByCategory>? GetTotalSalesByCategories()
+    public List<TotalSalesByCategory>? GetTotalSalesByCategories(int monthIdx)
     {
         var totalSalesByCategory =
             from trans in _context.StockTransactions
             join product in _context.Products on trans.ProductId equals product.SKU
             join rType in _context.ReasonTypes on trans.ReasonTypeId equals rType.Id
-            where rType.Reason == "Sold" && trans.Date >= FirstDateOfCurrentMonth() &&
-                trans.Date <= LastDateOfCurrentMonth()
+            where rType.Reason == "Sold" && trans.Date.Month == monthIdx
             group trans by product.Category into transGroup
             select new
             {
@@ -313,12 +443,12 @@ public class HomeRepository(DatabaseContext context)
     }
 
     /// <summary>
-    /// Answers: <b>Which product category has the most sales in the current month?</b>
+    /// Answers: <b>Which product category has the most sales in the given month?</b>
     /// </summary>
     /// <returns></returns>
-    public TotalSalesByCategory? GetCategoryWithMostSales()
+    public TotalSalesByCategory? GetCategoryWithMostSales(int monthIdx)
     {
-        List<TotalSalesByCategory>? tsbyc = GetTotalSalesByCategories();
+        List<TotalSalesByCategory>? tsbyc = GetTotalSalesByCategories(monthIdx);
 
         if (tsbyc != null && tsbyc.Count > 0)
             return tsbyc.OrderByDescending(r => r.TotalSales).First();
@@ -327,12 +457,12 @@ public class HomeRepository(DatabaseContext context)
     }
 
     /// <summary>
-    /// Answers: <b>Which product category has the least sales in the current month?</b>
+    /// Answers: <b>Which product category has the least sales in the given month?</b>
     /// </summary>
     /// <returns></returns>
-    public TotalSalesByCategory? GetCategoryWithLeastSales()
+    public TotalSalesByCategory? GetCategoryWithLeastSales(int monthIdx)
     {
-        List<TotalSalesByCategory>? tsbyc = GetTotalSalesByCategories();
+        List<TotalSalesByCategory>? tsbyc = GetTotalSalesByCategories(monthIdx);
 
         if (tsbyc != null && tsbyc.Count > 0)
             return tsbyc.OrderBy(r => r.TotalSales).First();
@@ -344,14 +474,14 @@ public class HomeRepository(DatabaseContext context)
     /// Answers: <b>Which product has the most sales in each category?</b>
     /// </summary>
     /// <returns></returns>
-    public List<TotalSalesByCategory>? GetProductsWithMostSalesByCategory()
+    public List<TotalSalesByCategory>? GetProductsWithMostSalesByCategory(int monthIdx)
     {
 
         var results =
             from trans in _context.StockTransactions
             join product in _context.Products on trans.ProductId equals product.SKU
             join reason in _context.ReasonTypes on trans.ReasonTypeId equals reason.Id
-            where reason.Reason == "Sold" && trans.Date >= FirstDateOfCurrentMonth() && trans.Date <= LastDateOfCurrentMonth()
+            where reason.Reason == "Sold" && trans.Date.Month == monthIdx 
             group trans by new
             {
                 product.Category
@@ -405,14 +535,14 @@ public class HomeRepository(DatabaseContext context)
     /// Answers: <b>Which product has the least sales in each category?</b>
     /// </summary>
     /// <returns></returns>
-    public List<TotalSalesByCategory>? GetProductsWithLeastSalesByCategory()
+    public List<TotalSalesByCategory>? GetProductsWithLeastSalesByCategory(int monthIdx)
     {
 
         var results =
             from trans in _context.StockTransactions
             join product in _context.Products on trans.ProductId equals product.SKU
             join reason in _context.ReasonTypes on trans.ReasonTypeId equals reason.Id
-            where reason.Reason == "Sold" && trans.Date >= FirstDateOfCurrentMonth() && trans.Date <= LastDateOfCurrentMonth()
+            where reason.Reason == "Sold" && trans.Date.Month == monthIdx
             group trans by new
             {
                 product.Category

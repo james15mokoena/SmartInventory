@@ -28,7 +28,13 @@
 
                 <div class="sales-reports show-reports-tab">
 
-                    <h2 style="font-size: 30px;">Sales Reports</h2>
+                    <h2 style="font-size: 40px;">Sales Reports</h2>
+
+                    <div class="month-selector">
+                        <button class="prev-month">&#60</button>
+                        <span class="selected-month">January</span>
+                        <button class="next-month">&#62</button>
+                    </div>
 
                     <div class="sales-charts all-charts-cnts">
 
@@ -42,12 +48,23 @@
                             </div>
                         </div>
 
-                        <div class="top-5-most-selling-categories-tm-chart-cnt inner-charts">
+                        <div class="top-5-most-selling-categories-tm-chart-cnt inner-charts">                            
                             <canvas id="t5msctm-chart-canvas" class="chart"></canvas>
                             <div class="more-info">
                                 <button class="btn-view-more-info">More Info</button>
                                 <div class="info hide">
                                     Provides more insight/information regarding the top 5 most selling product categories
+                                    this month.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bottom-5-least-selling-categories-tm-chart-cnt inner-charts">                            
+                            <canvas id="b5lsctm-chart-canvas" class="chart"></canvas>
+                            <div class="more-info">
+                                <button class="btn-view-more-info">More Info</button>
+                                <div class="info hide">
+                                    Provides more insight/information regarding the bottom 5 least selling product categories
                                     this month.
                                 </div>
                             </div>
@@ -72,7 +89,7 @@
                                     Provides more insight/information regarding the product categories contributing
                                     at most 50% towards the month's revenue.
                                 </div>
-                            </div>
+                            </div>                            
                         </div>
 
                     </div>
@@ -196,7 +213,7 @@
     });
 
     /**
-        The "Top 5 Most Selling Categories This Month" chart.
+        The "Top 5 Most Selling Categories in the selected month" chart.
     */
     const t5msctmChartCtx = document.querySelector("#t5msctm-chart-canvas").getContext("2d");
     let top5MostCategories = @Html.Raw(JsonSerializer.Serialize(Model.TopFiveCategories));
@@ -208,7 +225,7 @@
             labels: top5MostCategories,
             datasets: [
                 {
-                    label: 'Top 5 Most Selling Categories This Month',
+                    label: 'Top 5 Most Selling Categories',
                     data: top5MostCategoriesSales,
                     backgroundColor: ['green', 'lightblue', 'purple', 'maroon', 'orange'],
                     borderWidth: 1
@@ -261,8 +278,74 @@
         }
     });
 
+    /**
+        The "Bottom 5 Least Selling Categories in the selected month" chart.
+    */
+    const b5lsctmChartCtx = document.querySelector("#b5lsctm-chart-canvas").getContext("2d");
+    let bottom5LeastCategories = @Html.Raw(JsonSerializer.Serialize(Model.BottomFiveCategories));
+    let bottom5LeastCategoriesSales = @Html.Raw(JsonSerializer.Serialize(Model.BottomFiveCategoriesSales));
+
+    const bottom5LeastSellingCategoriesChart = new Chart(b5lsctmChartCtx, {
+        type: 'bar',
+        data: {
+            labels: bottom5LeastCategories,
+            datasets: [
+                {
+                    label: 'Bottom 5 Least Selling Categories',
+                    data: bottom5LeastCategoriesSales,
+                    backgroundColor: ['green', 'lightblue', 'purple', 'maroon', 'orange'],
+                    borderWidth: 1
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    labels: {
+                        font: {
+                            size: 18
+                        }
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    display: true,
+                    title: {
+                        display: true,
+                        text: 'Categories',
+                        font: {
+                            size: 18
+                        }
+                    },
+                    ticks: {
+                        font: {
+                            size: 18
+                        }
+                    }
+                },
+                y: {
+                    display: true,
+                    title: {
+                        display: true,
+                        text: 'Sales (R)',
+                        font: {
+                            size: 18
+                        }
+                    },
+                    ticks: {
+                        font: {
+                            size: 18
+                        }
+                    }
+                }
+            }
+        }
+    });
+
     /*
-        The "Categories Contributing More Than 50% Towards Month's Revenue" chart.
+        The "Categories Contributing More Than 50% Towards the selected Month's Revenue" chart.
     */
     const ccmt50Ctx = document.querySelector("#ccmt50tm-chart-canvas").getContext("2d");
     let categoriesCMT50 = @Html.Raw(JsonSerializer.Serialize(Model.CategoriesCMT50Percent));
@@ -290,7 +373,7 @@
                 },
                 title: {
                     display: true,
-                    text: 'Categories Contributing More Than 50% Towards Revenue This Month',
+                    text: 'Categories Contributing More Than 50% Towards Revenue',
                     font: {
                         size: 18
                     }
@@ -300,7 +383,7 @@
     });
 
     /*
-        The "Categories Contributing At Most 50% Towards Month's Revenue" chart.
+        The "Categories Contributing At Most 50% Towards the selected Month's Revenue" chart.
     */
     const ccam50Ctx = document.querySelector("#ccam50tm-chart-canvas").getContext("2d");
     let categoriesAM50Percent = @Html.Raw(JsonSerializer.Serialize(Model.CategoriesCAM50Percent));
@@ -328,7 +411,7 @@
                 },
                 title: {
                     display: true,
-                    text: 'Categories Contributing At Most 50% Towards Revenue This Month',
+                    text: 'Categories Contributing At Most 50% Towards Revenue',
                     font: {
                         size: 18
                     }
