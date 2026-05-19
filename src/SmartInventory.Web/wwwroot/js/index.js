@@ -56,12 +56,15 @@ homeMenuBtns.forEach(btn => {
 
         deselectBtns();
 
+        var monthIdxHome = null;
+        monthIdxHome = localStorage.getItem("monthIdxHome");
+
         if (btn.classList.contains("btn-sales-charts") && !btn.classList.contains("show")) {
             
             // show the sales reports tab and hide all other tabs.            
             localStorage.setItem("clickedHomeBtn", "btn-sales-charts");
             localStorage.setItem("tabToShow", "sales-reports");
-            window.location.href = "http://localhost:5289/Index?action=Sales&monthIdx=1";            
+            window.location.href = `http://localhost:5289/Index?action=Sales&monthIdx=${monthIdxHome ?? 1}`;
 
         }
         else if (btn.classList.contains("btn-purchases-charts") && !btn.classList.contains("show")) {
@@ -69,9 +72,9 @@ homeMenuBtns.forEach(btn => {
             // show the purchases reports tab and hide all other tabs.
             localStorage.setItem("clickedHomeBtn", "btn-purchases-charts");
             localStorage.setItem("tabToShow", "purchases-reports");
-            window.location.href = "http://localhost:5289/Index?action=Purchases";
+            window.location.href = `http://localhost:5289/Index?action=Purchases&monthIdx=${monthIdxHome ?? 1}`;
         }
-        else if (btn.classList.contains("btn-returns-charts") && !btn.classList.contains("show")) {
+        /*else if (btn.classList.contains("btn-returns-charts") && !btn.classList.contains("show")) {
 
             // show the returns reports tab and hide all other tabs.
             localStorage.setItem("clickedHomeBtn", "btn-returns-charts");
@@ -84,7 +87,7 @@ homeMenuBtns.forEach(btn => {
             localStorage.setItem("clickedHomeBtn", "btn-damages-charts");
             localStorage.setItem("tabToShow", "damages-reports");
             window.location.href = "http://localhost:5289/Index?action=Damages";
-        }
+        }*/
     });
 });
 
@@ -113,10 +116,10 @@ homeMenuBtns.forEach(btn => {
         changeClickedBtnBgColorHelper(btn, ".sales-reports")
     else if (btn.classList.contains("btn-purchases-charts") && clickedHomeBtn === "btn-purchases-charts")
         changeClickedBtnBgColorHelper(btn, ".purchases-reports")
-    else if (btn.classList.contains("btn-returns-charts") && clickedHomeBtn === "btn-returns-charts")
+    /*else if (btn.classList.contains("btn-returns-charts") && clickedHomeBtn === "btn-returns-charts")
         changeClickedBtnBgColorHelper(btn, ".returns-reports")
     else if (btn.classList.contains("btn-damages-charts") && clickedHomeBtn === "btn-damages-charts")
-        changeClickedBtnBgColorHelper(btn, ".damages-reports")
+        changeClickedBtnBgColorHelper(btn, ".damages-reports")*/
 });
 
 
@@ -151,8 +154,9 @@ function getPreceedingMonth() {
         var preceedingIdx = getMonthIndex(selectedMo) - 1;
         selectedMonth.textContent = getMonth(preceedingIdx);
         localStorage.setItem("currentMonth", selectedMonth.textContent);
+        ++preceedingIdx;
+        localStorage.setItem("monthIdxHome", preceedingIdx);
         if (findActiveReportsTab() === "sales-reports") {
-            ++preceedingIdx;
             window.location.href = `http://localhost:5289/Index?action=Sales&monthIdx=${preceedingIdx}`;
         }
     }
@@ -170,8 +174,9 @@ function getNextMonth() {
         var nextIdx = getMonthIndex(selectedMo) + 1;
         selectedMonth.textContent = getMonth(nextIdx);
         localStorage.setItem("currentMonth", selectedMonth.textContent);
+        ++nextIdx;
+        localStorage.setItem("monthIdxHome", nextIdx);
         if (findActiveReportsTab() === "sales-reports") {
-            ++nextIdx;
             window.location.href = `http://localhost:5289/Index?action=Sales&monthIdx=${nextIdx}`;
         }
             

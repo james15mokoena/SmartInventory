@@ -260,12 +260,12 @@ public class StockManagementRepository(DatabaseContext context, UserManagementRe
     }
 
     /// <summary>
-    /// Compiles a summary of the sales transactions for the current month.
+    /// Compiles a summary of the sales transactions for the given month.
     /// </summary>
     /// <param name="transactions"></param>
     /// <param name="reasonType"></param>
     /// <returns></returns>
-    private List<StockTransactionSummary>? CompileSalesStockTransactionsSummaries(List<StockTransaction> transactions, ReasonType reasonType)
+    private List<StockTransactionSummary>? CompileSalesStockTransactionsSummaries(List<StockTransaction> transactions, ReasonType reasonType, int monthIdx)
     {
 
         if (transactions.Count > 0 && reasonType.Reason == "Sold")
@@ -278,7 +278,7 @@ public class StockManagementRepository(DatabaseContext context, UserManagementRe
             var numTransactionsForEachProduct =
                 from transaction in transactions
                 join rType in _context.ReasonTypes on transaction.ReasonTypeId equals rType.Id
-                where rType.Reason == "Sold"
+                where rType.Reason == "Sold" && transaction.Date.Month == monthIdx
                 group transaction by transaction.ProductId into transactionGroup
                 select new
                 {
@@ -286,12 +286,12 @@ public class StockManagementRepository(DatabaseContext context, UserManagementRe
                     NumTransactions = transactionGroup.Count()
                 };            
 
-            // What is the largest sale for each product in the current month?
+            // What is the largest sale for each product in the given month?
             var largestSaleForEachProduct =
                 from transaction in transactions
                 join product in _context.Products on transaction.ProductId equals product.SKU
                 join rType in _context.ReasonTypes on transaction.ReasonTypeId equals rType.Id
-                where rType.Reason == "Sold" && transaction.Date >= FirstDateOfCurrentMonth() && transaction.Date <= LastDateOfCurrentMonth()
+                where rType.Reason == "Sold" && transaction.Date.Month == monthIdx
                 group transaction by transaction.ProductId into transactionGroup
                 select new
                 {
@@ -303,12 +303,12 @@ public class StockManagementRepository(DatabaseContext context, UserManagementRe
                     ).Max()
                 };
 
-            // What is the lowest sale for each product in the current month?
+            // What is the lowest sale for each product in the given month?
             var lowestSaleForEachProduct =
                 from transaction in transactions
                 join product in _context.Products on transaction.ProductId equals product.SKU
                 join rType in _context.ReasonTypes on transaction.ReasonTypeId equals rType.Id
-                where rType.Reason == "Sold" && transaction.Date >= FirstDateOfCurrentMonth() && transaction.Date <= LastDateOfCurrentMonth()
+                where rType.Reason == "Sold" && transaction.Date.Month == monthIdx
                 group transaction by transaction.ProductId into transactionGroup
                 select new
                 {
@@ -320,12 +320,12 @@ public class StockManagementRepository(DatabaseContext context, UserManagementRe
                     ).Min()
                 };
 
-            // What is the total sale for each product in the current month?
+            // What is the total sale for each product in the given month?
             var totalSalesForEachProduct =
                 from transaction in transactions
                 join product in _context.Products on transaction.ProductId equals product.SKU
                 join rType in _context.ReasonTypes on transaction.ReasonTypeId equals rType.Id
-                where rType.Reason == "Sold" && transaction.Date >= FirstDateOfCurrentMonth() && transaction.Date <= LastDateOfCurrentMonth()
+                where rType.Reason == "Sold" && transaction.Date.Month == monthIdx
                 group transaction by transaction.ProductId into transactionGroup
                 select new
                 {
@@ -337,12 +337,12 @@ public class StockManagementRepository(DatabaseContext context, UserManagementRe
                     ).Sum()
                 };
 
-            // How many units of each product have been sold and how many are unsold as of this month?
+            // How many units of each product have been sold and how many are unsold as of the given month?
             var quantityUnitsSoldAndUnsoldForeachProduct =
                 from trans in transactions
                 join rType in _context.ReasonTypes on trans.ReasonTypeId equals rType.Id
                 join product in _context.Products on trans.ProductId equals product.SKU
-                where rType.Reason == "Sold" && trans.Date >= FirstDateOfCurrentMonth() && trans.Date <= LastDateOfCurrentMonth()
+                where rType.Reason == "Sold" && trans.Date.Month == monthIdx
                 group trans by new
                 {
                     trans.ProductId,
@@ -443,30 +443,30 @@ public class StockManagementRepository(DatabaseContext context, UserManagementRe
     /// <param name="transactions"></param>
     /// <param name="reasonType"></param>
     /// <returns></returns>
-    private List<StockTransactionSummary>? CompilePurchasesStockTransactionsSummaries(List<StockTransaction> transactions, ReasonType reasonType)
+    private List<StockTransactionSummary>? CompilePurchasesStockTransactionsSummaries(List<StockTransaction> transactions, ReasonType reasonType, int monthIdx)
     {
         if (transactions.Count > 0 && reasonType.Reason == "Purchased")
         {
             // The transaction summaries for each product.
             List<StockTransactionSummary> summaries = [];
 
-            // How many purchases transactions does each product have?
+            // How many purchase transactions does each product have?
             var numTransactionsForEachProduct =
                 from transaction in transactions
                 join rType in _context.ReasonTypes on transaction.ReasonTypeId equals rType.Id
-                where rType.Reason == "Purchased"
+                where rType.Reason == "Purchased" && transaction.Date.Month == monthIdx
                 group transaction by transaction.ProductId into transGroup
                 select new
                 {
                     ProductId = transGroup.Key
                 };
 
-            // what is the largest order (purchase) for each product this month?
+            // what is the largest order (purchase) for each product in the given month?
             var largestOrderForeachProduct =
                 from transaction in transactions
                 join product in _context.Products on transaction.ProductId equals product.SKU
                 join rType in _context.ReasonTypes on transaction.ReasonTypeId equals rType.Id
-                where rType.Reason == "Purchased" && transaction.Date >= FirstDateOfCurrentMonth() && transaction.Date <= LastDateOfCurrentMonth()
+                where rType.Reason == "Purchased" && transaction.Date.Month == monthIdx
                 group transaction by transaction.ProductId into transactionGroup
                 select new
                 {
@@ -476,12 +476,12 @@ public class StockManagementRepository(DatabaseContext context, UserManagementRe
                                     select trans.QuantityChange * pro.CostPrice).Max()
                 };
 
-            // What is the lowest order (purchase) for each product this month?
+            // What is the lowest order (purchase) for each product in the given month?
             var lowestOrderForeachProduct =
                 from transaction in transactions
                 join product in _context.Products on transaction.ProductId equals product.SKU
                 join rType in _context.ReasonTypes on transaction.ReasonTypeId equals rType.Id
-                where rType.Reason == "Purchased" && transaction.Date >= FirstDateOfCurrentMonth() && transaction.Date <= LastDateOfCurrentMonth()
+                where rType.Reason == "Purchased" && transaction.Date.Month == monthIdx
                 group transaction by transaction.ProductId into transactionGroup
                 select new
                 {
@@ -491,12 +491,12 @@ public class StockManagementRepository(DatabaseContext context, UserManagementRe
                                    select trans.QuantityChange * product.CostPrice).Min()
                 };
 
-            // How many times has each product been ordered this month?
+            // How many times has each product been ordered in the given month?
             var NumberOfTimesTheProductHasBeenOrdered =
                 from transaction in transactions
                 join product in _context.Products on transaction.ProductId equals product.SKU
                 join rType in _context.ReasonTypes on transaction.ReasonTypeId equals rType.Id
-                where rType.Reason == "Purchased" && transaction.Date >= FirstDateOfCurrentMonth() && transaction.Date <= LastDateOfCurrentMonth()
+                where rType.Reason == "Purchased" && transaction.Date.Month == monthIdx
                 group transaction by transaction.ProductId into transactionGroup
                 select new
                 {
@@ -506,12 +506,12 @@ public class StockManagementRepository(DatabaseContext context, UserManagementRe
                          select trans).Count()
                 };
 
-            // What is the total cost (purchase) for each product this month?
+            // What is the total cost (purchase) for each product in the given month?
             var totalCostForeachProduct =
                 from trans in transactions
                 join product in _context.Products on trans.ProductId equals product.SKU
                 join rType in _context.ReasonTypes on trans.ReasonTypeId equals rType.Id
-                where rType.Reason == "Purchased" && trans.Date >= FirstDateOfCurrentMonth() && trans.Date <= LastDateOfCurrentMonth()
+                where rType.Reason == "Purchased" && trans.Date.Month == monthIdx
                 group trans by trans.ProductId into transGroup
                 select new
                 {
@@ -521,11 +521,11 @@ public class StockManagementRepository(DatabaseContext context, UserManagementRe
                                  select trans2.QuantityChange * product.CostPrice).Sum()
                 };
 
-            // How many units of each product have been purchased this month?
+            // How many units of each product have been purchased in the given month?
             var quantityUnitsPurchasedForeachProduct =
                 from trans in transactions
                 join rType in _context.ReasonTypes on trans.ReasonTypeId equals rType.Id
-                where rType.Reason == "Purchased" && trans.Date >= FirstDateOfCurrentMonth() && trans.Date <= LastDateOfCurrentMonth()
+                where rType.Reason == "Purchased" && trans.Date.Month == monthIdx
                 group trans by trans.ProductId into transGroup
                 select new
                 {
@@ -607,29 +607,29 @@ public class StockManagementRepository(DatabaseContext context, UserManagementRe
     /// <param name="transactions"></param>
     /// <param name="reasonType"></param>
     /// <returns></returns>
-    private List<StockTransactionSummary>? CompileReturnsStockTransactions(List<StockTransaction> transactions, ReasonType reasonType)
+    private List<StockTransactionSummary>? CompileReturnsStockTransactions(List<StockTransaction> transactions, ReasonType reasonType, int monthIdx)
     {
         if (transactions.Count > 0 && reasonType.Reason == "Returned")
         {
             // stores transaction summaries for each product.
             List<StockTransactionSummary> summaries = [];
 
-            // How many return transactions does each product have?
+            // How many return transactions does each product have in the given month?
             var numTransactionsForEachProduct =
                 from transaction in transactions
                 join rType in _context.ReasonTypes on transaction.ReasonTypeId equals rType.Id
-                where rType.Reason == "Returned"
+                where rType.Reason == "Returned" && transaction.Date.Month == monthIdx
                 group transaction by transaction.ProductId into transGroup
                 select new
                 {
                     ProductId = transGroup.Key
                 };
 
-            // How many units of each product have been returned and how much was reclaimed this month?
+            // How many units of each product have been returned and how much was reclaimed in the given month?
             var quantityUnitsReturnedAndAmountReclaimed =
                 from trans in transactions
                 join rType in _context.ReasonTypes on trans.ReasonTypeId equals rType.Id
-                where rType.Reason == "Returned" && trans.Date >= FirstDateOfCurrentMonth() && trans.Date <= LastDateOfCurrentMonth()
+                where rType.Reason == "Returned" && trans.Date.Month == monthIdx
                 group trans by trans.ProductId into transGroup
                 select new
                 {
@@ -679,7 +679,7 @@ public class StockManagementRepository(DatabaseContext context, UserManagementRe
     /// <param name="transactions"></param>
     /// <param name="reasonType"></param>
     /// <returns></returns>
-    private List<StockTransactionSummary>? CompileDamagedStockTransactionSummaries(List<StockTransaction> transactions, ReasonType reasonType)
+    private List<StockTransactionSummary>? CompileDamagedStockTransactionSummaries(List<StockTransaction> transactions, ReasonType reasonType, int monthIdx)
     {
         if(transactions.Count > 0 && reasonType.Reason == "Damaged")
         {
@@ -688,18 +688,18 @@ public class StockManagementRepository(DatabaseContext context, UserManagementRe
             var damagedProductsSku =
                 from trans in transactions
                 join rType in _context.ReasonTypes on trans.ReasonTypeId equals rType.Id
-                where rType.Reason == "Damaged"
+                where rType.Reason == "Damaged" && trans.Date.Month == monthIdx
                 group trans by trans.ProductId into transGroup
                 select new
                 {
                     ProductId = transGroup.Key
                 };
 
-            // How many units of each product have been damaged this month and what is the total cost for each product?
+            // How many units of each product have been damaged in the given month and what is the total cost for each product?
             var quantityDamagedAndDamageCost =
                 from trans in transactions
                 join rType in _context.ReasonTypes on trans.ReasonTypeId equals rType.Id
-                where rType.Reason == "Damaged"
+                where rType.Reason == "Damaged" && trans.Date.Month == monthIdx
                 group trans by trans.ProductId into transGroup
                 select new
                 {
@@ -743,33 +743,32 @@ public class StockManagementRepository(DatabaseContext context, UserManagementRe
     }
 
     /// <summary>
-    /// Generates a summary of the stock transactions for the current month.
+    /// Generates a summary of the stock transactions for the given month.
     /// </summary>
     /// <param name="reason">Used to specify which category of transaction reasons to
     /// fetch.</param>
     /// <returns></returns>
-    public List<StockTransactionSummary>? GetStockTransactionsSummaries(string? reason)
+    public List<StockTransactionSummary>? GetStockTransactionsSummaries(string? reason, int monthIdx)
     {
 
         if (!string.IsNullOrEmpty(reason) && _context.ReasonTypes.FirstOrDefault(r => r.Reason == reason) is ReasonType rType)
         {
-            // Which transactions occurred in the current month?
+            // Which transactions occurred in the given month?
             List<StockTransaction>? transactions = [..
                 from transaction in _context.StockTransactions
-                where transaction.ReasonTypeId == rType.Id && transaction.Date >= FirstDateOfCurrentMonth() &&
-                transaction.Date <= LastDateOfCurrentMonth()
+                where transaction.ReasonTypeId == rType.Id && transaction.Date.Month == monthIdx
                 orderby transaction.ProductId, transaction.Date
                 select transaction
             ];
 
             if (reason == "Sold")
-                return CompileSalesStockTransactionsSummaries(transactions, rType);
+                return CompileSalesStockTransactionsSummaries(transactions, rType, monthIdx);
             else if (reason == "Purchased")
-                return CompilePurchasesStockTransactionsSummaries(transactions, rType);
+                return CompilePurchasesStockTransactionsSummaries(transactions, rType, monthIdx);
             else if (reason == "Returned")
-                return CompileReturnsStockTransactions(transactions, rType);
+                return CompileReturnsStockTransactions(transactions, rType, monthIdx);
             else if (reason == "Damaged")
-                return CompileDamagedStockTransactionSummaries(transactions, rType);
+                return CompileDamagedStockTransactionSummaries(transactions, rType, monthIdx);
         }
 
         return null;

@@ -57,6 +57,8 @@ public class LoginModel(HttpClient client, ServerConstants server) : PageModel
             IsLoggedIn = "true";
             TempData["Username"] = Details.Username;
             TempData["RoleName"] = role.Name;
+            AppContext.SetData("Username", Details.Username);
+            AppContext.SetData("RoleName", role.Name);
 
             // go to the home page
             return RedirectToPage("../Index");

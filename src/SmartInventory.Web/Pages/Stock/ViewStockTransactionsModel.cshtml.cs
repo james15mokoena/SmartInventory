@@ -23,17 +23,21 @@ public class ViewStockTransactionsModel(HttpClient client, ServerConstants serve
     /// </summary>
     /// <param name="reason"></param>
     /// <returns></returns>
-    public async Task GetStockTransactionSummaries(string reason)
+    public async Task GetStockTransactionSummaries(string reason, int monthIdx)
     {
         if (!string.IsNullOrEmpty(reason))
         {
             string? username = HttpContext.Session.GetString("Username");
+            string? acUsername = AppContext.GetData("Username") as string ?? null;
 
-            if (!string.IsNullOrEmpty(username))
+            if (!string.IsNullOrEmpty(username) || acUsername != null)
             {
+                HttpContext.Session.SetString("Username", acUsername!);
+                TempData["Username"] = acUsername;
+                username = acUsername;
 
                 HttpResponseMessage resp =
-                    await _client.GetAsync($"{server.ApiAddress}/Stock/ViewStockTransactionSummaries/{username}/{reason}");
+                    await _client.GetAsync($"{server.ApiAddress}/Stock/ViewStockTransactionSummaries/{username}/{reason}/{monthIdx}");
 
                 if (resp.IsSuccessStatusCode)
                 {
@@ -53,14 +57,14 @@ public class ViewStockTransactionsModel(HttpClient client, ServerConstants serve
     /// </summary>
     /// <param name="reason"></param>
     /// <returns></returns>
-    public async Task OnGet(string? reason = "Sold")
+    public async Task OnGet(string? reason = "Sold", int monthIdx = 1)
     {
         if (HttpContext.Session.GetString("Username") is string username)
             TempData["Username"] = username;
 
         if (!string.IsNullOrEmpty(reason))
-            await GetStockTransactionSummaries(reason);
+            await GetStockTransactionSummaries(reason, monthIdx);
         else
-            await GetStockTransactionSummaries("Sold");
+            await GetStockTransactionSummaries("Sold", monthIdx);
     }
 }

@@ -15,7 +15,7 @@ public class HomeService(HomeRepository homeRepo, PermissionManagementService pe
     /// <param name="monthIdx"></param>
     /// <returns></returns>
     public List<CategorySales>? GetTopFiveMostSellingProductsInMonth(string username, int monthIdx) =>
-        !string.IsNullOrEmpty(username) && _permServ.IsAuthorized(username, "ViewReports") &&
+        !string.IsNullOrEmpty(username) && _permServ.IsAuthorized(username, "ViewReports") && monthIdx >= 1 && monthIdx <= 12 &&
         _homeRepo.GetTopFiveMostSellingProductsInMonth(monthIdx) is List<CategorySales> cs ?
         cs : null;
     
@@ -25,7 +25,7 @@ public class HomeService(HomeRepository homeRepo, PermissionManagementService pe
     /// <param name="monthIdx"></param>
     /// <returns></returns>
     public List<CategorySales>? GetFiveLeastSellingProductsInMonth(string username, int monthIdx) =>
-        !string.IsNullOrEmpty(username) && _permServ.IsAuthorized(username, "ViewReports") &&
+        !string.IsNullOrEmpty(username) && _permServ.IsAuthorized(username, "ViewReports") && monthIdx >= 1 && monthIdx <= 12 &&
         _homeRepo.GetFiveLeastSellingProductsInMonth(monthIdx) is List<CategorySales> cs ?
         cs : null;
 
@@ -35,7 +35,7 @@ public class HomeService(HomeRepository homeRepo, PermissionManagementService pe
     /// </summary>
     /// <returns></returns>
     public List<CategorySales>? GetCategoriesContributingAtMost50PercentMonth(string username, int monthIdx) =>
-        !string.IsNullOrEmpty(username) && _permServ.IsAuthorized(username, "ViewReports") &&
+        !string.IsNullOrEmpty(username) && _permServ.IsAuthorized(username, "ViewReports") && monthIdx >= 1 && monthIdx <= 12 &&
         _homeRepo.GetCategoriesContributingAtMost50PercentMonth(monthIdx) is List<CategorySales> cs ?
         cs : null;
 
@@ -45,7 +45,7 @@ public class HomeService(HomeRepository homeRepo, PermissionManagementService pe
     /// <param name="username"></param>
     /// <returns></returns>
     public List<CategorySales>? GetCategoriesContributingMoreThan50PercentMonth(string username, int monthIdx) =>
-        !string.IsNullOrEmpty(username) && _permServ.IsAuthorized(username, "ViewReports") &&
+        !string.IsNullOrEmpty(username) && _permServ.IsAuthorized(username, "ViewReports") && monthIdx >= 1 && monthIdx <= 12 &&
         _homeRepo.GetCategoriesContributingMoreThan50PercentMonth(monthIdx) is List<CategorySales> cs ?
         cs : null;
 
@@ -55,7 +55,7 @@ public class HomeService(HomeRepository homeRepo, PermissionManagementService pe
     /// <param name="username"></param>
     /// <returns></returns>
     public List<CategorySales>? GetTopFiveMostSellingCategoriesThisMonth(string username, int monthIdx) =>
-        !string.IsNullOrEmpty(username) && _permServ.IsAuthorized(username, "ViewReports") &&
+        !string.IsNullOrEmpty(username) && _permServ.IsAuthorized(username, "ViewReports") && monthIdx >= 1 && monthIdx <= 12 &&
         _homeRepo.GetTopFiveMostSellingCategoriesThisMonth(monthIdx) is List<CategorySales> s ? s : null;
 
     
@@ -65,7 +65,7 @@ public class HomeService(HomeRepository homeRepo, PermissionManagementService pe
     /// <param name="username"></param>
     /// <returns></returns>
     public List<CategorySales>? GetBottomFiveLeastSellingCategoriesThisMonth(string username, int monthIdx) =>
-        !string.IsNullOrEmpty(username) && _permServ.IsAuthorized(username, "ViewReports") &&
+        !string.IsNullOrEmpty(username) && _permServ.IsAuthorized(username, "ViewReports") && monthIdx >= 1 && monthIdx <= 12 &&
         _homeRepo.GetBottomFiveMostLeastCategoriesThisMonth(monthIdx) is List<CategorySales> s ? s : null;
 
     /// <summary>
@@ -91,7 +91,7 @@ public class HomeService(HomeRepository homeRepo, PermissionManagementService pe
     /// <param name="username"></param>
     /// <returns></returns>
     public List<TotalSalesByCategory>? GetTotalSalesByCategories(string username, int monthIdx) =>
-        !string.IsNullOrEmpty(username) && _permServ.IsAuthorized(username, "ViewReports") ?
+        !string.IsNullOrEmpty(username) && _permServ.IsAuthorized(username, "ViewReports") && monthIdx >= 1 && monthIdx <= 12 ?
         _homeRepo.GetTotalSalesByCategories(monthIdx) :
         null;
 
@@ -100,7 +100,7 @@ public class HomeService(HomeRepository homeRepo, PermissionManagementService pe
     /// </summary>
     /// <returns></returns>
     public TotalSalesByCategory? GetCategoryWithMostSales(string username, int monthIdx) =>
-        !string.IsNullOrEmpty(username) &&  _permServ.IsAuthorized(username,"ViewReports") &&
+        !string.IsNullOrEmpty(username) &&  _permServ.IsAuthorized(username,"ViewReports") && monthIdx >= 1 && monthIdx <= 12 &&
         _homeRepo.GetCategoryWithMostSales(monthIdx) is TotalSalesByCategory t ?
         t : null;
 
@@ -109,7 +109,7 @@ public class HomeService(HomeRepository homeRepo, PermissionManagementService pe
     /// </summary>
     /// <returns></returns>
     public TotalSalesByCategory? GetCategoryWithLeastSales(string username, int monthIdx) =>
-        !string.IsNullOrEmpty(username) && _permServ.IsAuthorized(username,"ViewReports") &&
+        !string.IsNullOrEmpty(username) && _permServ.IsAuthorized(username,"ViewReports") && monthIdx >= 1 && monthIdx <= 12 &&
         _homeRepo.GetCategoryWithLeastSales(monthIdx) is TotalSalesByCategory t
         ? t : null;
 
@@ -118,7 +118,7 @@ public class HomeService(HomeRepository homeRepo, PermissionManagementService pe
     /// </summary>
     /// <returns></returns>
     public List<TotalSalesByCategory>? GetProductsWithMostSalesByCategory(string username, int monthIdx) =>
-        !string.IsNullOrEmpty(username) && _permServ.IsAuthorized(username, "ViewReports") &&
+        !string.IsNullOrEmpty(username) && _permServ.IsAuthorized(username, "ViewReports") && monthIdx >= 1 && monthIdx <= 12 &&
         _homeRepo.GetProductsWithMostSalesByCategory(monthIdx) is List<TotalSalesByCategory> ts ?
         ts : null;
 
@@ -127,7 +127,7 @@ public class HomeService(HomeRepository homeRepo, PermissionManagementService pe
     /// </summary>
     /// <returns></returns>
     public List<TotalSalesByCategory>? GetProductsWithLeastSalesByCategory(string username, int monthIdx) =>
-        !string.IsNullOrEmpty(username) && _permServ.IsAuthorized(username, "ViewReports") &&
+        !string.IsNullOrEmpty(username) && _permServ.IsAuthorized(username, "ViewReports") && monthIdx >= 1 && monthIdx <= 12 &&
         _homeRepo.GetProductsWithLeastSalesByCategory(monthIdx) is List<TotalSalesByCategory> ts ?
         ts : null;
 }

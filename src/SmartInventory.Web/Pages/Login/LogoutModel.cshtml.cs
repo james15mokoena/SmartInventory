@@ -10,6 +10,8 @@ public class LogoutModel: PageModel
         // clear user state.        
         HttpContext.Session.Clear();
         TempData["Username"] = null;
+        AppContext.SetData("Username", null);
+        AppContext.SetData("RoleName", null);
 
         return RedirectToPage("../Index");
     }

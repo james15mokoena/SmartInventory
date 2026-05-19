@@ -100,6 +100,36 @@ public class IndexModel(HttpClient client, ServerConstants server) : PageModel
     public List<double> ContributionsAM50Percent { get; set; } = [];
 
     /// <summary>
+    /// Stores the top five most selling products in the specified month.
+    /// </summary>
+    public List<CategorySales>? TopFiveMostSellingProductsInMonth { get; set; } = [];
+
+    /// <summary>
+    /// Stores the names of the top five most selling products in the specified month.
+    /// </summary>
+    public List<string> TopFiveMostSellingProductNames { get; set; } = [];
+
+    /// <summary>
+    /// Stores the names of the top five most selling products in the specified month.
+    /// </summary>
+    public List<double> TopFiveMostSellingProductSales { get; set; } = [];
+
+    /// <summary>
+    /// Stores the five least selling products in the specified month.
+    /// </summary>
+    public List<CategorySales>? FiveLeastSellingProductsInMonth { get; set; } = [];
+
+    /// <summary>
+    /// Stores the names of the five least selling products in the specified month.
+    /// </summary>
+    public List<string> FiveLeastSellingProductNames { get; set; } = [];
+
+    /// <summary>
+    /// Stores the sales of the five least selling products in the specified month.
+    /// </summary>
+    public List<double> FiveLeastSellingProductSales { get; set; } = [];
+
+    /// <summary>
     /// Indicates if reports have been generated.
     /// </summary>
     [BindProperty]
@@ -113,9 +143,16 @@ public class IndexModel(HttpClient client, ServerConstants server) : PageModel
     public async Task OnGet(string? action = "Sales", int monthIdx = 1)
     {
         string? username = HttpContext.Session.GetString("Username");
+        string? acUsername = AppContext.GetData("Username") as string ?? null;
 
-        if (!string.IsNullOrEmpty(username))
-            TempData["Username"] = username;
+        if (!string.IsNullOrEmpty(username) || !string.IsNullOrEmpty(acUsername))
+        {
+            HttpContext.Session.SetString("Username", acUsername!);
+            HttpContext.Session.SetString("RoleName", (AppContext.GetData("RoleName") as string)!);
+            TempData["Username"] = acUsername;
+            username = acUsername;
+        }
+            
 
         if (!string.IsNullOrEmpty(username))
         {
@@ -246,6 +283,84 @@ public class IndexModel(HttpClient client, ServerConstants server) : PageModel
     }
 
     /// <summary>
+    /// Generates a chart showing the top five most selling products in the given month.
+    /// </summary>
+    /// <param name="username"></param>
+    /// <param name="monthIdx"></param>
+    /// <returns></returns>
+    private async Task<bool> GenerateTopFiveMostSellingProductsInMonth(string username, int monthIdx)
+    {
+        if (!string.IsNullOrEmpty(username))
+        {
+            HttpResponseMessage resp = await _client.GetAsync($"{_server.ApiAddress}/Home/GetTopFiveMostSellingProductsInMonth/{username}/{monthIdx}");
+
+            if (resp.IsSuccessStatusCode)
+            {
+                TopFiveMostSellingProductsInMonth = JsonSerializer.Deserialize<List<CategorySales>>(await resp.Content.ReadAsStringAsync(),
+                    new JsonSerializerOptions
+                    {
+                        PropertyNameCaseInsensitive = true
+                    });
+
+                if (TopFiveMostSellingProductsInMonth != null && TopFiveMostSellingProductsInMonth.Count >= 0)
+                {
+                    TopFiveMostSellingProductNames.Clear();
+                    TopFiveMostSellingProductSales.Clear();
+
+                    foreach (var item in TopFiveMostSellingProductsInMonth)
+                    {
+                        TopFiveMostSellingProductNames.Add(item.Category);
+                        TopFiveMostSellingProductSales.Add(item.Sales);
+                    }
+
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    /// Generates a chart showing the five least selling products in the given month.
+    /// </summary>
+    /// <param name="username"></param>
+    /// <param name="monthIdx"></param>
+    /// <returns></returns>
+    private async Task<bool> GenerateFiveLeastSellingProductsInMonth(string username, int monthIdx)
+    {
+        if (!string.IsNullOrEmpty(username))
+        {
+            HttpResponseMessage resp = await _client.GetAsync($"{_server.ApiAddress}/Home/GetFiveLeastSellingProductsInMonth/{username}/{monthIdx}");
+
+            if (resp.IsSuccessStatusCode)
+            {
+                FiveLeastSellingProductsInMonth = JsonSerializer.Deserialize<List<CategorySales>>(await resp.Content.ReadAsStringAsync(),
+                    new JsonSerializerOptions
+                    {
+                        PropertyNameCaseInsensitive = true
+                    });
+
+                if (FiveLeastSellingProductsInMonth != null && FiveLeastSellingProductsInMonth.Count >= 0)
+                {
+                    FiveLeastSellingProductNames.Clear();
+                    FiveLeastSellingProductSales.Clear();
+
+                    foreach (var item in FiveLeastSellingProductsInMonth)
+                    {
+                        FiveLeastSellingProductNames.Add(item.Category);
+                        FiveLeastSellingProductSales.Add(item.Sales);
+                    }
+
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /// <summary>
     /// Fetches data for categories contributing more than 50% towards the given month's revenue.
     /// </summary>
     /// <param name="username"></param>
@@ -336,7 +451,9 @@ public class IndexModel(HttpClient client, ServerConstants server) : PageModel
                 await GenerateCategoriesContributingMoreThan50PercentMonthReport(username, monthIdx) &&
                 await GenerateCategoriesContributingAtMost50PercentMonth(username, monthIdx) &&
                 await GenerateTopFiveMostSellingCategoriesThisMonthReport(username,monthIdx) &&
-                await GenerateBottomFiveLeastSellingCategoriesThisMonthReport(username,monthIdx))
+                await GenerateBottomFiveLeastSellingCategoriesThisMonthReport(username,monthIdx) &&
+                await GenerateTopFiveMostSellingProductsInMonth(username,monthIdx) &&
+                await GenerateFiveLeastSellingProductsInMonth(username, monthIdx))
                 return true;
         }
 

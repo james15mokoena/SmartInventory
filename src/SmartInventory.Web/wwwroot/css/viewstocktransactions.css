@@ -34,6 +34,27 @@
     background-color: lightgray;
 }
 
+.month-selector-vst{
+    margin: 15px;
+}
+
+.prev-month-vst, .next-month-vst{
+    width: 40px;
+    height: 40px;
+    border-radius: 15px;
+    border: none;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.selected-month-vst{
+    font-size: 20px;
+    font-weight: bold;
+    text-decoration: underline;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
 .summaries{
     display: flex;
     flex-direction: column;

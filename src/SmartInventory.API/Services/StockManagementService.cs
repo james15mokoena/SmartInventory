@@ -112,10 +112,10 @@ public class StockManagementService(StockManagementRepository stockRepo, UserMan
     /// <param name="username"></param>
     /// <param name="reason"></param>
     /// <returns></returns>
-    public List<StockTransactionSummary>? GetStockTransactionsSummaries(string username, string? reason) =>
-        !string.IsNullOrEmpty(username) && !string.IsNullOrEmpty(reason) &&
+    public List<StockTransactionSummary>? GetStockTransactionsSummaries(string username, string? reason, int monthIdx) =>
+        !string.IsNullOrEmpty(username) && !string.IsNullOrEmpty(reason) && monthIdx >= 1 && monthIdx <= 12 &&
         _permService.IsAuthorized(username, "ViewStockTransactions") &&
-        _stockRepo.GetStockTransactionsSummaries(reason) is List<StockTransactionSummary> summaries ?
+        _stockRepo.GetStockTransactionsSummaries(reason, monthIdx) is List<StockTransactionSummary> summaries ?
         summaries : null;
 
     /// <summary>
