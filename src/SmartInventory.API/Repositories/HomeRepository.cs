@@ -645,6 +645,53 @@ public class HomeRepository(DatabaseContext context)
     {
         var query =
             (from trans in _context.StockTransactions
+             where trans.Date.Month == monthIdx
+             from product in _context.Products
+             where trans.ProductId == product.SKU
+             from rtype in _context.ReasonTypes
+             where rtype.Id == trans.ReasonTypeId && rtype.Reason == "Purchased"
+             group trans by product.Category into tg
+             select new
+             {
+                 Category = tg.Key
+                 ,
+                 TotalCost =
+                     (from tr in tg
+                      from prod in _context.Products
+                      where tr.ProductId == prod.SKU
+                      select tr.QuantityChange * prod.CostPrice).Sum()
+             } into res
+             orderby res.TotalCost descending
+             select res).Take(5);
+
+        if (query.Any())
+        {
+            List<CategorySales> categoryTotalCost = [];
+
+            foreach (var item in query)
+            {
+                categoryTotalCost.Add(new()
+                {
+                    Category = item.Category,
+                    Sales = item.TotalCost
+                });
+            }
+
+            return categoryTotalCost;
+        }
+
+        return null;
+    }
+    
+    /// <summary>
+    /// Query: <b>What are 5 least categories with low total cost of purchases?</b>
+    /// </summary>
+    /// <param name="monthIdx"></param>
+    /// <returns></returns>
+    public List<CategorySales>? GetFiveLeastCategoriesWithLowTotalCostInMonth(int monthIdx)
+    {
+        var query =
+            (from trans in _context.StockTransactions
             where trans.Date.Month == monthIdx
             from product in _context.Products
             where trans.ProductId == product.SKU
@@ -661,7 +708,7 @@ public class HomeRepository(DatabaseContext context)
                      where tr.ProductId == prod.SKU
                      select tr.QuantityChange * prod.CostPrice).Sum()
             } into res
-            orderby res.TotalCost descending
+            orderby res.TotalCost
             select res).Take(5);
 
         if (query.Any())

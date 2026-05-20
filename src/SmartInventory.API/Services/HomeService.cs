@@ -144,4 +144,9 @@ public class HomeService(HomeRepository homeRepo, PermissionManagementService pe
         !string.IsNullOrEmpty(username) && _permServ.IsAuthorized(username, "ViewReports") &&
         monthIdx >= 1 && monthIdx <= 12 &&
         _homeRepo.GetTopFiveCategoriesWithHigherTotalCostInMonth(monthIdx) is List<CategorySales> res ? res : null;
+
+    public List<CategorySales>? GetFiveLeastCategoriesWithLowTotalCostInMonth(string username, int monthIdx) =>
+        !string.IsNullOrEmpty(username) && _permServ.IsAuthorized(username, "ViewReports") &&
+        monthIdx >= 1 && monthIdx <= 12 &&
+        _homeRepo.GetFiveLeastCategoriesWithLowTotalCostInMonth(monthIdx) is List<CategorySales> res ? res : null;
 }
