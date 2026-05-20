@@ -27,6 +27,8 @@ public class ProductDetailsModel(HttpClient client, ServerConstants server) : Pa
         if (HttpContext.Session.GetString("Username") is string username)
             TempData["Username"] = username;
 
+        sku = Converter.ToBase64String(sku);
+
         // send the request to fetch the data using the sku of the product.
         HttpResponseMessage resp = await _client.GetAsync(
             $"{server.ApiAddress}/Product/ViewProductDetailsBySku/{sku}/{HttpContext.Session.GetString("Username")}");
@@ -56,6 +58,8 @@ public class ProductDetailsModel(HttpClient client, ServerConstants server) : Pa
             Product.ReorderQuantity >= 0 && Product.UnitMeasurement != null && Product.SupplierId >= 0 &&
             Product.Barcode != null && Product.ImageUrl != null)
         {
+            Product.SKU = Converter.ToBase64String(Product.SKU!);
+            
             // convert the model to the json.
             StringContent content = new(JsonSerializer.Serialize(Product), Encoding.UTF8, "application/json");
 

@@ -375,8 +375,12 @@ public class ProductManagementService(ProductManagementRepository productRepo, S
            !string.IsNullOrEmpty(updatedProduct.Description) && updatedProduct.CostPrice >= 0.0 &&
            updatedProduct.CurrentStock >= 0.0 && updatedProduct.MinimumStockLevel >= 0.0 && updatedProduct.ReorderQuantity >= 0 &&
            updatedProduct.UnitPrice >= 0.0 && updatedProduct.UnitMeasurement != null  && updatedProduct.SupplierId >= 0 &&
-           updatedProduct.MaximumStockLevel >= 0 && _permService.IsAuthorized(username,"EditProduct"))
+           updatedProduct.MaximumStockLevel >= 0 && _permService.IsAuthorized(username, "EditProduct"))
+        {
+            updatedProduct.SKU = ConverterService.FromBase64String(updatedProduct.SKU);
             return _productRepo.EditProduct(updatedProduct) is Product p ? updatedProduct : null;
+        }
+            
         return null;
     }
 }

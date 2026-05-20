@@ -44,7 +44,9 @@ public class EditProductModel(HttpClient client, ServerConstants server) : PageM
 
         // send the request to fetch the data using the sku of the product.
         if (IsValid(Product!.SKU!))
-            resp = await _client.GetAsync($"{server.ApiAddress}/Product/ViewProductDetailsBySku/{Product.SKU}/{HttpContext.Session.GetString("Username")}");
+        {
+            resp = await _client.GetAsync($"{server.ApiAddress}/Product/ViewProductDetailsBySku/{Converter.ToBase64String(Product.SKU!)}/{HttpContext.Session.GetString("Username")}");
+        }   
         else if (IsValid(Product!.Name))
             // send the request to fetch the data using the name of the product
             resp = await _client.GetAsync($"{server.ApiAddress}/Product/ViewProductDetailsByName/{Product.Name}/{HttpContext.Session.GetString("Username")}");
@@ -81,6 +83,8 @@ public class EditProductModel(HttpClient client, ServerConstants server) : PageM
             Product.ReorderQuantity >= 0 && Product.UnitMeasurement != null && Product.SupplierId >= 0 &&
             Product.Barcode != null && Product.ImageUrl != null)
         {
+            Product.SKU = Converter.ToBase64String(Product.SKU!);
+            
             // convert the model to the json.
             StringContent content = new(JsonSerializer.Serialize(Product), Encoding.UTF8, "application/json");
 

@@ -1,3 +1,6 @@
+using System.Drawing.Imaging;
+using System.Text;
+using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using SmartInventory.API.Domain.DTO;
 using SmartInventory.API.Domain.Models;
@@ -34,10 +37,16 @@ public class ProductController(ProductManagementService productService) : Contro
     /// <param name="sku"></param>
     /// <returns></returns>
     [HttpGet("{sku}/{username}")]
-    public IActionResult ViewProductDetailsBySku(string sku, string username) =>
-        _productService.GetProductBySku(sku, username) is ProductDto dto ? Ok(dto) :
-        BadRequest("Failed to fetch product details!");
+    public IActionResult ViewProductDetailsBySku(string sku, string username)
+    {
+        sku = ConverterService.FromBase64String(sku);
 
+        if (_productService.GetProductBySku(sku, username) is ProductDto dto)
+            return Ok(dto);
+
+        return BadRequest("Failed to fetch product details!");
+    }
+        
     /// <summary>
     /// Fetches a product's details by name.
     /// </summary>
@@ -75,7 +84,7 @@ public class ProductController(ProductManagementService productService) : Contro
     /// <returns></returns>
     [HttpPut("{sku}/{username}")]
     public IActionResult ActivateOrDeactivateProduct(string sku, string username) =>
-        _productService.ToggleProductActiveStatus(sku, username) ?
+        _productService.ToggleProductActiveStatus(ConverterService.FromBase64String(sku), username) ?
         Ok("Product status changed!") :
         BadRequest("Failed to change product's status!");
 
