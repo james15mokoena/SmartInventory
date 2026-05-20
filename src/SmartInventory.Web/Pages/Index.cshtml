@@ -22,6 +22,12 @@
             <button class="btn-item btn-damages-charts">Damages Reports</button>*@
         </div>
 
+        <div class="month-selector">
+            <button class="prev-month">&#60</button>
+            <span class="selected-month">January</span>
+            <button class="next-month">&#62</button>
+        </div>
+
         @if(Model.IsFetched == "true"){
 
             <div class="charts">
@@ -29,12 +35,6 @@
                 <div class="sales-reports show-reports-tab">
 
                     <h2 style="font-size: 40px;">Sales Reports</h2>
-
-                    <div class="month-selector">
-                        <button class="prev-month">&#60</button>
-                        <span class="selected-month">January</span>
-                        <button class="next-month">&#62</button>
-                    </div>
 
                     <div class="sales-charts all-charts-cnts">
 
@@ -120,15 +120,45 @@
 
                 <div class="purchases-reports hide-reports-tab">
 
-                    <h2 style="font-size: 30px;">Purchases Reports</h2>
+                    <h2 style="font-size: 40px;">Purchases Reports</h2>
 
                     <div class="purchases-charts all-charts-cnts">
+
+                        <div class="monthly-total-costs-chart-cnt inner-charts">
+                            <canvas id="monthly-total-cost-chart-canvas" class="chart"></canvas>
+                            <div class="more-info">
+                                <button class="btn-view-more-info">More Info</button>
+                                <div class="info hide">
+                                    Provides more insight/information regarding the monthly total cost trends.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="top-5-categories-high-purchase-cost-tm-chart-cnt inner-charts">                            
+                            <canvas id="t5cwhpc-chart-canvas" class="chart"></canvas>
+                            <div class="more-info">
+                                <button class="btn-view-more-info">More Info</button>
+                                <div class="info hide">
+                                    Provides more insight/information regarding the top 5 categories with high purchase costs in the given month.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="five-categories-low-purchase-cost-tm-chart-cnt inner-charts">                            
+                            <canvas id="five-lcwlowpc-chart-canvas" class="chart"></canvas>
+                            <div class="more-info">
+                                <button class="btn-view-more-info">More Info</button>
+                                <div class="info hide">
+                                    Provides more insight/information regarding the five categories with low purchase costs in the given month.
+                                </div>
+                            </div>
+                        </div>
 
                     </div>
 
                 </div>
 
-                <div class="returns-reports hide-reports-tab">
+                @*<div class="returns-reports hide-reports-tab">
 
                     <h2 style="font-size: 30px;">Returns Reports</h2>
 
@@ -145,7 +175,7 @@
                     <div class="damages-charts all-charts-cnts">
                         
                     </div>
-                </div>
+                </div>*@
 
             </div>
         }
@@ -168,6 +198,8 @@
 
 @* ********************* CHART CREATION CODE ********************* *@
 <script>
+
+    @* $$$$$$$$$$ SALES REPORTS CHARTS $$$$$$$$$$*@
 
     /**
     * The "Monthly Revenue Trends" chart.
@@ -560,6 +592,205 @@
                     title: {
                         display: true,
                         text: 'Sales (R)',
+                        font: {
+                            size: 18
+                        }
+                    },
+                    ticks: {
+                        font: {
+                            size: 18
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+    @* %%%%%%%%%% PURCHASES REPORTS CHARTS %%%%%%%%%%*@
+
+    /**
+    * The "Monthly Total Costs Trends" chart.
+    */
+    const totalCostsChartCanvasCtx = document.getElementById("monthly-total-cost-chart-canvas").getContext("2d");
+    let monthsTC = @Html.Raw(JsonSerializer.Serialize(Model.MonthsTC));
+    let totalCosts = @Html.Raw(JsonSerializer.Serialize(Model.TotalCosts));
+
+    const totalCostsChart = new Chart(totalCostsChartCanvasCtx, {
+        type: 'line',
+        data: {
+            // x-axis
+            labels: monthsTC,
+            datasets: [
+                {
+                    label: 'Monthly Total Costs Trends (R)',
+                    data: totalCosts,
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    labels: {
+                        font: {
+                            size: 18
+                        }
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    display: true,
+                    title: {
+                        display: true,
+                        text: 'Months',
+                        font: {
+                            size: 18
+                        },
+                    },
+                    ticks: {
+                        font: {
+                            size: 18
+                        }
+                    }
+                },
+                y: {
+                    display: true,
+                    title: {
+                        display: true,
+                        text: 'Total Cost (R)',
+                        font: {
+                            size: 18
+                        },
+                    },
+                    ticks: {
+                        font: {
+                            size: 18
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+    /**
+        The "Top 5 Categories with high purchase costs in the selected month" chart.
+    */
+    const topFiveCatWithHighPCChartCtx = document.querySelector("#t5cwhpc-chart-canvas").getContext("2d");
+    let top5CatHighPCCategories = @Html.Raw(JsonSerializer.Serialize(Model.TopFiveCategoriesWithHighPurchaseCostsNames));
+    let top5CatHighPCPurchases = @Html.Raw(JsonSerializer.Serialize(Model.TopFiveCategoriesWithHighPurchaseCostsTC));
+
+    const top5CatHighPCChart = new Chart(topFiveCatWithHighPCChartCtx, {
+        type: 'bar',
+        data: {
+            labels: top5CatHighPCCategories,
+            datasets: [
+                {
+                    label: 'Top 5 Categories With High Purchase Cost',
+                    data: top5CatHighPCPurchases,
+                    backgroundColor: ['green', 'lightblue', 'purple', 'maroon', 'orange'],
+                    borderWidth: 1
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    labels: {
+                        font: {
+                            size: 18
+                        }
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    display: true,
+                    title: {
+                        display: true,
+                        text: 'Categories',
+                        font: {
+                            size: 18
+                        }
+                    },
+                    ticks: {
+                        font: {
+                            size: 18
+                        }
+                    }
+                },
+                y: {
+                    display: true,
+                    title: {
+                        display: true,
+                        text: 'Cost (R)',
+                        font: {
+                            size: 18
+                        }
+                    },
+                    ticks: {
+                        font: {
+                            size: 18
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+    /**
+        The "5 Least Categories with low purchase cost in the selected month" chart.
+    */
+    const fiveLeastCatWithLowPCChartCtx = document.querySelector("#five-lcwlowpc-chart-canvas").getContext("2d");
+    let fiveLeastPCCategories = @Html.Raw(JsonSerializer.Serialize(Model.FiveLeastCategoriesWithLowPurchaseCostsNames));
+    let fiveLeastCategoriesPurchases = @Html.Raw(JsonSerializer.Serialize(Model.FiveLeastCategoriesWithLowPurchaseCostsTC));
+
+    const fiveLeastCatWithLowPCChart = new Chart(fiveLeastCatWithLowPCChartCtx, {
+        type: 'bar',
+        data: {
+            labels: fiveLeastPCCategories,
+            datasets: [
+                {
+                    label: 'Five Least Categories with Low Purchase Cost',
+                    data: fiveLeastCategoriesPurchases,
+                    backgroundColor: ['green', 'lightblue', 'purple', 'maroon', 'orange'],
+                    borderWidth: 1
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    labels: {
+                        font: {
+                            size: 18
+                        }
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    display: true,
+                    title: {
+                        display: true,
+                        text: 'Categories',
+                        font: {
+                            size: 18
+                        }
+                    },
+                    ticks: {
+                        font: {
+                            size: 18
+                        }
+                    }
+                },
+                y: {
+                    display: true,
+                    title: {
+                        display: true,
+                        text: 'Cost (R)',
                         font: {
                             size: 18
                         }

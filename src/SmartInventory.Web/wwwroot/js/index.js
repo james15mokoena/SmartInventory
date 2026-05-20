@@ -159,6 +159,9 @@ function getPreceedingMonth() {
         if (findActiveReportsTab() === "sales-reports") {
             window.location.href = `http://localhost:5289/Index?action=Sales&monthIdx=${preceedingIdx}`;
         }
+        else if (findActiveReportsTab() === "purchases-reports") {
+            window.location.href = `http://localhost:5289/Index?action=Purchases&monthIdx=${preceedingIdx}`;
+        }
     }
 }
 
@@ -178,6 +181,9 @@ function getNextMonth() {
         localStorage.setItem("monthIdxHome", nextIdx);
         if (findActiveReportsTab() === "sales-reports") {
             window.location.href = `http://localhost:5289/Index?action=Sales&monthIdx=${nextIdx}`;
+        }
+        if (findActiveReportsTab() === "purchases-reports") {
+            window.location.href = `http://localhost:5289/Index?action=Purchases&monthIdx=${nextIdx}`;
         }
             
     }

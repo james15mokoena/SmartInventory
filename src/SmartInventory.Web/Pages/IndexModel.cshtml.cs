@@ -130,6 +130,60 @@ public class IndexModel(HttpClient client, ServerConstants server) : PageModel
     public List<double> FiveLeastSellingProductSales { get; set; } = [];
 
     /// <summary>
+    /// Stores the monthly total costs.
+    /// </summary>
+    [BindProperty]
+    public List<MonthlyRevenue>? MonthlyTotalCosts { get; set; } = [];
+
+    /// <summary>
+    /// Stores the months with total costs.
+    /// </summary>
+    [BindProperty]
+    public List<string> MonthsTC { get; set; } = [];
+
+    /// <summary>
+    /// Stores the total cost for each month.
+    /// </summary>
+    [BindProperty]
+    public List<double> TotalCosts { get; set; } = [];
+
+    /// <summary>
+    /// Stores the top 5 categories with high purchase costs.
+    /// </summary>
+    [BindProperty]
+    public List<CategorySales>? TopFiveCategoriesWithHighPurchaseCosts{ get; set; } = [];
+
+    /// <summary>
+    /// Stores the names of top 5 categories with high purchase costs.
+    /// </summary>
+    [BindProperty]
+    public List<string> TopFiveCategoriesWithHighPurchaseCostsNames { get; set; } = [];
+
+    /// <summary>
+    /// Stores the costs of the top 5 categories with high purchase costs.
+    /// </summary>
+    [BindProperty]
+    public List<double> TopFiveCategoriesWithHighPurchaseCostsTC { get; set; } = [];
+
+    /// <summary>
+    /// Stores the 5 least categories with low purchase costs.
+    /// </summary>
+    [BindProperty]
+    public List<CategorySales>? FiveLeastCategoriesWithLowPurchaseCosts{ get; set; } = [];
+
+    /// <summary>
+    /// Stores the names of the five least categories with low purchase costs.
+    /// </summary>
+    [BindProperty]
+    public List<string> FiveLeastCategoriesWithLowPurchaseCostsNames { get; set; } = [];
+
+    /// <summary>
+    /// Stores the costs of the five least categories with low purchase costs.
+    /// </summary>
+    [BindProperty]
+    public List<double> FiveLeastCategoriesWithLowPurchaseCostsTC { get; set; } = [];
+
+    /// <summary>
     /// Indicates if reports have been generated.
     /// </summary>
     [BindProperty]
@@ -151,14 +205,20 @@ public class IndexModel(HttpClient client, ServerConstants server) : PageModel
             HttpContext.Session.SetString("RoleName", (AppContext.GetData("RoleName") as string)!);
             TempData["Username"] = acUsername;
             username = acUsername;
-        }
-            
+        }   
 
         if (!string.IsNullOrEmpty(username))
         {
             if ((!string.IsNullOrEmpty(action) && action == "Sales") || string.IsNullOrEmpty(action))
             {
                 if (await GenerateSalesReports(username, monthIdx))
+                    IsFetched = "true";
+                else
+                    IsFetched = "false";
+            }
+            else if(!string.IsNullOrEmpty(action) && action == "Purchases")
+            {
+                if (await GeneratePurchasesReports(username, monthIdx))
                     IsFetched = "true";
                 else
                     IsFetched = "false";
@@ -439,6 +499,120 @@ public class IndexModel(HttpClient client, ServerConstants server) : PageModel
     }
 
     /// <summary>
+    /// Fetches data for the top five categories with high purchase costs in the given month report.
+    /// </summary>
+    /// <param name="username"></param>
+    /// <returns></returns>
+    private async Task<bool> GenerateTopFiveCategoriesWithHighPurchaseCostsMonthReport(string username, int monthIdx)
+    {
+        if (!string.IsNullOrEmpty(username))
+        {
+            HttpResponseMessage resp = await _client.GetAsync($"{_server.ApiAddress}/Home/GetTopFiveCategoriesWithHigherTotalCostInMonth/{username}/{monthIdx}");
+
+            if (resp.IsSuccessStatusCode)
+            {
+                TopFiveCategoriesWithHighPurchaseCosts = JsonSerializer.Deserialize<List<CategorySales>>(await resp.Content.ReadAsStringAsync(),
+                    new JsonSerializerOptions
+                    {
+                        PropertyNameCaseInsensitive = true
+                    });
+
+                if (TopFiveCategoriesWithHighPurchaseCosts != null && TopFiveCategoriesWithHighPurchaseCosts.Count >= 0)
+                {
+                    TopFiveCategoriesWithHighPurchaseCostsNames.Clear();
+                    TopFiveCategoriesWithHighPurchaseCostsTC.Clear();
+
+                    foreach (var item in TopFiveCategoriesWithHighPurchaseCosts)
+                    {
+                        TopFiveCategoriesWithHighPurchaseCostsNames.Add(item.Category);
+                        TopFiveCategoriesWithHighPurchaseCostsTC.Add(item.Sales);
+                    }
+
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    /// Fetches data for the five least categories with low purchase costs in the given month report.
+    /// </summary>
+    /// <param name="username"></param>
+    /// <returns></returns>
+    private async Task<bool> GenerateFiveLeastCategoriesWithLowPurchaseCostsMonthReport(string username, int monthIdx)
+    {
+        if (!string.IsNullOrEmpty(username))
+        {
+            HttpResponseMessage resp = await _client.GetAsync($"{_server.ApiAddress}/Home/GetFiveLeastCategoriesWithLowTotalCostInMonth/{username}/{monthIdx}");
+
+            if (resp.IsSuccessStatusCode)
+            {
+                FiveLeastCategoriesWithLowPurchaseCosts = JsonSerializer.Deserialize<List<CategorySales>>(await resp.Content.ReadAsStringAsync(),
+                    new JsonSerializerOptions
+                    {
+                        PropertyNameCaseInsensitive = true
+                    });
+
+                if (FiveLeastCategoriesWithLowPurchaseCosts != null && FiveLeastCategoriesWithLowPurchaseCosts.Count >= 0)
+                {
+                    FiveLeastCategoriesWithLowPurchaseCostsNames.Clear();
+                    FiveLeastCategoriesWithLowPurchaseCostsTC.Clear();
+
+                    foreach (var item in FiveLeastCategoriesWithLowPurchaseCosts)
+                    {
+                        FiveLeastCategoriesWithLowPurchaseCostsNames.Add(item.Category);
+                        FiveLeastCategoriesWithLowPurchaseCostsTC.Add(item.Sales);
+                    }
+
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    /// Fetches data for the monthly total costs report.
+    /// </summary>
+    /// <param name="username"></param>
+    /// <returns></returns>
+    private async Task<bool> GenerateMonthlyTotalCostsReport(string username)
+    {
+        if (!string.IsNullOrEmpty(username))
+        {
+            HttpResponseMessage resp = await _client.GetAsync($"{_server.ApiAddress}/Home/GetMonthlyTotalCost/{username}");
+
+            if (resp.IsSuccessStatusCode)
+            {
+                MonthlyTotalCosts = JsonSerializer.Deserialize<List<MonthlyRevenue>>(await resp.Content.ReadAsStringAsync(),
+                    new JsonSerializerOptions()
+                    {
+                        PropertyNameCaseInsensitive = true
+                    });
+
+                if (MonthlyTotalCosts != null && MonthlyTotalCosts.Count >= 0)
+                {
+                    MonthsTC.Clear();
+                    TotalCosts.Clear();
+
+                    foreach (var mr in MonthlyTotalCosts)
+                    {
+                        MonthsTC.Add(mr.Month);
+                        TotalCosts.Add(mr.Revenue);
+                    }
+
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /// <summary>
     /// Generates sales reports.
     /// </summary>
     /// <param name="username"></param>
@@ -450,10 +624,28 @@ public class IndexModel(HttpClient client, ServerConstants server) : PageModel
             if (await GenerateMonthlyRevenuesReport(username) &&
                 await GenerateCategoriesContributingMoreThan50PercentMonthReport(username, monthIdx) &&
                 await GenerateCategoriesContributingAtMost50PercentMonth(username, monthIdx) &&
-                await GenerateTopFiveMostSellingCategoriesThisMonthReport(username,monthIdx) &&
-                await GenerateBottomFiveLeastSellingCategoriesThisMonthReport(username,monthIdx) &&
-                await GenerateTopFiveMostSellingProductsInMonth(username,monthIdx) &&
+                await GenerateTopFiveMostSellingCategoriesThisMonthReport(username, monthIdx) &&
+                await GenerateBottomFiveLeastSellingCategoriesThisMonthReport(username, monthIdx) &&
+                await GenerateTopFiveMostSellingProductsInMonth(username, monthIdx) &&
                 await GenerateFiveLeastSellingProductsInMonth(username, monthIdx))
+                return true;
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    /// Generates purchases reports.
+    /// </summary>
+    /// <param name="username"></param>
+    /// <returns></returns>
+    private async Task<bool> GeneratePurchasesReports(string username, int monthIdx)
+    {
+        if (!string.IsNullOrEmpty(username))
+        {
+            if (await GenerateMonthlyTotalCostsReport(username) &&
+                await GenerateTopFiveCategoriesWithHighPurchaseCostsMonthReport(username, monthIdx) &&
+                await GenerateFiveLeastCategoriesWithLowPurchaseCostsMonthReport(username, monthIdx))
                 return true;
         }
 
