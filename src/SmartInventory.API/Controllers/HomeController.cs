@@ -18,7 +18,7 @@ public class HomeController(HomeService homeService) : ControllerBase
     [HttpGet("{username}/{monthIdx}")]
     public IActionResult GetTopFiveMostSellingProductsInMonth(string username, int monthIdx) =>
         !string.IsNullOrEmpty(username) && _homeServ.GetTopFiveMostSellingProductsInMonth(username, monthIdx) is List<CategorySales> cs ? Ok(cs) : BadRequest("Failed to get the data.");
-    
+
     /// <summary>
     /// Query: <b>What are 5 least selling products in a given month?</b>
     /// </summary>
@@ -35,7 +35,7 @@ public class HomeController(HomeService homeService) : ControllerBase
     /// <returns></returns>
     [HttpGet("{username}/{monthIdx}")]
     public IActionResult GetCategoriesContributingAtMost50PercentMonth(string username, int monthIdx) =>
-        !string.IsNullOrEmpty(username) && _homeServ.GetCategoriesContributingAtMost50PercentMonth(username,monthIdx)
+        !string.IsNullOrEmpty(username) && _homeServ.GetCategoriesContributingAtMost50PercentMonth(username, monthIdx)
         is List<CategorySales> res ? Ok(res) : BadRequest("Failed to get the data!");
 
     /// <summary>
@@ -56,7 +56,7 @@ public class HomeController(HomeService homeService) : ControllerBase
     [HttpGet("{username}/{monthIdx}")]
     public IActionResult GetTopFiveMostSellingCategoriesThisMonth(string username, int monthIdx) =>
         !string.IsNullOrEmpty(username) && _homeServ.GetTopFiveMostSellingCategoriesThisMonth(username, monthIdx) is List<CategorySales> s ? Ok(s) : BadRequest("Failed to get the top 5 most selling categories.");
-    
+
     /// <summary>
     /// Gets the bottom 5 least selling categories.
     /// </summary>
@@ -95,7 +95,7 @@ public class HomeController(HomeService homeService) : ControllerBase
     [HttpGet("{username}/{monthIdx}")]
     public IActionResult ViewTotalSalesByCategories(string username, int monthIdx) =>
         !string.IsNullOrEmpty(username) &&
-        _homeServ.GetTotalSalesByCategories(username,monthIdx) is List<TotalSalesByCategory> sales ?
+        _homeServ.GetTotalSalesByCategories(username, monthIdx) is List<TotalSalesByCategory> sales ?
         Ok(sales) :
         BadRequest("Failed to get the total sales by categories!");
 
@@ -106,7 +106,7 @@ public class HomeController(HomeService homeService) : ControllerBase
     /// <returns></returns>
     [HttpGet("{username}/{monthIdx}")]
     public IActionResult ViewCategoryWithMostSales(string username, int monthIdx) =>
-        !string.IsNullOrEmpty(username) && _homeServ.GetCategoryWithMostSales(username,monthIdx) is TotalSalesByCategory t ?
+        !string.IsNullOrEmpty(username) && _homeServ.GetCategoryWithMostSales(username, monthIdx) is TotalSalesByCategory t ?
         Ok(t) : BadRequest("Failed to get the category with most sales!");
 
     /// <summary>
@@ -116,7 +116,7 @@ public class HomeController(HomeService homeService) : ControllerBase
     /// <returns></returns>
     [HttpGet("{username}/{monthIdx}")]
     public IActionResult ViewCategoryWithLeastSales(string username, int monthIdx) =>
-        !string.IsNullOrEmpty(username) && _homeServ.GetCategoryWithLeastSales(username,monthIdx) is TotalSalesByCategory t ?
+        !string.IsNullOrEmpty(username) && _homeServ.GetCategoryWithLeastSales(username, monthIdx) is TotalSalesByCategory t ?
         Ok(t) : BadRequest("Failed to get the category with least sales!");
 
     /// <summary>
@@ -126,9 +126,9 @@ public class HomeController(HomeService homeService) : ControllerBase
     /// <returns></returns>
     [HttpGet("{username}/{monthIdx}")]
     public IActionResult ViewProductsWithMostSalesByCategory(string username, int monthIdx) =>
-        !string.IsNullOrEmpty(username) && _homeServ.GetProductsWithMostSalesByCategory(username,monthIdx) is
+        !string.IsNullOrEmpty(username) && _homeServ.GetProductsWithMostSalesByCategory(username, monthIdx) is
             List<TotalSalesByCategory> res ? Ok(res) : BadRequest("Failed to get products with most sales by category!");
-    
+
     /// <summary>
     /// Gets products with the least sales in each category.
     /// </summary>
@@ -136,7 +136,16 @@ public class HomeController(HomeService homeService) : ControllerBase
     /// <returns></returns>
     [HttpGet("{username}/{monthIdx}")]
     public IActionResult ViewProductsWithLeastSalesByCategory(string username, int monthIdx) =>
-        !string.IsNullOrEmpty(username) && _homeServ.GetProductsWithLeastSalesByCategory(username,monthIdx) is
+        !string.IsNullOrEmpty(username) && _homeServ.GetProductsWithLeastSalesByCategory(username, monthIdx) is
             List<TotalSalesByCategory> res ? Ok(res) : BadRequest("Failed to get products with least sales by category!");
 
+    /// <summary>
+    /// Returns the monthly total costs.
+    /// </summary>
+    /// <param name="username"></param>
+    /// <returns></returns>
+    [HttpGet("{username}")]
+    public IActionResult GetMonthlyTotalCost(string username) =>
+        !string.IsNullOrEmpty(username) && _homeServ.GetMonthlyTotalCost(username) is List<MonthlyRevenue> tc ?
+        Ok(tc) : BadRequest("Failed to get the data.");
 }

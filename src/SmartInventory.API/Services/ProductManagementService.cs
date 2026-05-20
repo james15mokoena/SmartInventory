@@ -289,6 +289,10 @@ public class ProductManagementService(ProductManagementRepository productRepo, S
                         UnitMeasurement = product.UnitMeasurement
                         ,
                         UnitPrice = product.UnitPrice
+                        ,
+                        ImageUrl = product.ImageUrl
+                        ,
+                        MaximumStockLevel = product.MaximumStockLevel
                     });
                 }
             }
@@ -376,10 +380,7 @@ public class ProductManagementService(ProductManagementRepository productRepo, S
            updatedProduct.CurrentStock >= 0.0 && updatedProduct.MinimumStockLevel >= 0.0 && updatedProduct.ReorderQuantity >= 0 &&
            updatedProduct.UnitPrice >= 0.0 && updatedProduct.UnitMeasurement != null  && updatedProduct.SupplierId >= 0 &&
            updatedProduct.MaximumStockLevel >= 0 && _permService.IsAuthorized(username, "EditProduct"))
-        {
-            updatedProduct.SKU = ConverterService.FromBase64String(updatedProduct.SKU);
             return _productRepo.EditProduct(updatedProduct) is Product p ? updatedProduct : null;
-        }
             
         return null;
     }

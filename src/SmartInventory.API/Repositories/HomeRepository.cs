@@ -530,7 +530,7 @@ public class HomeRepository(DatabaseContext context)
 
         return null;
     }
-    
+
     /// <summary>
     /// Answers: <b>Which product has the least sales in each category?</b>
     /// </summary>
@@ -588,6 +588,50 @@ public class HomeRepository(DatabaseContext context)
 
         if (productsWithLeastSalesInTheirCategories.Count > 0)
             return productsWithLeastSalesInTheirCategories;
+
+        return null;
+    }
+
+    /// <summary>
+    /// Query: <b>What is the total cost of purchases for the past months?</b>
+    /// </summary>
+    /// <returns></returns>
+    public List<MonthlyRevenue>? GetMonthlyTotalCost()
+    {
+        var monthlyTotalCosts =
+            from trans in _context.StockTransactions
+            from product in _context.Products
+            where trans.ProductId == product.SKU
+            from rtype in _context.ReasonTypes
+            where rtype.Id == trans.ReasonTypeId && rtype.Reason == "Purchased"
+            group trans by trans.Date.Month into tg
+            select new
+            {
+                Month = tg.Key,
+                TotalCost =
+                    (from trans2 in tg
+                     from prod in _context.Products
+                     where trans2.ProductId == prod.SKU
+                     select trans2.QuantityChange * prod.CostPrice).Sum()
+            } into res
+            orderby res.Month
+            select res;
+
+        if (monthlyTotalCosts.Any())
+        {
+            List<MonthlyRevenue> _monthlyTotalCosts = [];
+
+            foreach (var item in monthlyTotalCosts)
+            {
+                _monthlyTotalCosts.Add(new()
+                {
+                    Month = GetMonth(item.Month),
+                    Revenue = item.TotalCost
+                });
+            }
+
+            return _monthlyTotalCosts;
+        }
 
         return null;
     }

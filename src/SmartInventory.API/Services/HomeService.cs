@@ -130,4 +130,13 @@ public class HomeService(HomeRepository homeRepo, PermissionManagementService pe
         !string.IsNullOrEmpty(username) && _permServ.IsAuthorized(username, "ViewReports") && monthIdx >= 1 && monthIdx <= 12 &&
         _homeRepo.GetProductsWithLeastSalesByCategory(monthIdx) is List<TotalSalesByCategory> ts ?
         ts : null;
+
+    /// <summary>
+    /// Returns the monthly total costs.
+    /// </summary>
+    /// <param name="username"></param>
+    /// <returns></returns>
+    public List<MonthlyRevenue>? GetMonthlyTotalCost(string username) =>
+        !string.IsNullOrEmpty(username) && _permServ.IsAuthorized(username, "ViewReports") &&
+        _homeRepo.GetMonthlyTotalCost() is List<MonthlyRevenue> tc ? tc : null;
 }

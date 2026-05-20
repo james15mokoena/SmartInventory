@@ -198,13 +198,13 @@ public class ProductManagementRepository(DatabaseContext context, StockManagemen
                 isUpdated = true;
             }
 
-            if (product.ImageUrl != updatedProduct.ImageUrl && product.ImageUrl != "")
+            if (product.ImageUrl != updatedProduct.ImageUrl && updatedProduct.ImageUrl != "")
             {
                 product.ImageUrl = updatedProduct.ImageUrl!;
                 isUpdated = true;
             }
 
-            if (product.Barcode != updatedProduct.Barcode && product.Barcode != "")
+            if (product.Barcode != updatedProduct.Barcode && updatedProduct.Barcode != "")
             {
                 product.Barcode = updatedProduct.Barcode!;
                 isUpdated = true;
