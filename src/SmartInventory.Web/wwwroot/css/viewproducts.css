@@ -46,9 +46,10 @@
 
 .product{
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 200px;
+    height: 300px;
     border: 1px solid black;
     margin: 5px;
     background-color: rgb(100,90,90);
@@ -56,6 +57,12 @@
     text-decoration: none;
     color: white;
     font-size: 20px;
+}
+
+.prod-img{
+    height: 250px;
+    width: 300px;
+    margin-bottom: 7px;
 }
 
 .product:hover{
@@ -109,7 +116,7 @@
     background-color: peru;
 }
 
-@media (max-width:544px){
+@media (max-width:616px){
 
     .products{
         grid-template-columns: repeat(1,1fr);
@@ -125,7 +132,13 @@
     }
 }
 
-@media (min-width: 545px) and (max-width: 790px){
+@media (min-width: 791px) and (max-width: 920px) {
+    .products{
+        grid-template-columns: repeat(2,1fr);
+    }
+}
+
+@media (min-width: 614px) and (max-width: 790px){
 
     .products{
         grid-template-columns: repeat(2,1fr);

@@ -40,6 +40,9 @@ public class EditProductModel(HttpClient client, ServerConstants server) : PageM
     /// <returns></returns>
     public async Task OnPostFetchData()
     {
+        if (HttpContext.Session.GetString("Username") is string username)
+            TempData["Username"] = username;
+
         HttpResponseMessage? resp = null;
 
         // send the request to fetch the data using the sku of the product.
@@ -83,7 +86,6 @@ public class EditProductModel(HttpClient client, ServerConstants server) : PageM
             Product.ReorderQuantity >= 0 && Product.UnitMeasurement != null && Product.SupplierId >= 0 &&
             Product.Barcode != null && Product.ImageUrl != null)
         {
-            Product.SKU = Converter.ToBase64String(Product.SKU!);
             
             // convert the model to the json.
             StringContent content = new(JsonSerializer.Serialize(Product), Encoding.UTF8, "application/json");

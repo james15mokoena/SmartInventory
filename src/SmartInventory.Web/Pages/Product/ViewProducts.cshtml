@@ -53,6 +53,7 @@
                     foreach(ProductDto product in products){
 
                         <a href="~/Product/ProductDetails?sku=@product.SKU" class="product">
+                            <img class="prod-img" src="~/images/@product.ImageUrl" alt="@product.Name">
                             <span>@product.Name</span>
                         </a>
                     }
