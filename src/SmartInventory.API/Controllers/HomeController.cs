@@ -148,4 +148,14 @@ public class HomeController(HomeService homeService) : ControllerBase
     public IActionResult GetMonthlyTotalCost(string username) =>
         !string.IsNullOrEmpty(username) && _homeServ.GetMonthlyTotalCost(username) is List<MonthlyRevenue> tc ?
         Ok(tc) : BadRequest("Failed to get the data.");
+
+    /// <summary>
+    /// Gets top five categories with higher total cost in the given month.
+    /// </summary>
+    /// <param name="username"></param>
+    /// <param name="monthIdx"></param>
+    /// <returns></returns>
+    [HttpGet("{username}/{monthIdx}")]
+    public IActionResult GetTopFiveCategoriesWithHigherTotalCostInMonth(string username, int monthIdx) =>
+        !string.IsNullOrEmpty(username) && _homeServ.GetTopFiveCategoriesWithHigherTotalCostInMonth(username, monthIdx) is List<CategorySales> res ? Ok(res) : BadRequest("Failed to get the data.");
 }
