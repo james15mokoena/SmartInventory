@@ -187,622 +187,87 @@
     
     </div>
 
-    <footer>
-        Footer
-    </footer>
-
 </div>
 
 <script src="~/lib/chartjs/chart.umd.min.js" type="text/javascript"></script>
 <script src="~/js/index.js" type="text/javascript"></script>
+<script src="~/js/index_charts.js" type="text/javascript"></script>
 
 @* ********************* CHART CREATION CODE ********************* *@
 <script>
 
-    @* $$$$$$$$$$ SALES REPORTS CHARTS $$$$$$$$$$*@
+    @* ********** Sales Reports ********** *@
 
-    /**
-    * The "Monthly Revenue Trends" chart.
-    */
+    /* Builds a chart that shows the monthly revenues in the current year. */
     const revenueChartCanvasCtx = document.getElementById("revenue-chart-canvas").getContext("2d");
     let months = @Html.Raw(JsonSerializer.Serialize(Model.Months));
     let revenues = @Html.Raw(JsonSerializer.Serialize(Model.Revenues));
 
-    const revenueChart = new Chart(revenueChartCanvasCtx, {
-        type: 'line',
-        data: {
-            // x-axis
-            labels: months,
-            datasets: [
-                {
-                    label: 'Monthly Revenue Trends (R)',
-                    data: revenues,
-                }
-            ]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: {
-                    labels: {
-                        font: {
-                            size: 18
-                        }
-                    }
-                }
-            },
-            scales: {
-                x: {
-                    display: true,
-                    title: {
-                        display: true,
-                        text: 'Months',
-                        font: {
-                            size: 18
-                        },
-                    },
-                    ticks: {
-                        font: {
-                            size: 18
-                        }
-                    }
-                },
-                y: {
-                    display: true,
-                    title: {
-                        display: true,
-                        text: 'Revenue (R)',
-                        font: {
-                            size: 18
-                        },
-                    },
-                    ticks: {
-                        font: {
-                            size: 18
-                        }
-                    }
-                }
-            }
-        }
-    });
+    buildRevenueChart(revenueChartCanvasCtx, months, revenues);
 
-    /**
-        The "Top 5 Most Selling Categories in the selected month" chart.
-    */
-    const t5msctmChartCtx = document.querySelector("#t5msctm-chart-canvas").getContext("2d");
+    /* Builds a chart that shows the top 5 selling categories in the specified month. */
+    const top5SellingCategoriesCtx = document.querySelector("#t5msctm-chart-canvas").getContext("2d");
     let top5MostCategories = @Html.Raw(JsonSerializer.Serialize(Model.TopFiveCategories));
     let top5MostCategoriesSales = @Html.Raw(JsonSerializer.Serialize(Model.TopFiveCategoriesSales));
 
-    const top5MostSellingCategoriesChart = new Chart(t5msctmChartCtx, {
-        type: 'bar',
-        data: {
-            labels: top5MostCategories,
-            datasets: [
-                {
-                    label: 'Top 5 Most Selling Categories',
-                    data: top5MostCategoriesSales,
-                    backgroundColor: ['green', 'lightblue', 'purple', 'maroon', 'orange'],
-                    borderWidth: 1
-                }
-            ]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: {
-                    labels: {
-                        font: {
-                            size: 18
-                        }
-                    }
-                }
-            },
-            scales: {
-                x: {
-                    display: true,
-                    title: {
-                        display: true,
-                        text: 'Categories',
-                        font: {
-                            size: 18
-                        }
-                    },
-                    ticks: {
-                        font: {
-                            size: 18
-                        }
-                    }
-                },
-                y: {
-                    display: true,
-                    title: {
-                        display: true,
-                        text: 'Sales (R)',
-                        font: {
-                            size: 18
-                        }
-                    },
-                    ticks: {
-                        font: {
-                            size: 18
-                        }
-                    }
-                }
-            }
-        }
-    });
+    buildTop5SellingCategoriesChart(top5SellingCategoriesCtx, top5MostCategories, top5MostCategoriesSales);
 
-    /**
-        The "Bottom 5 Least Selling Categories in the selected month" chart.
-    */
-    const b5lsctmChartCtx = document.querySelector("#b5lsctm-chart-canvas").getContext("2d");
-    let bottom5LeastCategories = @Html.Raw(JsonSerializer.Serialize(Model.BottomFiveCategories));
-    let bottom5LeastCategoriesSales = @Html.Raw(JsonSerializer.Serialize(Model.BottomFiveCategoriesSales));
+    /* Builds a chart showing the five least selling categories in the specified month. */
+    const fiveLeastSellingCategoriesCtx = document.querySelector("#b5lsctm-chart-canvas").getContext("2d");
+    let fiveLeastCategories = @Html.Raw(JsonSerializer.Serialize(Model.BottomFiveCategories));
+    let fiveLeastCategoriesSales = @Html.Raw(JsonSerializer.Serialize(Model.BottomFiveCategoriesSales));
 
-    const bottom5LeastSellingCategoriesChart = new Chart(b5lsctmChartCtx, {
-        type: 'bar',
-        data: {
-            labels: bottom5LeastCategories,
-            datasets: [
-                {
-                    label: 'Bottom 5 Least Selling Categories',
-                    data: bottom5LeastCategoriesSales,
-                    backgroundColor: ['green', 'lightblue', 'purple', 'maroon', 'orange'],
-                    borderWidth: 1
-                }
-            ]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: {
-                    labels: {
-                        font: {
-                            size: 18
-                        }
-                    }
-                }
-            },
-            scales: {
-                x: {
-                    display: true,
-                    title: {
-                        display: true,
-                        text: 'Categories',
-                        font: {
-                            size: 18
-                        }
-                    },
-                    ticks: {
-                        font: {
-                            size: 18
-                        }
-                    }
-                },
-                y: {
-                    display: true,
-                    title: {
-                        display: true,
-                        text: 'Sales (R)',
-                        font: {
-                            size: 18
-                        }
-                    },
-                    ticks: {
-                        font: {
-                            size: 18
-                        }
-                    }
-                }
-            }
-        }
-    });
+    buildFiveLeastSellingCategoriesChart(fiveLeastSellingCategoriesCtx, fiveLeastCategories, fiveLeastCategoriesSales);
 
-    /*
-        The "Categories Contributing More Than 50% Towards the selected Month's Revenue" chart.
-    */
+    /* Builds a chart showing categories contributing more than 50% towards monthly revenue. */
     const ccmt50Ctx = document.querySelector("#ccmt50tm-chart-canvas").getContext("2d");
     let categoriesCMT50 = @Html.Raw(JsonSerializer.Serialize(Model.CategoriesCMT50Percent));
     let contributingMT50Percent = @Html.Raw(JsonSerializer.Serialize(Model.ContributionsMT50Percent));
 
-    const ccmt50Chart = new Chart(ccmt50Ctx, {
-        type: 'pie',
-        data: {
-            labels: categoriesCMT50,
-            datasets: [
-                {
-                    data: contributingMT50Percent
-                }
-            ]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: {
-                    labels: {
-                        font: {
-                            size: 18
-                        }
-                    }
-                },
-                title: {
-                    display: true,
-                    text: 'Categories Contributing More Than 50% Towards Revenue',
-                    font: {
-                        size: 18
-                    }
-                }
-            }            
-        }
-    });
+    buildCategoriesContributingMT50PercentChart(ccmt50Ctx, categoriesCMT50, contributingMT50Percent);
 
-    /*
-        The "Categories Contributing At Most 50% Towards the selected Month's Revenue" chart.
-    */
+    /* Builds a chart showing categories contributing at most 50% towards monthly revenue. */
     const ccam50Ctx = document.querySelector("#ccam50tm-chart-canvas").getContext("2d");
     let categoriesAM50Percent = @Html.Raw(JsonSerializer.Serialize(Model.CategoriesCAM50Percent));
     let contributingAM50Percent = @Html.Raw(JsonSerializer.Serialize(Model.ContributionsAM50Percent));
 
-    const ccam50Chart = new Chart(ccam50Ctx, {
-        type: 'pie',
-        data: {
-            labels: categoriesAM50Percent,
-            datasets: [
-                {
-                    data: contributingAM50Percent
-                }
-            ]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: {
-                    labels: {
-                        font: {
-                            size: 18
-                        }
-                    }
-                },
-                title: {
-                    display: true,
-                    text: 'Categories Contributing At Most 50% Towards Revenue',
-                    font: {
-                        size: 18
-                    }
-                }
-            }            
-        }
-    });
+    buildCategoriesContributingAM50PercentChart(ccam50Ctx, categoriesAM50Percent, contributingAM50Percent);
 
-    /**
-        The "Top 5 Most Selling Products in the selected month" chart.
-    */
+    /* Builds a chart showing the top 5 selling products in the specified month. */
     const t5mspimChartCtx = document.querySelector("#t5mspim-chart-canvas").getContext("2d");
     let top5MostSellingProductNames = @Html.Raw(JsonSerializer.Serialize(Model.TopFiveMostSellingProductNames));
     let top5MostSellingProductSales = @Html.Raw(JsonSerializer.Serialize(Model.TopFiveMostSellingProductSales));
 
-    const top5MostSellingProductsChart = new Chart(t5mspimChartCtx, {
-        type: 'bar',
-        data: {
-            labels: top5MostSellingProductNames,
-            datasets: [
-                {
-                    label: 'Top 5 Most Selling Products',
-                    data: top5MostSellingProductSales,
-                    backgroundColor: ['green', 'lightblue', 'purple', 'maroon', 'orange'],
-                    borderWidth: 1
-                }
-            ]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: {
-                    labels: {
-                        font: {
-                            size: 18
-                        }
-                    }
-                }
-            },
-            scales: {
-                x: {
-                    display: true,
-                    title: {
-                        display: true,
-                        text: 'Product',
-                        font: {
-                            size: 18
-                        }
-                    },
-                    ticks: {
-                        font: {
-                            size: 18
-                        }
-                    }
-                },
-                y: {
-                    display: true,
-                    title: {
-                        display: true,
-                        text: 'Sales (R)',
-                        font: {
-                            size: 18
-                        }
-                    },
-                    ticks: {
-                        font: {
-                            size: 18
-                        }
-                    }
-                }
-            }
-        }
-    });
+    buildTop5SellingProductsChart(t5mspimChartCtx, top5MostSellingProductNames, top5MostSellingProductSales);
 
-    /**
-        The "5 Least Selling Products in the selected month" chart.
-    */
-    const fiveLeastsellingProductsInMonthChartCtx = document.querySelector("#fiveLeastSellingProductsInMonth-chart-canvas").getContext("2d");
+    /* Builds a chart showing the five least selling products in the specified month. */
+    const fiveLeastSellingProductsInMonthChartCtx = document.querySelector("#fiveLeastSellingProductsInMonth-chart-canvas").getContext("2d");
     let fiveLeastSellingProductNames = @Html.Raw(JsonSerializer.Serialize(Model.FiveLeastSellingProductNames));
     let fiveLeastSellingProductSales = @Html.Raw(JsonSerializer.Serialize(Model.FiveLeastSellingProductSales));
 
-    const fiveLeastSellingProductsChart = new Chart(fiveLeastsellingProductsInMonthChartCtx, {
-        type: 'bar',
-        data: {
-            labels: fiveLeastSellingProductNames,
-            datasets: [
-                {
-                    label: 'Five Least Selling Products',
-                    data: fiveLeastSellingProductSales,
-                    backgroundColor: ['green', 'lightblue', 'purple', 'maroon', 'orange'],
-                    borderWidth: 1
-                }
-            ]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: {
-                    labels: {
-                        font: {
-                            size: 18
-                        }
-                    }
-                }
-            },
-            scales: {
-                x: {
-                    display: true,
-                    title: {
-                        display: true,
-                        text: 'Product',
-                        font: {
-                            size: 18
-                        }
-                    },
-                    ticks: {
-                        font: {
-                            size: 18
-                        }
-                    }
-                },
-                y: {
-                    display: true,
-                    title: {
-                        display: true,
-                        text: 'Sales (R)',
-                        font: {
-                            size: 18
-                        }
-                    },
-                    ticks: {
-                        font: {
-                            size: 18
-                        }
-                    }
-                }
-            }
-        }
-    });
+    buildFiveLeastSellingProductsChart(fiveLeastSellingProductsInMonthChartCtx, fiveLeastSellingProductNames, fiveLeastSellingProductSales);
 
-    @* %%%%%%%%%% PURCHASES REPORTS CHARTS %%%%%%%%%%*@
+    @* ********** Purchases Reports ********** *@
 
-    /**
-    * The "Monthly Total Costs Trends" chart.
-    */
+    /* Builds a chart showing the monthly inventory purchases total costs. */
     const totalCostsChartCanvasCtx = document.getElementById("monthly-total-cost-chart-canvas").getContext("2d");
     let monthsTC = @Html.Raw(JsonSerializer.Serialize(Model.MonthsTC));
     let totalCosts = @Html.Raw(JsonSerializer.Serialize(Model.TotalCosts));
 
-    const totalCostsChart = new Chart(totalCostsChartCanvasCtx, {
-        type: 'line',
-        data: {
-            // x-axis
-            labels: monthsTC,
-            datasets: [
-                {
-                    label: 'Monthly Total Costs Trends (R)',
-                    data: totalCosts,
-                }
-            ]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: {
-                    labels: {
-                        font: {
-                            size: 18
-                        }
-                    }
-                }
-            },
-            scales: {
-                x: {
-                    display: true,
-                    title: {
-                        display: true,
-                        text: 'Months',
-                        font: {
-                            size: 18
-                        },
-                    },
-                    ticks: {
-                        font: {
-                            size: 18
-                        }
-                    }
-                },
-                y: {
-                    display: true,
-                    title: {
-                        display: true,
-                        text: 'Total Cost (R)',
-                        font: {
-                            size: 18
-                        },
-                    },
-                    ticks: {
-                        font: {
-                            size: 18
-                        }
-                    }
-                }
-            }
-        }
-    });
+    buildInventoryPurchasesMonthlyTotalCostChart(totalCostsChartCanvasCtx, monthsTC, totalCosts);
 
-    /**
-        The "Top 5 Categories with high purchase costs in the selected month" chart.
-    */
+    /* Builds a chart showing the top 5 categories with high inventory purchase costs. */
     const topFiveCatWithHighPCChartCtx = document.querySelector("#t5cwhpc-chart-canvas").getContext("2d");
     let top5CatHighPCCategories = @Html.Raw(JsonSerializer.Serialize(Model.TopFiveCategoriesWithHighPurchaseCostsNames));
     let top5CatHighPCPurchases = @Html.Raw(JsonSerializer.Serialize(Model.TopFiveCategoriesWithHighPurchaseCostsTC));
 
-    const top5CatHighPCChart = new Chart(topFiveCatWithHighPCChartCtx, {
-        type: 'bar',
-        data: {
-            labels: top5CatHighPCCategories,
-            datasets: [
-                {
-                    label: 'Top 5 Categories With High Purchase Cost',
-                    data: top5CatHighPCPurchases,
-                    backgroundColor: ['green', 'lightblue', 'purple', 'maroon', 'orange'],
-                    borderWidth: 1
-                }
-            ]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: {
-                    labels: {
-                        font: {
-                            size: 18
-                        }
-                    }
-                }
-            },
-            scales: {
-                x: {
-                    display: true,
-                    title: {
-                        display: true,
-                        text: 'Categories',
-                        font: {
-                            size: 18
-                        }
-                    },
-                    ticks: {
-                        font: {
-                            size: 18
-                        }
-                    }
-                },
-                y: {
-                    display: true,
-                    title: {
-                        display: true,
-                        text: 'Cost (R)',
-                        font: {
-                            size: 18
-                        }
-                    },
-                    ticks: {
-                        font: {
-                            size: 18
-                        }
-                    }
-                }
-            }
-        }
-    });
+    buildTop5CategoriesWithHighInventoryCostsChart(topFiveCatWithHighPCChartCtx, top5CatHighPCCategories, top5CatHighPCPurchases);
 
-    /**
-        The "5 Least Categories with low purchase cost in the selected month" chart.
-    */
+    /* Builds a chart showing the five least categories with low inventory purchase costs. */
     const fiveLeastCatWithLowPCChartCtx = document.querySelector("#five-lcwlowpc-chart-canvas").getContext("2d");
     let fiveLeastPCCategories = @Html.Raw(JsonSerializer.Serialize(Model.FiveLeastCategoriesWithLowPurchaseCostsNames));
     let fiveLeastCategoriesPurchases = @Html.Raw(JsonSerializer.Serialize(Model.FiveLeastCategoriesWithLowPurchaseCostsTC));
 
-    const fiveLeastCatWithLowPCChart = new Chart(fiveLeastCatWithLowPCChartCtx, {
-        type: 'bar',
-        data: {
-            labels: fiveLeastPCCategories,
-            datasets: [
-                {
-                    label: 'Five Least Categories with Low Purchase Cost',
-                    data: fiveLeastCategoriesPurchases,
-                    backgroundColor: ['green', 'lightblue', 'purple', 'maroon', 'orange'],
-                    borderWidth: 1
-                }
-            ]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: {
-                    labels: {
-                        font: {
-                            size: 18
-                        }
-                    }
-                }
-            },
-            scales: {
-                x: {
-                    display: true,
-                    title: {
-                        display: true,
-                        text: 'Categories',
-                        font: {
-                            size: 18
-                        }
-                    },
-                    ticks: {
-                        font: {
-                            size: 18
-                        }
-                    }
-                },
-                y: {
-                    display: true,
-                    title: {
-                        display: true,
-                        text: 'Cost (R)',
-                        font: {
-                            size: 18
-                        }
-                    },
-                    ticks: {
-                        font: {
-                            size: 18
-                        }
-                    }
-                }
-            }
-        }
-    });
+    buildFiveLeastCategoriesWithLowInventoryPurchaseCostsChart(fiveLeastCatWithLowPCChartCtx, fiveLeastPCCategories, fiveLeastCategoriesPurchases);
 
 </script>
