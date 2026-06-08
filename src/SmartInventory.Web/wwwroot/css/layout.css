@@ -36,7 +36,7 @@ header{
     background-color: tan;
     grid-area: header;
     display: flex;
-    justify-content: space-evenly;
+    justify-content: space-around;
     align-items: center;
     flex-wrap: wrap;
 }
@@ -115,7 +115,6 @@ footer{
 @media (max-width: 546px) {
 
     header{
-        display: flex;
         flex-direction: row;
         justify-content: space-between;
         padding: 15px;

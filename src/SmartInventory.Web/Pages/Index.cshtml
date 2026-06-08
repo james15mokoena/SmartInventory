@@ -22,13 +22,13 @@
             <button class="btn-item btn-damages-charts">Damages Reports</button>*@
         </div>
 
-        <div class="month-selector">
-            <button class="prev-month">&#60</button>
-            <span class="selected-month">January</span>
-            <button class="next-month">&#62</button>
-        </div>
-
         @if(Model.IsFetched == "true"){
+
+            <div class="month-selector">
+                <button class="prev-month">&#60</button>
+                <span class="selected-month">January</span>
+                <button class="next-month">&#62</button>
+            </div>
 
             <div class="charts">
 
@@ -69,6 +69,7 @@
                                 </div>
                             </div>
                         </div>
+
 
                         <div class="categories-contributing-more-than-50-tm-chart-cnt inner-charts">
                             <canvas id="ccmt50tm-chart-canvas" class="chart"></canvas>
@@ -193,7 +194,6 @@
 <script src="~/js/index.js" type="text/javascript"></script>
 <script src="~/js/index_charts.js" type="text/javascript"></script>
 
-@* ********************* CHART CREATION CODE ********************* *@
 <script>
 
     @* ********** Sales Reports ********** *@
@@ -202,49 +202,42 @@
     const revenueChartCanvasCtx = document.getElementById("revenue-chart-canvas").getContext("2d");
     let months = @Html.Raw(JsonSerializer.Serialize(Model.Months));
     let revenues = @Html.Raw(JsonSerializer.Serialize(Model.Revenues));
-
     buildRevenueChart(revenueChartCanvasCtx, months, revenues);
 
     /* Builds a chart that shows the top 5 selling categories in the specified month. */
     const top5SellingCategoriesCtx = document.querySelector("#t5msctm-chart-canvas").getContext("2d");
     let top5MostCategories = @Html.Raw(JsonSerializer.Serialize(Model.TopFiveCategories));
     let top5MostCategoriesSales = @Html.Raw(JsonSerializer.Serialize(Model.TopFiveCategoriesSales));
-
     buildTop5SellingCategoriesChart(top5SellingCategoriesCtx, top5MostCategories, top5MostCategoriesSales);
 
     /* Builds a chart showing the five least selling categories in the specified month. */
     const fiveLeastSellingCategoriesCtx = document.querySelector("#b5lsctm-chart-canvas").getContext("2d");
     let fiveLeastCategories = @Html.Raw(JsonSerializer.Serialize(Model.BottomFiveCategories));
     let fiveLeastCategoriesSales = @Html.Raw(JsonSerializer.Serialize(Model.BottomFiveCategoriesSales));
-
     buildFiveLeastSellingCategoriesChart(fiveLeastSellingCategoriesCtx, fiveLeastCategories, fiveLeastCategoriesSales);
 
     /* Builds a chart showing categories contributing more than 50% towards monthly revenue. */
-    const ccmt50Ctx = document.querySelector("#ccmt50tm-chart-canvas").getContext("2d");
+    const ccmt50Ctx = document.getElementById("ccmt50tm-chart-canvas").getContext("2d");
     let categoriesCMT50 = @Html.Raw(JsonSerializer.Serialize(Model.CategoriesCMT50Percent));
     let contributingMT50Percent = @Html.Raw(JsonSerializer.Serialize(Model.ContributionsMT50Percent));
-
     buildCategoriesContributingMT50PercentChart(ccmt50Ctx, categoriesCMT50, contributingMT50Percent);
 
     /* Builds a chart showing categories contributing at most 50% towards monthly revenue. */
     const ccam50Ctx = document.querySelector("#ccam50tm-chart-canvas").getContext("2d");
     let categoriesAM50Percent = @Html.Raw(JsonSerializer.Serialize(Model.CategoriesCAM50Percent));
     let contributingAM50Percent = @Html.Raw(JsonSerializer.Serialize(Model.ContributionsAM50Percent));
-
     buildCategoriesContributingAM50PercentChart(ccam50Ctx, categoriesAM50Percent, contributingAM50Percent);
 
     /* Builds a chart showing the top 5 selling products in the specified month. */
     const t5mspimChartCtx = document.querySelector("#t5mspim-chart-canvas").getContext("2d");
     let top5MostSellingProductNames = @Html.Raw(JsonSerializer.Serialize(Model.TopFiveMostSellingProductNames));
     let top5MostSellingProductSales = @Html.Raw(JsonSerializer.Serialize(Model.TopFiveMostSellingProductSales));
-
     buildTop5SellingProductsChart(t5mspimChartCtx, top5MostSellingProductNames, top5MostSellingProductSales);
 
     /* Builds a chart showing the five least selling products in the specified month. */
     const fiveLeastSellingProductsInMonthChartCtx = document.querySelector("#fiveLeastSellingProductsInMonth-chart-canvas").getContext("2d");
     let fiveLeastSellingProductNames = @Html.Raw(JsonSerializer.Serialize(Model.FiveLeastSellingProductNames));
     let fiveLeastSellingProductSales = @Html.Raw(JsonSerializer.Serialize(Model.FiveLeastSellingProductSales));
-
     buildFiveLeastSellingProductsChart(fiveLeastSellingProductsInMonthChartCtx, fiveLeastSellingProductNames, fiveLeastSellingProductSales);
 
     @* ********** Purchases Reports ********** *@

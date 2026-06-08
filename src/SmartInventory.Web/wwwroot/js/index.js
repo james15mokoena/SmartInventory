@@ -1,5 +1,22 @@
 // ##################################### EVENT HANDLING ##################################### //
 
+// Sets the default behavior after the window loads.
+window.onload = function () {
+
+    if (sessionStorage.getItem("clickedHomeBtn") === null) {
+        sessionStorage.setItem("clickedHomeBtn", "btn-sales-charts");
+        sessionStorage.setItem("tabToShow", "sales-reports");
+    }
+
+    if (sessionStorage.getItem("monthIdxHome") === null) {
+        sessionStorage.setItem("monthIdxHome", 1);        
+        location = `http://localhost:5289/Index?action=Sales&monthIdx=1`;
+        var btnSalesReports = document.querySelector(".btn-sales-charts");
+        btnSalesReports.style.backgroundColor = "lightseagreen";
+    }
+
+}
+
 const btnViewMoreInfoList = document.querySelectorAll(".btn-view-more-info");
 
 // Add event listeners and event handlers.
@@ -22,17 +39,21 @@ btnViewMoreInfoList.forEach(btn => {
     })
 });
 
+/*
+    Get the buttons used to switch between viewing sales reports and
+    purchases reports.
+*/
 let homeMenuBtns = document.querySelectorAll(".btn-item");
 
 /**
- * When a button is clicked, it deselects other buttons.
+ * When one button is clicked, it deselects other buttons.
  */
 function deselectBtns() {
     homeMenuBtns.forEach(btn => btn.style.backgroundColor = "peru");
 }
 
 /**
- * Hides all reports tab before the selected one is displayed.
+ * Hides all reports tabs before the selected one is displayed.
  */
 function hideReportsTabs() {
     
@@ -50,6 +71,9 @@ function hideReportsTabs() {
     }
 }
 
+/**
+ * Handles the switching between the reports tab to show.
+ */
 homeMenuBtns.forEach(btn => {
 
     btn.addEventListener('click', () => {
@@ -57,43 +81,42 @@ homeMenuBtns.forEach(btn => {
         deselectBtns();
 
         var monthIdxHome = null;
-        monthIdxHome = localStorage.getItem("monthIdxHome");
+        monthIdxHome = sessionStorage.getItem("monthIdxHome");
 
         if (btn.classList.contains("btn-sales-charts") && !btn.classList.contains("show")) {
             
             // show the sales reports tab and hide all other tabs.            
-            localStorage.setItem("clickedHomeBtn", "btn-sales-charts");
-            localStorage.setItem("tabToShow", "sales-reports");
-            window.location.href = `http://localhost:5289/Index?action=Sales&monthIdx=${monthIdxHome ?? 1}`;
-
+            sessionStorage.setItem("clickedHomeBtn", "btn-sales-charts");
+            sessionStorage.setItem("tabToShow", "sales-reports");
+            location = `http://localhost:5289/Index?action=Sales&monthIdx=${monthIdxHome ?? 1}`;
         }
         else if (btn.classList.contains("btn-purchases-charts") && !btn.classList.contains("show")) {
 
             // show the purchases reports tab and hide all other tabs.
-            localStorage.setItem("clickedHomeBtn", "btn-purchases-charts");
-            localStorage.setItem("tabToShow", "purchases-reports");
-            window.location.href = `http://localhost:5289/Index?action=Purchases&monthIdx=${monthIdxHome ?? 1}`;
+            sessionStorage.setItem("clickedHomeBtn", "btn-purchases-charts");
+            sessionStorage.setItem("tabToShow", "purchases-reports");
+            location = `http://localhost:5289/Index?action=Purchases&monthIdx=${monthIdxHome ?? 1}`;
         }
         /*else if (btn.classList.contains("btn-returns-charts") && !btn.classList.contains("show")) {
 
             // show the returns reports tab and hide all other tabs.
-            localStorage.setItem("clickedHomeBtn", "btn-returns-charts");
-            localStorage.setItem("tabToShow", "returns-reports");
+            sessionStorage.setItem("clickedHomeBtn", "btn-returns-charts");
+            sessionStorage.setItem("tabToShow", "returns-reports");
             window.location.href = "http://localhost:5289/Index?action=Returns";
         }
         else if (btn.classList.contains("btn-damages-charts") && !btn.classList.contains("show")) {
 
             // show the damages reports tab and hide all other tabs.
-            localStorage.setItem("clickedHomeBtn", "btn-damages-charts");
-            localStorage.setItem("tabToShow", "damages-reports");
+            sessionStorage.setItem("clickedHomeBtn", "btn-damages-charts");
+            sessionStorage.setItem("tabToShow", "damages-reports");
             window.location.href = "http://localhost:5289/Index?action=Damages";
         }*/
     });
 });
 
 // After page reload change the background color of the clicked button and show its corresponding tab/content.
-let clickedHomeBtn = localStorage.getItem("clickedHomeBtn");
-let tabToShow = localStorage.getItem("tabToShow");
+let clickedHomeBtn = sessionStorage.getItem("clickedHomeBtn");
+let tabToShow = sessionStorage.getItem("tabToShow");
 
 /**
  * Changes the background color of the selected button and shows the corresponding
@@ -110,6 +133,10 @@ function changeClickedBtnBgColorHelper(clickedBtn, tabToShowClassName) {
     tab.classList.add("show-reports-tab");
 }
 
+/**
+ * Handles the displaying of the reports tab whose corresponding button has been
+ * clicked.
+ */
 homeMenuBtns.forEach(btn => {
 
     if (btn.classList.contains("btn-sales-charts") && clickedHomeBtn === "btn-sales-charts")
@@ -121,7 +148,6 @@ homeMenuBtns.forEach(btn => {
     else if (btn.classList.contains("btn-damages-charts") && clickedHomeBtn === "btn-damages-charts")
         changeClickedBtnBgColorHelper(btn, ".damages-reports")*/
 });
-
 
 /**
  * Finds a reports tab that is currently displayed.
@@ -153,14 +179,14 @@ function getPreceedingMonth() {
     if (getMonthIndex(selectedMo) >= 1) {
         var preceedingIdx = getMonthIndex(selectedMo) - 1;
         selectedMonth.textContent = getMonth(preceedingIdx);
-        localStorage.setItem("currentMonth", selectedMonth.textContent);
-        ++preceedingIdx;
-        localStorage.setItem("monthIdxHome", preceedingIdx);
+        sessionStorage.setItem("currentMonth", selectedMonth.textContent);
+        ++preceedingIdx;    // necessary since the API month indices are within [1,12]
+        sessionStorage.setItem("monthIdxHome", preceedingIdx);
         if (findActiveReportsTab() === "sales-reports") {
-            window.location.href = `http://localhost:5289/Index?action=Sales&monthIdx=${preceedingIdx}`;
+            location = `http://localhost:5289/Index?action=Sales&monthIdx=${preceedingIdx}`;
         }
         else if (findActiveReportsTab() === "purchases-reports") {
-            window.location.href = `http://localhost:5289/Index?action=Purchases&monthIdx=${preceedingIdx}`;
+            location = `http://localhost:5289/Index?action=Purchases&monthIdx=${preceedingIdx}`;
         }
     }
 }
@@ -176,25 +202,24 @@ function getNextMonth() {
     if (getMonthIndex(selectedMo) <= 10) {
         var nextIdx = getMonthIndex(selectedMo) + 1;
         selectedMonth.textContent = getMonth(nextIdx);
-        localStorage.setItem("currentMonth", selectedMonth.textContent);
-        ++nextIdx;
-        localStorage.setItem("monthIdxHome", nextIdx);
+        sessionStorage.setItem("currentMonth", selectedMonth.textContent);
+        ++nextIdx;  // // necessary since the API month indices are within [1,12]
+        sessionStorage.setItem("monthIdxHome", nextIdx);
         if (findActiveReportsTab() === "sales-reports") {
-            window.location.href = `http://localhost:5289/Index?action=Sales&monthIdx=${nextIdx}`;
+            location = `http://localhost:5289/Index?action=Sales&monthIdx=${nextIdx}`;
         }
         if (findActiveReportsTab() === "purchases-reports") {
-            window.location.href = `http://localhost:5289/Index?action=Purchases&monthIdx=${nextIdx}`;
+            location = `http://localhost:5289/Index?action=Purchases&monthIdx=${nextIdx}`;
         }
             
     }
 }
 
-selectedMonth.textContent = localStorage.getItem("currentMonth") ?? selectedMonth.textContent;
+selectedMonth.textContent = sessionStorage.getItem("currentMonth") ?? selectedMonth.textContent;
 
 // register event listener and event handler
 btnPrevMonth.addEventListener("click", getPreceedingMonth);
 btnNextMonth.addEventListener("click", getNextMonth);
-
 
 // ##################################### UTILITY FUNCTIONS ##################################### //
 
@@ -351,8 +376,3 @@ function getMonth(monthIdx) {
             break;
     }
 }
-
-// clear the local storage
-//localStorage.clear();
-
-// ##################################### CHART CREATION CODE ##################################### //
