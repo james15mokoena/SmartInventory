@@ -4,55 +4,89 @@ const btnActiveProducts = document.querySelector(".menu-option .btn-active-produ
 const btnDeactivatedProducts = document.querySelector(".menu-option .btn-deactivated-products");
 // get the "dropdown-prod" btn
 const btnDropdown = document.querySelector(".dropbtn-prod");
+// indicates the product type whether: active or deactivated.
+const type = new URLSearchParams(window.location.search).get("type");
+// indicates the category of products to display.
+const category = new URLSearchParams(window.location.search).get("cat");
+// get all the links for each category.
+const categories = document.querySelectorAll(".lnk");
 
-/**
- * Assigns the "select" class to a clicked button.
- * @param {*} selectedBtn The selected button.
- * @param {*} selectedBtnName The name of the selected button.
- * @param {*} url The url of the page to be opened.
- */
-function selectOrDeselectBtnHandler(selectedBtn, selectedBtnName, url) {
-    if (!selectedBtn.classList.contains("select")) {
-        localStorage.setItem("selectedBtn", selectedBtnName);
-        if(url != null)
-            window.location.href = url;
+console.log(`Category: ${category}`);
+
+// default behavior after the page loads.
+window.addEventListener("load", function () {
+
+    if (!type && sessionStorage.getItem("selectedVPsBtn") === "btnDeactivatedProducts") {
+        sessionStorage.setItem("selectedVPsBtn", "btnDeactivatedProducts");
+        location = "/Product/ViewProducts?type=deactivated";
     }
-}
+    else if (!category && sessionStorage.getItem("selectedVPsBtn")?.startsWith("lnk")) {
+
+        let clickedLink = findClickedLink(sessionStorage.getItem("selectedVPsBtn"));
+        const catName = document.querySelector(`.${clickedLink}`).textContent;
+        location = `/Product/ViewProducts?cat=${encodeURIComponent(catName)}`;
+
+    }
+    else if (sessionStorage.getItem("selectedVPsBtn") === null) {
+        sessionStorage.setItem("selectedVPsBtn", "btnActiveProducts");
+    }
+});
+
+// event handling
+btnActiveProducts.addEventListener("click", function () {
+   
+    if (sessionStorage.getItem("selectedVPsBtn") != "btnActiveProducts") {
+        sessionStorage.setItem("selectedVPsBtn", "btnActiveProducts");
+        location = "/Product/ViewProducts?type=active";
+    }
+});
+
+btnDeactivatedProducts.addEventListener("click", function () {
+   
+    if (sessionStorage.getItem("selectedVPsBtn") != "btnDeactivatedProducts") {
+        sessionStorage.setItem("selectedVPsBtn", "btnDeactivatedProducts");
+        sessionStorage.setItem("IsDeactivatedShown", "true");
+        location = "/Product/ViewProducts?type=deactivated";
+    }
+});
+
+categories.forEach(cat => {
+
+    cat.addEventListener("click", function () {
+        sessionStorage.setItem("selectedVPsBtn", cat.classList[1]);
+    });
+});
 
 /**
- * Responsible for selecting or deselecting the "active-products" link,
- * when it is clicked.
+ * Obtains the category link that has been clicked.
+ * @param {string} selectedVPsBtn A selected button.
+* @returns category link that has been clicked.
  */
-btnActiveProducts.addEventListener("click", () =>
-    selectOrDeselectBtnHandler(btnActiveProducts, "btnActiveProducts", "ViewProducts?type=active"));
+function findClickedLink(selectedVPsBtn) {
+    
+    let clickedLink = null;
 
-/**
- * Responsible for selecting or deselecting the "deactivated-products" link,
- * when it is clicked.
- */
-btnDeactivatedProducts.addEventListener("click", () =>
-    selectOrDeselectBtnHandler(btnDeactivatedProducts, "btnDeactivatedProducts", "ViewProducts?type=deactivated"));
+    categories.forEach(cat => {
+        if (cat.classList[1] === selectedVPsBtn) {
+            clickedLink = cat.classList[1];
+            return cat.classList[1];
+        }
+    })
 
-btnDropdown.addEventListener("mouseover", () => selectOrDeselectBtnHandler(btnDropdown, "btnDropdown", null));
-
-/**
- * Changes the background color of the selected button.
- * @param {*} selectedBtn The selected button.
- * @param {*} selectedBtnName The name of the selected button.
- */
-function changeButtonBgColor(selectedBtn, selectedBtnName) {
-    selectedBtn.classList.add("select");
-    selectedBtn.style.backgroundColor = "lightseagreen";
-    selectedBtn.classList.remove("deselect");
+    return clickedLink;
 }
 
-// executes after the page reloads.
-if (localStorage.getItem("selectedBtn") === "btnActiveProducts") {
-    changeButtonBgColor(btnActiveProducts, "btnActiveProducts");
+// get the clicked link if any.
+const clickedLink = findClickedLink(sessionStorage.getItem("selectedVPsBtn"));
+
+// apply styles after page loads
+if (sessionStorage.getItem("selectedVPsBtn") === "btnActiveProducts") {
+    btnActiveProducts.style.backgroundColor = "lightseagreen";
 }
-else if (localStorage.getItem("selectedBtn") === "btnDeactivatedProducts") {
-    changeButtonBgColor(btnDeactivatedProducts, "btnDeactivatedProducts");
+else if (sessionStorage.getItem("selectedVPsBtn") === "btnDeactivatedProducts") {
+    btnDeactivatedProducts.style.backgroundColor = "lightseagreen";
 }
-else if (localStorage.getItem("selectedBtn") === "btnDropdown") {
-    changeButtonBgColor(btnDropdown, "btnDropdown");
+else if (sessionStorage.getItem("selectedVPsBtn") === clickedLink) {
+    document.querySelector(`.${clickedLink}`).style.backgroundColor = "lightseagreen";
 }
+

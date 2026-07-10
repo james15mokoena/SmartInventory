@@ -15,7 +15,7 @@ public class ViewProductsModel(HttpClient client, ServerConstants server) : Page
     [BindProperty]
     public List<ProductDto>? Products { get; set; } = [];
 
-    public async Task OnGet(string? type)
+    public async Task OnGet(string? type, string? cat)
     {
         string? username = HttpContext.Session.GetString("Username");
         if (username != null)
@@ -24,13 +24,13 @@ public class ViewProductsModel(HttpClient client, ServerConstants server) : Page
         HttpResponseMessage? resp = null;
 
         // send the request to fetch active products.
-        if ((!string.IsNullOrEmpty(type) && type == "active") || type == null)
+        if (!string.IsNullOrEmpty(cat) && string.IsNullOrEmpty(type))
+            resp = await _client.GetAsync($"{server.ApiAddress}/Product/ViewProductsByCategory/{cat}/{username}");
+        else if ((!string.IsNullOrEmpty(type) && type == "active") || type == null)
             resp = await _client.GetAsync($"{server.ApiAddress}/Product/ViewActiveProducts/{username}");
         // send the request to fetch deactivated products.
         else if (!string.IsNullOrEmpty(type) && type == "deactivated")
             resp = await _client.GetAsync($"{server.ApiAddress}/Product/ViewDeactivatedProducts/{username}");
-        else if (!string.IsNullOrEmpty(type))
-            resp = await _client.GetAsync($"{server.ApiAddress}/Product/ViewProductsByCategory/{type}/{username}");
 
         if (resp != null && resp.IsSuccessStatusCode)
         {

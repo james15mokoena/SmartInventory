@@ -36,133 +36,136 @@
                     Damaged
                 </button>
             </li>*@
-        </ul>
-
-        <div class="month-selector-vst">
-            <button class="prev-month-vst">&#60</button>
-            <span class="selected-month-vst">January</span>
-            <button class="next-month-vst">&#62</button>
-        </div>
+        </ul>        
 
         <div class="summaries">
 
-            @{
-                if(Model.TransactionSummaries != null && Model.TransactionSummaries.Count > 0){
+            @if(Model.TransactionSummaries != null && Model.TransactionSummaries.Count > 0){
 
-                    List<StockTransactionSummary> summaries = Model.TransactionSummaries;
-                    
-                    foreach(StockTransactionSummary summary in summaries){
+                <div class="month-selector-vst">
+                    <button class="prev-month-vst">&#60</button>
+                    <span class="selected-month-vst">January</span>
+                    <button class="next-month-vst">&#62</button>
+                </div>
 
-                        <div class="summary">
+                List<StockTransactionSummary> summaries = Model.TransactionSummaries;
+                
+                foreach(StockTransactionSummary summary in summaries){
 
-                            <div class="summary-header">
-                                <button class="collaps">+</button>
-                                <h3>@summary.ProductName</h3>
-                                <span></span>
-                            </div>
+                    <div class="summary">
 
-                            <div class="summary-content closed">
-                                
-                                @if(Model.Reason == "Sold"){
-
-                                    <ul class="facts-list">
-                                        
-                                        @{
-                                            int lpws = summary.EndOfLongestPeriodWithoutSales.Day - summary.
-                                                        StartOfLongestPeriodWithoutSales.Day;
-                                            int lpwcs = summary.EndOfLongestPeriodWithConsecutiveSales.Day - summary.StartOfLongestPeriodWithConsecutiveSales.Day;
-
-                                        }
-
-                                        <li class="fact">
-                                            <span class="lbls">Longest period without sales: </span>
-                                            <span class="val">[@summary.StartOfLongestPeriodWithoutSales , @summary.EndOfLongestPeriodWithoutSales] (@lpws days) </span>
-                                        </li>
-                                        <li class="fact">
-                                            <span class="lbls">Longest period with consecutive sales: </span>
-                                            <span class="val">[@summary.StartOfLongestPeriodWithConsecutiveSales , @summary.EndOfLongestPeriodWithConsecutiveSales] (@lpwcs days)</span>
-                                        </li>
-                                        <li class="fact">
-                                            <span class="lbls">Largest sale: R </span>
-                                            <span class="val">@summary.LargestSale</span>
-                                        </li>
-                                        <li class="fact">
-                                            <span class="lbls">Lowest sale: R </span>
-                                            <span class="val">@summary.LowestSale</span>
-                                        </li>
-                                        <li class="fact">
-                                            <span class="lbls">Total sales: R</span>
-                                            <span class="val">@summary.TotalSales</span>
-                                        </li>
-                                        <li class="fact">
-                                            <span class="lbls">Number of units sold this month: </span>
-                                            <span class="val">@summary.QuantityUnitsSold</span>
-                                        </li>
-                                        <li class="fact">
-                                            <span class="lbls">Number of units unsold: </span>
-                                            <span class="val">@summary.QuantityUnitsUnsold</span>
-                                        </li>
-                                    </ul>
-                                }
-                                else if(Model.Reason == "Purchased"){
-
-                                    <ul class="facts-list">
-                                        
-                                        <li class="fact">
-                                            <span class="lbls">Number of times ordered: </span>
-                                            <span class="val">@summary.NumberOfTimesTheProductHasBeenOrdered</span>
-                                        </li>
-                                        <li class="fact">
-                                            <span class="lbls">Quantity units purchased: </span>
-                                            <span class="val">@summary.QuantityUnitsPurchased</span>
-                                        </li>
-                                        <li class="fact">
-                                            <span class="lbls">Largest order: R </span>
-                                            <span class="val">@summary.LargestOrder</span>
-                                        </li>
-                                        <li class="fact">
-                                            <span class="lbls">Lowest order: R </span>
-                                            <span class="val">@summary.LowestOrder</span>
-                                        </li>
-                                        <li class="fact">
-                                            <span class="lbls">Total cost: R</span>
-                                            <span class="val">@summary.TotalCost</span>
-                                        </li>
-                                    </ul>
-                                }
-                                else if(Model.Reason == "Returned"){
-
-                                    <ul class="facts-list">
-                                        
-                                        <li class="fact">
-                                            <span class="lbls">Quantity units returned: </span>
-                                            <span class="val">@summary.QuantityReturned</span>
-                                        </li>
-                                        <li class="fact">
-                                            <span class="lbls">Total amount reclaimed: R</span>
-                                            <span class="val">@summary.AmountReclaimed</span>
-                                        </li>                                       
-                                    </ul>
-                                }
-                                else if(Model.Reason == "Damaged"){
-                                    <ul class="facts-list">
-                                        
-                                        <li class="fact">
-                                            <span class="lbls">Quantity units damaged: </span>
-                                            <span class="val">@summary.QuantityDamaged</span>
-                                        </li>
-                                        <li class="fact">
-                                            <span class="lbls">Total damage cost: R</span>
-                                            <span class="val">@summary.DamageCost</span>
-                                        </li>                                       
-                                    </ul>
-                                }
-
-                            </div>
+                        <div class="summary-header">
+                            <button class="collaps">+</button>
+                            <h3>@summary.ProductName</h3>
+                            <span></span>
                         </div>
-                    }
+
+                        <div class="summary-content closed">
+                            
+                            @if(Model.Reason == "Sold"){
+
+                                <ul class="facts-list">
+                                    
+                                    @{
+                                        int lpws = summary.EndOfLongestPeriodWithoutSales.Day - summary.
+                                                    StartOfLongestPeriodWithoutSales.Day;
+                                        int lpwcs = summary.EndOfLongestPeriodWithConsecutiveSales.Day - summary.StartOfLongestPeriodWithConsecutiveSales.Day;
+
+                                    }
+
+                                    <li class="fact">
+                                        <span class="lbls">Longest period without sales: </span>
+                                        <span class="val">[@summary.StartOfLongestPeriodWithoutSales , @summary.EndOfLongestPeriodWithoutSales] (@lpws days) </span>
+                                    </li>
+                                    <li class="fact">
+                                        <span class="lbls">Longest period with consecutive sales: </span>
+                                        <span class="val">[@summary.StartOfLongestPeriodWithConsecutiveSales , @summary.EndOfLongestPeriodWithConsecutiveSales] (@lpwcs days)</span>
+                                    </li>
+                                    <li class="fact">
+                                        <span class="lbls">Largest sale: R </span>
+                                        <span class="val">@summary.LargestSale</span>
+                                    </li>
+                                    <li class="fact">
+                                        <span class="lbls">Lowest sale: R </span>
+                                        <span class="val">@summary.LowestSale</span>
+                                    </li>
+                                    <li class="fact">
+                                        <span class="lbls">Total sales: R</span>
+                                        <span class="val">@summary.TotalSales</span>
+                                    </li>
+                                    <li class="fact">
+                                        <span class="lbls">Number of units sold this month: </span>
+                                        <span class="val">@summary.QuantityUnitsSold</span>
+                                    </li>
+                                    <li class="fact">
+                                        <span class="lbls">Number of units unsold: </span>
+                                        <span class="val">@summary.QuantityUnitsUnsold</span>
+                                    </li>
+                                </ul>
+                            }
+                            else if(Model.Reason == "Purchased"){
+
+                                <ul class="facts-list">
+                                    
+                                    <li class="fact">
+                                        <span class="lbls">Number of times ordered: </span>
+                                        <span class="val">@summary.NumberOfTimesTheProductHasBeenOrdered</span>
+                                    </li>
+                                    <li class="fact">
+                                        <span class="lbls">Quantity units purchased: </span>
+                                        <span class="val">@summary.QuantityUnitsPurchased</span>
+                                    </li>
+                                    <li class="fact">
+                                        <span class="lbls">Largest order: R </span>
+                                        <span class="val">@summary.LargestOrder</span>
+                                    </li>
+                                    <li class="fact">
+                                        <span class="lbls">Lowest order: R </span>
+                                        <span class="val">@summary.LowestOrder</span>
+                                    </li>
+                                    <li class="fact">
+                                        <span class="lbls">Total cost: R</span>
+                                        <span class="val">@summary.TotalCost</span>
+                                    </li>
+                                </ul>
+                            }
+                            else if(Model.Reason == "Returned"){
+
+                                <ul class="facts-list">
+                                    
+                                    <li class="fact">
+                                        <span class="lbls">Quantity units returned: </span>
+                                        <span class="val">@summary.QuantityReturned</span>
+                                    </li>
+                                    <li class="fact">
+                                        <span class="lbls">Total amount reclaimed: R</span>
+                                        <span class="val">@summary.AmountReclaimed</span>
+                                    </li>                                       
+                                </ul>
+                            }
+                            else if(Model.Reason == "Damaged"){
+                                <ul class="facts-list">
+                                    
+                                    <li class="fact">
+                                        <span class="lbls">Quantity units damaged: </span>
+                                        <span class="val">@summary.QuantityDamaged</span>
+                                    </li>
+                                    <li class="fact">
+                                        <span class="lbls">Total damage cost: R</span>
+                                        <span class="val">@summary.DamageCost</span>
+                                    </li>                                       
+                                </ul>
+                            }
+
+                        </div>
+                    </div>
                 }
-            }                
+            }
+            else{
+                <h2 style="text-align: center;color:red;background-color: wheat;">
+                    No reports generated.
+                </h2>
+            }
         </div>
 
     </div>

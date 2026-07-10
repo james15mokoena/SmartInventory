@@ -281,6 +281,7 @@ function getMonths() {
     return months;
 }
 
+
 /**
  * Given a month name, it returns its index.
  * @param {*} month The name of the month.

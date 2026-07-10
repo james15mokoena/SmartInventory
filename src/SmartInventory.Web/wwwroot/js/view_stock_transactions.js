@@ -5,10 +5,19 @@ const btnDamaged = document.querySelector(".menu-item .btn-damaged");*/
 const btns = [btnSold, btnPurchases];//, btnReturned, btnDamaged];
 
 // On page load selected the btnSold button by default.
-/*window.addEventListener("load", () => {
-    btnSold.classList.add("selected");
-    btnSold.style.backgroundColor = "lightseagreen";
-});*/
+window.onload = function () {
+    
+    if (sessionStorage.getItem("selectedButton") === null) {
+        sessionStorage.setItem("selectedButton", "btn-sales");        
+    }
+
+    if (sessionStorage.getItem("monthIdxVst") === null) {
+        sessionStorage.setItem("monthIdxVst", 1);
+        location = `http://localhost:5289/Stock/ViewStockTransactions?reason=Sold&monthIdx=1`;
+        btnSold.style.backgroundColor = "lightseagreen";
+        btnSold.classList.add("selected");
+    }
+}
 
 /**
  * Deselects a previously selected button.
@@ -35,13 +44,13 @@ function showOrHideTab(selectedBtn) {
         deselectPreviouslySelectedBtn();
 
         if (selectedBtn === btnSold)
-            localStorage.setItem("selectedButton", "btn-sales");
+            sessionStorage.setItem("selectedButton", "btn-sales");
         else if (selectedBtn === btnPurchases)
-            localStorage.setItem("selectedButton", "btn-purchases");
+            sessionStorage.setItem("selectedButton", "btn-purchases");
         /*else if (selectedBtn === btnReturned)
-            localStorage.setItem("selectedButton", "btn-returned");
+            sessionStorage.setItem("selectedButton", "btn-returned");
         else if (selectedBtn === btnDamaged)
-            localStorage.setItem("selectedButton", "btn-damaged");*/
+            sessionStorage.setItem("selectedButton", "btn-damaged");*/
     }
 }
 
@@ -49,25 +58,25 @@ function showOrHideTab(selectedBtn) {
 btns.forEach(btn => btn.addEventListener("click", () => {
 
     var monthIdx = null;
-    monthIdx = localStorage.getItem("monthIdxVst");
+    monthIdx = sessionStorage.getItem("monthIdxVst");
 
     if (btn.classList.contains("btn-sales")) {
-        window.location.href = `http://localhost:5289/Stock/ViewStockTransactions?reason=Sold&monthIdx=${monthIdx ?? 1}`;
+        location = `http://localhost:5289/Stock/ViewStockTransactions?reason=Sold&monthIdx=${monthIdx ?? 1}`;
     }
     else if (btn.classList.contains("btn-purchases")) {
-        window.location.href = `http://localhost:5289/Stock/ViewStockTransactions?reason=Purchased&monthIdx=${monthIdx ?? 1}`;
+        location = `http://localhost:5289/Stock/ViewStockTransactions?reason=Purchased&monthIdx=${monthIdx ?? 1}`;
     }
     /*else if (btn.classList.contains("btn-returned")) {
-        window.location.href = `http://localhost:5289/Stock/ViewStockTransactions?reason=Returned&monthIdx=${monthIdx !== null ? monthIdx : 1}`;
+        location = `http://localhost:5289/Stock/ViewStockTransactions?reason=Returned&monthIdx=${monthIdx !== null ? monthIdx : 1}`;
     }
     else if (btn.classList.contains("btn-damaged")) {
-        window.location.href = `http://localhost:5289/Stock/ViewStockTransactions?reason=Damaged&monthIdx=${monthIdx !== null ? monthIdx : 1}`;
+        location = `http://localhost:5289/Stock/ViewStockTransactions?reason=Damaged&monthIdx=${monthIdx !== null ? monthIdx : 1}`;
     }*/
 
     showOrHideTab(btn)
 }));
 
-const selectedButton = localStorage.getItem("selectedButton");
+const selectedButton = sessionStorage.getItem("selectedButton");
 
 // change the color of the selected button
 btns.forEach(btn => {
@@ -140,20 +149,20 @@ function getPreceedingMonth() {
     if (getMonthIndex(selectedMo) >= 1) {
         var preceedingIdx = getMonthIndex(selectedMo) - 1;
         selectedMonthVst.textContent = getMonth(preceedingIdx);
-        localStorage.setItem("currentMonthVst", selectedMonthVst.textContent);
+        sessionStorage.setItem("currentMonthVst", selectedMonthVst.textContent);
         ++preceedingIdx;
-        localStorage.setItem("monthIdxVst", preceedingIdx);
+        sessionStorage.setItem("monthIdxVst", preceedingIdx);
         if (selectedButton === "btn-sales") {
-            window.location.href = `http://localhost:5289/Stock/ViewStockTransactions?reason=Sold&monthIdx=${preceedingIdx}`;
+            location = `http://localhost:5289/Stock/ViewStockTransactions?reason=Sold&monthIdx=${preceedingIdx}`;
         }
         else if (selectedButton === "btn-purchases") {
-            window.location.href = `http://localhost:5289/Stock/ViewStockTransactions?reason=Purchased&monthIdx=${preceedingIdx}`;
+            location = `http://localhost:5289/Stock/ViewStockTransactions?reason=Purchased&monthIdx=${preceedingIdx}`;
         }
         /*else if (selectedButton === "btn-returned") {
-            window.location.href = `http://localhost:5289/Stock/ViewStockTransactions?reason=Returned&monthIdx=${preceedingIdx}`;
+            location = `http://localhost:5289/Stock/ViewStockTransactions?reason=Returned&monthIdx=${preceedingIdx}`;
         }
         else if (selectedButton === "btn-damaged") {
-            window.location.href = `http://localhost:5289/Stock/ViewStockTransactions?reason=Damaged&monthIdx=${preceedingIdx}`;
+            location = `http://localhost:5289/Stock/ViewStockTransactions?reason=Damaged&monthIdx=${preceedingIdx}`;
         }*/
     }
 }
@@ -168,26 +177,28 @@ function getNextMonth() {
 
     if (getMonthIndex(selectedMo) <= 10) {
         var nextIdx = getMonthIndex(selectedMo) + 1;
-        selectedMonthVst.textContent = getMonth(nextIdx);
-        localStorage.setItem("currentMonthVst", selectedMonthVst.textContent);
+        selectedMonthVst.textContent = getMonth(nextIdx);        
+        sessionStorage.setItem("currentMonthVst", selectedMonthVst.textContent);
         ++nextIdx;
-        localStorage.setItem("monthIdxVst", nextIdx);
+        console.log("New Index: " + nextIdx);
+        console.log("New Month: " + selectedMonthVst.textContent);
+        sessionStorage.setItem("monthIdxVst", nextIdx);
         if (selectedButton === "btn-sales") {
-            window.location.href = `http://localhost:5289/Stock/ViewStockTransactions?reason=Sold&monthIdx=${nextIdx}`;
+            location = `http://localhost:5289/Stock/ViewStockTransactions?reason=Sold&monthIdx=${nextIdx}`;
         }
         else if (selectedButton === "btn-purchases") {
-            window.location.href = `http://localhost:5289/Stock/ViewStockTransactions?reason=Purchased&monthIdx=${nextIdx}`;
+            location = `http://localhost:5289/Stock/ViewStockTransactions?reason=Purchased&monthIdx=${nextIdx}`;
         }
         /*else if (selectedButton === "btn-returned") {
-            window.location.href = `http://localhost:5289/Stock/ViewStockTransactions?reason=Returned&monthIdx=${nextIdx}`;
+            location = `http://localhost:5289/Stock/ViewStockTransactions?reason=Returned&monthIdx=${nextIdx}`;
         }
         else if (selectedButton === "btn-damaged") {
-            window.location.href = `http://localhost:5289/Stock/ViewStockTransactions?reason=Damaged&monthIdx=${nextIdx}`;
+            location = `http://localhost:5289/Stock/ViewStockTransactions?reason=Damaged&monthIdx=${nextIdx}`;
         }*/
     }
 }
 
-selectedMonthVst.textContent = localStorage.getItem("currentMonthVst") ?? selectedMonthVst.textContent;
+selectedMonthVst.textContent = sessionStorage.getItem("currentMonthVst") ?? selectedMonthVst.textContent;
 
 // register event listener and event handler
 btnPrevMonthVst.addEventListener("click", getPreceedingMonth);
