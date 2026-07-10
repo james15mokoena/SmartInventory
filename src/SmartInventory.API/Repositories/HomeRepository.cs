@@ -206,9 +206,11 @@ public class HomeRepository(DatabaseContext context)
 
         var result =
             from trans in _context.StockTransactions
-            join product in _context.Products on trans.ProductId equals product.SKU
-            join r in _context.ReasonTypes on trans.ReasonTypeId equals r.Id
-            where r.Reason == "Sold" && trans.Date.Month == monthIdx
+            where trans.Date.Month == monthIdx
+            from product in _context.Products
+            where trans.ProductId == product.SKU
+            from rType in _context.ReasonTypes
+            where trans.ReasonTypeId == rType.Id && rType.Reason == "Sold"
             group trans by product.Category into tGroup
             select new
             {
@@ -224,9 +226,11 @@ public class HomeRepository(DatabaseContext context)
         // compute the total revenue for the given month
         double revenue =
             (from trans in _context.StockTransactions
-             join product in _context.Products on trans.ProductId equals product.SKU
-             join r in _context.ReasonTypes on trans.ReasonTypeId equals r.Id
-             where r.Reason == "Sold" && trans.Date.Month == monthIdx
+             where trans.Date.Month == monthIdx
+             from product in _context.Products
+             where trans.ProductId == product.SKU
+             from rType in _context.ReasonTypes
+             where trans.ReasonTypeId == rType.Id && rType.Reason == "Sold"
              select trans.QuantityChange * product.UnitPrice).Sum();
 
         if (result.Any())

@@ -349,7 +349,11 @@ public class ProductManagementService(ProductManagementRepository productRepo, S
                         UnitMeasurement = product.UnitMeasurement
                         ,
                         UnitPrice = product.UnitPrice
-                    });
+                        ,
+                        ImageUrl = product.ImageUrl
+                        ,
+                        MaximumStockLevel = product.MaximumStockLevel
+                    });                    
                 }
             }
 
