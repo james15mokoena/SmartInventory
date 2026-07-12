@@ -11,11 +11,22 @@ console.log(`Reason: ${reason}\nMonth Index: ${monthIndex}`);
 
 // On page load selected the btnSold button by default.
 window.addEventListener("load", function () {
+
+    console.log(`MonthIdxVst: ${sessionStorage.getItem("monthIdxVst")}`);
     
     if (!reason && !monthIndex && !sessionStorage.getItem("monthIdxVst")) {
         sessionStorage.setItem("selectedButton", "btn-sales");
         sessionStorage.setItem("monthIdxVst", 0);
         location = `/Stock/ViewStockTransactions?reason=${encodeURIComponent("Sold")}&monthIdx=${encodeURIComponent(1)}`;
+    }
+    else if (!reason && !monthIndex && sessionStorage.getItem("monthIdxVst")) {
+
+        if (sessionStorage.getItem("selectedButton") === "btn-sales") {
+            location = `/Stock/ViewStockTransactions?reason=${encodeURIComponent("Sold")}&monthIdx=${encodeURIComponent(sessionStorage.getItem("monthIdxVst"))}`;
+        }
+        else if (sessionStorage.getItem("selectedButton") === "btn-purchases"){
+            location = `/Stock/ViewStockTransactions?reason=${encodeURIComponent("Purchased")}&monthIdx=${encodeURIComponent(sessionStorage.getItem("monthIdxVst"))}`;
+        }
     }
     else if (reason && reason === "Sold" && monthIndex && !sessionStorage.getItem("monthIdxVst")) {
         sessionStorage.setItem("selectedButton", "btn-sales");
