@@ -11,7 +11,7 @@ const category = new URLSearchParams(window.location.search).get("cat");
 // get all the links for each category.
 const categories = document.querySelectorAll(".lnk");
 
-console.log(`Category: ${category}`);
+console.log(`Type: ${type}\nCategory: ${category}`);
 
 // default behavior after the page loads.
 window.addEventListener("load", function () {
@@ -27,8 +27,9 @@ window.addEventListener("load", function () {
         location = `/Product/ViewProducts?cat=${encodeURIComponent(catName)}`;
 
     }
-    else if (sessionStorage.getItem("selectedVPsBtn") === null) {
+    else if (!type && !category) {
         sessionStorage.setItem("selectedVPsBtn", "btnActiveProducts");
+        location = "/Product/ViewProducts?type=active";
     }
 });
 
@@ -37,6 +38,7 @@ btnActiveProducts.addEventListener("click", function () {
    
     if (sessionStorage.getItem("selectedVPsBtn") != "btnActiveProducts") {
         sessionStorage.setItem("selectedVPsBtn", "btnActiveProducts");
+        sessionStorage.setItem("type", "active");
         location = "/Product/ViewProducts?type=active";
     }
 });
@@ -46,6 +48,7 @@ btnDeactivatedProducts.addEventListener("click", function () {
     if (sessionStorage.getItem("selectedVPsBtn") != "btnDeactivatedProducts") {
         sessionStorage.setItem("selectedVPsBtn", "btnDeactivatedProducts");
         sessionStorage.setItem("IsDeactivatedShown", "true");
+        sessionStorage.setItem("type", "deactivated");
         location = "/Product/ViewProducts?type=deactivated";
     }
 });
