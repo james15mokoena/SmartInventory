@@ -89,4 +89,7 @@ else if (sessionStorage.getItem("selectedVPsBtn") === "btnDeactivatedProducts") 
 else if (sessionStorage.getItem("selectedVPsBtn") === clickedLink) {
     document.querySelector(`.${clickedLink}`).style.backgroundColor = "lightseagreen";
 }
+else {
+    btnActiveProducts.style.backgroundColor = "lightseagreen";
+}
 

@@ -3,21 +3,31 @@ const btnPurchases = document.querySelector(".menu-item .btn-purchases");
 /*const btnReturned = document.querySelector(".menu-item .btn-returned");
 const btnDamaged = document.querySelector(".menu-item .btn-damaged");*/
 const btns = [btnSold, btnPurchases];//, btnReturned, btnDamaged];
+// get the url parameters
+let reason = new URLSearchParams(window.location.search).get("reason");
+let monthIndex = new URLSearchParams(window.location.search).get("monthIdx");
+
+console.log(`Reason: ${reason}\nMonth Index: ${monthIndex}`);
 
 // On page load selected the btnSold button by default.
-window.onload = function () {
+window.addEventListener("load", function () {
     
-    if (sessionStorage.getItem("selectedButton") === null) {
-        sessionStorage.setItem("selectedButton", "btn-sales");        
+    if (!reason && !monthIndex && !sessionStorage.getItem("monthIdxVst")) {
+        sessionStorage.setItem("selectedButton", "btn-sales");
+        sessionStorage.setItem("monthIdxVst", 0);
+        location = `/Stock/ViewStockTransactions?reason=${encodeURIComponent("Sold")}&monthIdx=${encodeURIComponent(1)}`;
     }
-
-    if (sessionStorage.getItem("monthIdxVst") === null) {
-        sessionStorage.setItem("monthIdxVst", 1);
-        location = `http://localhost:5289/Stock/ViewStockTransactions?reason=Sold&monthIdx=1`;
-        btnSold.style.backgroundColor = "lightseagreen";
-        btnSold.classList.add("selected");
+    else if (reason && reason === "Sold" && monthIndex && !sessionStorage.getItem("monthIdxVst")) {
+        sessionStorage.setItem("selectedButton", "btn-sales");
+        sessionStorage.setItem("monthIdxVst", monthIndex);
+        location = `/Stock/ViewStockTransactions?reason=${encodeURIComponent("Sold")}&monthIdx=${encodeURIComponent(monthIndex)}`;
     }
-}
+    else if (reason && reason === "Purchased" && monthIndex && !sessionStorage.getItem("monthIdxVst")) {
+        sessionStorage.setItem("selectedButton", "btn-purchases");
+        sessionStorage.setItem("monthIdxVst", monthIndex);
+        location = `/Stock/ViewStockTransactions?reason=${encodeURIComponent("Purchased")}&monthIdx=${encodeURIComponent(monthIndex)}`;
+    }
+});
 
 /**
  * Deselects a previously selected button.
