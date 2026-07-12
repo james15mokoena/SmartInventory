@@ -89,10 +89,10 @@ public class StockManagementRepository(DatabaseContext context, UserManagementRe
     /// </summary>
     /// <param name="transactions"></param>
     /// <returns></returns>
-    private static List<DateTime>? FindLongestPeriodWithoutSales(List<StockTransaction> transactions)
+    private static List<DateTime>? FindLongestPeriodWithoutSales(List<StockTransaction> transactions, int monthIdx)
     {
-        DateOnly firstDateOfMonth = DateOnly.FromDateTime(FirstDateOfCurrentMonth());
-        DateOnly lastDateOfMonth = DateOnly.FromDateTime(LastDateOfCurrentMonth());
+        DateOnly firstDateOfMonth = DateOnly.FromDateTime(FirstDateOfMonth(monthIdx));
+        DateOnly lastDateOfMonth = DateOnly.FromDateTime(LastDateOfMonth(monthIdx));
         DateOnly? startMaxPeriod = null;
         DateOnly? endMaxPeriod = null;
 
@@ -239,22 +239,27 @@ public class StockManagementRepository(DatabaseContext context, UserManagementRe
     }
 
     /// <summary>
-    /// Finds the first date of the current month.
+    /// Returns the first date of the given month.
     /// </summary>
     /// <returns></returns>
-    private static DateTime FirstDateOfCurrentMonth() => new (DateTime.Now.Year, DateTime.Now.Month, 1);
+    private static DateTime FirstDateOfMonth(int monthIdx) => new DateTime(DateTime.Now.Year, monthIdx, 1);
+        
 
     /// <summary>
-    /// Finds the last date of the current month.
+    /// Returns the last date of the given month.
     /// </summary>
     /// <returns></returns>
-    private static DateTime LastDateOfCurrentMonth()
+    private static DateTime LastDateOfMonth(int monthIdx)
     {
-        return DateTime.Now.Month switch
+        Console.WriteLine("Today's date: " + new DateTime(DateTime.Now.Year, monthIdx, DateTime.Now.Day).AddDays(28 - DateTime.Now.Day));
+        Console.WriteLine("Today's date: " + new DateTime(DateTime.Now.Year, monthIdx, DateTime.Now.Day).AddDays(30 - DateTime.Now.Day));
+        Console.WriteLine("Today's date: " + new DateTime(DateTime.Now.Year, monthIdx, DateTime.Now.Day).AddDays(31 - DateTime.Now.Day));
+
+        return monthIdx switch
         {
-            2 => DateTime.Now.AddDays(28 - DateTime.Now.Day),
-            4 or 6 or 9 or 11 => DateTime.Now.AddDays(30 - DateTime.Now.Day),
-            1 or 3 or 5 or 7 or 8 or 10 or 12 => DateTime.Now.AddDays(31 - DateTime.Now.Day),
+            2 => new DateTime(DateTime.Now.Year, monthIdx, DateTime.Now.Day).AddDays(28 - DateTime.Now.Day)  ,//DateTime.Now.AddDays(28 - DateTime.Now.Day),
+            4 or 6 or 9 or 11 => new DateTime(DateTime.Now.Year, monthIdx, DateTime.Now.Day).AddDays(30 - DateTime.Now.Day), //DateTime.Now.AddDays(30 - DateTime.Now.Day),
+            1 or 3 or 5 or 7 or 8 or 10 or 12 => new DateTime(DateTime.Now.Year, monthIdx, DateTime.Now.Day).AddDays(31 - DateTime.Now.Day), //,DateTime.Now.AddDays(31 - DateTime.Now.Day),
             _ => DateTime.Now,
         };
     }
@@ -378,7 +383,7 @@ public class StockManagementRepository(DatabaseContext context, UserManagementRe
                 // update next index to refer to the next transaction in the transactions list.
                 nextIndex += numTransactionsForEachProduct.ElementAt(i).NumTransactions;
                 // find the longest period without sales
-                longestPeriodWithoutSales = FindLongestPeriodWithoutSales(stockTransactions)!;
+                longestPeriodWithoutSales = FindLongestPeriodWithoutSales(stockTransactions, monthIdx)!;
                 // find the longest period with consecutive sales
                 longestPeriodWithConsecutiveSales = FindLongestPeriodWithConsecutiveSales(stockTransactions)!;
 
