@@ -251,10 +251,6 @@ public class StockManagementRepository(DatabaseContext context, UserManagementRe
     /// <returns></returns>
     private static DateTime LastDateOfMonth(int monthIdx)
     {
-        Console.WriteLine("Today's date: " + new DateTime(DateTime.Now.Year, monthIdx, DateTime.Now.Day).AddDays(28 - DateTime.Now.Day));
-        Console.WriteLine("Today's date: " + new DateTime(DateTime.Now.Year, monthIdx, DateTime.Now.Day).AddDays(30 - DateTime.Now.Day));
-        Console.WriteLine("Today's date: " + new DateTime(DateTime.Now.Year, monthIdx, DateTime.Now.Day).AddDays(31 - DateTime.Now.Day));
-
         return monthIdx switch
         {
             2 => new DateTime(DateTime.Now.Year, monthIdx, DateTime.Now.Day).AddDays(28 - DateTime.Now.Day)  ,//DateTime.Now.AddDays(28 - DateTime.Now.Day),
